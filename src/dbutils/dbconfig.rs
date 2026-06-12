@@ -2,6 +2,7 @@ use dotenvy::dotenv;
 use std::env;
 use diesel::prelude::*;
 
+//here we establish connection for database 
 pub fn establish_connection()->PgConnection{
     dotenv().ok();
 

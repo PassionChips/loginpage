@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login System</title>
+    <title>Authentication System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,33 +15,64 @@
             align-items: center;
             height: 100vh;
         }
-        .login-container {
-            width: 300px;
+        .auth-container {
+            width: 350px;
             background-color: #ffffff;
             padding: 20px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .login-container h1 {
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            color: #666;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+            margin-bottom: -2px;
+        }
+        .tab:hover {
+            color: #007bff;
+        }
+        .form-container {
+            display: none;
+        }
+        .form-container.active {
+            display: block;
+        }
+        .auth-container h2 {
             text-align: center;
             color: #333;
             margin-bottom: 20px;
         }
-        .login-container label {
+        .auth-container label {
             display: block;
             margin-bottom: 5px;
             color: #555;
         }
-        .login-container input[type="text"], 
-        .login-container input[type="password"] {
-            width: calc(100% - 40px);
+        .auth-container input[type="text"], 
+        .auth-container input[type="password"],
+        .auth-container input[type="email"] {
+            width: calc(100% - 20px);
             padding: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 3px;
             box-sizing: border-box;
         }
-        .login-container button {
+        .auth-container button {
             width: 100%;
             padding: 10px;
             border: none;
@@ -50,52 +81,68 @@
             cursor: pointer;
             border-radius: 3px;
             box-sizing: border-box;
+            font-size: 16px;
         }
-        .login-container button:hover {
+        .auth-container button:hover {
             background-color: #0056b3;
+        }
+        .message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+            display: none;
+        }
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Login</h1>
-        <label for="username">username</label>
-        <input id="username" type="text" />
-        <label for="pw">Password</label>
-        <input id="pw" type="password" value="" />
-        <button onclick="login_btn()">Login</button>
+    <div class="auth-container">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('login')">Login</button>
+            <button class="tab" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="form-container active">
+            <h2>Login</h2>
+            <label for="login-username">Username</label>
+            <input id="login-username" type="text" placeholder="Enter your username" />
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="Enter your password" />
+            <button onclick="login_btn()">Login</button>
+            <div id="login-message" class="message"></div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signup-form" class="form-container">
+            <h2>Sign Up</h2>
+            <label for="signup-first-name">First Name</label>
+            <input id="signup-first-name" type="text" placeholder="Enter your first name" />
+            <label for="signup-last-name">Last Name</label>
+            <input id="signup-last-name" type="text" placeholder="Enter your last name" />
+            <label for="signup-username">Username</label>
+            <input id="signup-username" type="text" placeholder="Choose a username" />
+            <label for="signup-email">Email</label>
+            <input id="signup-email" type="email" placeholder="Enter your email" />
+            <label for="signup-password">Password</label>
+            <input id="signup-password" type="password" placeholder="Choose a password" />
+            <label for="signup-confirm-password">Confirm Password</label>
+            <input id="signup-confirm-password" type="password" placeholder="Confirm your password" />
+            <button onclick="signup_btn()">Sign Up</button>
+            <div id="signup-message" class="message"></div>
+        </div>
     </div>
 
-    <script>
-        function login_btn() {
-            let id = document.getElementById("id");
-            let pw = document.getElementById("pw");
-            const data = { username: username.value, password: pw.value };
-            
-            fetch('http://localhost:3000/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.result == true) {
-                    location.href = 'http://localhost:3000/success';
-                } else {
-                    location.href = 'http://localhost:3000/error';
-                }
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-        }
-    </script>
+    <script src="/static/js/auth.js"></script>
 </body>
 </html>

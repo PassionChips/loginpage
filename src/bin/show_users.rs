@@ -20,7 +20,9 @@ pub fn main(){
 
     for res in results{
         println!("user id: {}", res.id);
-        println!("-----------\n");
+        println!("username : {}", res.first_name);
+        println!("username : {}", res.last_name);
+        println!("username : {}", res.email);
         println!("username : {}", res.username);
     }
     

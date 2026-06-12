@@ -1,17 +1,28 @@
-use crate::model::auth::User;
+use crate::model::auth::{User,Login};
 use axum::response::Json;
 use serde_json::{json,Value};
 use crate::dbutils::write_users::create_users;
 
-pub async fn login(Json(user): Json<User>)->Json<Value>{
+pub async fn signup(Json(user): Json<User>)->Json<Value>{
     println!("{}" , user.username);
     println!("{}" , user.password);
 
     if user.username.len()!=0 && user.password.len()!=0{
-        create_users(&user); 
+        create_users(&user);
         Json(json!({"result":true})) 
     }
     else{
         Json(json!({"result":false}))
     }
 } 
+
+pub async fn login(Json(login): Json<Login>)->Json<Value>{
+    println!("{}" , login.username);
+    println!("{}" , login.password);
+
+    if login.username.len()!=0 && login.password.len()!=0{
+        Json(json!({"result":true}))
+    } else {
+        Json(json!({"result":false}))
+    }
+}
