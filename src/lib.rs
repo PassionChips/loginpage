@@ -18,11 +18,13 @@ pub async fn run(){
 
     let app = Router::new()
         .route("/", get(index))
+        .route("/login", get(login_page))
+        .route("/signup", get(signup_page))
         .route("/signup", post(signup))
         .route("/login", post(login))
         .route("/success", get(success))
         .route("/error", get(error))
-        .nest_service("/static", ServeDir::new("src/static"))
+        .nest_service("/static", ServeDir::new("src/static")) //when the html requests for /static/auth.js you don't need to create a separate route instead you use nest_service("/static" , ServeDir::new("src/static")) it will take whatever it needs
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
@@ -43,5 +45,15 @@ async fn success()->Html<&'static str>{
 
 async fn error()-> Html<&'static str>{
     let html_content = include_str!("static/templates/error.html");
+    Html(html_content)
+}
+
+async fn login_page()->Html<&'static str>{
+    let html_content = include_str!("static/templates/login.html");
+    Html(html_content)
+}
+
+async fn signup_page()->Html<&'static str>{
+    let html_content = include_str!("static/templates/signup.html");
     Html(html_content)
 }

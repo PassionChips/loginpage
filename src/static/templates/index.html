@@ -3,146 +3,810 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication System</title>
+    <title>TamilMart - Premium E-Commerce Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Mukta:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #D32F2F;
+            --secondary-color: #FF6F00;
+            --accent-color: #FFC107;
+            --dark-bg: #1A1A1A;
+            --light-bg: #FFFFFF;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --border-color: #E0E0E0;
+            --success-color: #4CAF50;
+            --tamil-gold: #FFD700;
+            --tamil-maroon: #800020;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            background: linear-gradient(135deg, var(--tamil-maroon) 0%, var(--primary-color) 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            height: 100vh;
         }
-        .auth-container {
-            width: 350px;
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .tabs {
+
+        .logo {
             display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
         }
-        .tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            background-color: transparent;
-            border: none;
-            color: #666;
-            font-size: 16px;
-            transition: all 0.3s;
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--tamil-gold);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--tamil-maroon);
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
         }
-        .tab.active {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
-            margin-bottom: -2px;
+
+        .logo-text {
+            font-family: 'Mukta', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light-bg);
+            letter-spacing: 1px;
         }
-        .tab:hover {
-            color: #007bff;
+
+        .logo-text .tamil-accent {
+            color: var(--tamil-gold);
         }
-        .form-container {
-            display: none;
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
         }
-        .form-container.active {
-            display: block;
+
+        .nav-link {
+            color: var(--light-bg);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        .auth-container h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--tamil-gold);
+            transition: width 0.3s ease;
         }
-        .auth-container label {
-            display: block;
-            margin-bottom: 5px;
-            color: #555;
-        }
-        .auth-container input[type="text"], 
-        .auth-container input[type="password"],
-        .auth-container input[type="email"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-        .auth-container button {
+
+        .nav-link:hover::after {
             width: 100%;
-            padding: 10px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.8rem;
             border: none;
-            background-color: #007bff;
-            color: #fff;
+            border-radius: 25px;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 3px;
-            box-sizing: border-box;
-            font-size: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.95rem;
         }
-        .auth-container button:hover {
-            background-color: #0056b3;
+
+        .btn-login {
+            background: transparent;
+            color: var(--light-bg);
+            border: 2px solid var(--light-bg);
         }
-        .message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 3px;
+
+        .btn-login:hover {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-signup {
+            background: var(--tamil-gold);
+            color: var(--tamil-maroon);
+            border: 2px solid var(--tamil-gold);
+        }
+
+        .btn-signup:hover {
+            background: transparent;
+            color: var(--tamil-gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(128, 0, 32, 0.95) 0%, rgba(211, 47, 47, 0.95) 100%),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="kolam" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="rgba(255,215,0,0.1)"/><circle cx="25" cy="25" r="1.5" fill="rgba(255,215,0,0.08)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,215,0,0.08)"/><circle cx="25" cy="75" r="1.5" fill="rgba(255,215,0,0.08)"/><circle cx="75" cy="25" r="1.5" fill="rgba(255,215,0,0.08)"/></pattern></defs><rect width="1200" height="600" fill="url(%23kolam)"/></svg>');
+            background-size: cover;
+            background-position: center;
+            padding: 8rem 2rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 111, 0, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--tamil-gold);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .hero h1 {
+            font-family: 'Mukta', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--light-bg);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero h1 .highlight {
+            color: var(--tamil-gold);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--tamil-gold);
+            color: var(--tamil-maroon);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--light-bg);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light-bg);
+            border: 2px solid var(--light-bg);
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+            background: var(--light-bg);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-family: 'Mukta', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-title .accent {
+            color: var(--primary-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--light-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--tamil-maroon), var(--tamil-gold));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, var(--tamil-maroon), var(--primary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--tamil-gold);
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, #FFF8E1 0%, #FFFFFF 100%);
+        }
+
+        .categories-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .category-card {
+            background: var(--light-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(128, 0, 32, 0.8), rgba(211, 47, 47, 0.8));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--tamil-maroon), var(--primary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-image::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .category-content {
+            padding: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .category-card:hover .category-content h3,
+        .category-card:hover .category-content p {
+            color: var(--light-bg);
+        }
+
+        .category-content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            transition: color 0.3s ease;
+        }
+
+        .category-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--tamil-maroon) 0%, var(--primary-color) 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><pattern id="pattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M30 0 L30 60 M0 30 L60 30" stroke="rgba(255,215,0,0.1)" stroke-width="1"/></pattern></defs><rect width="1200" height="400" fill="url(%23pattern)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-content h2 {
+            font-family: 'Mukta', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--light-bg);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-bg);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 3rem 2rem 1.5rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--tamil-gold);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--tamil-gold);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
             display: none;
+            background: none;
+            border: none;
+            color: var(--light-bg);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
-        .message.error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .features-grid,
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-content h2 {
+                font-size: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
         }
-        .message.success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.4rem;
+            }
+
+            .hero {
+                padding: 5rem 1rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('login')">Login</button>
-            <button class="tab" onclick="switchTab('signup')">Sign Up</button>
-        </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">தி</div>
+                <span class="logo-text">Tamil<span class="tamil-accent">Mart</span></span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#categories" class="nav-link">Categories</a>
+                <a href="#" class="nav-link">About</a>
+            </div>
 
-        <!-- Login Form -->
-        <div id="login-form" class="form-container active">
-            <h2>Login</h2>
-            <label for="login-username">Username</label>
-            <input id="login-username" type="text" placeholder="Enter your username" />
-            <label for="login-password">Password</label>
-            <input id="login-password" type="password" placeholder="Enter your password" />
-            <button onclick="login_btn()">Login</button>
-            <div id="login-message" class="message"></div>
-        </div>
+            <div class="auth-buttons">
+                <a href="/login" class="btn btn-login">Login</a>
+                <a href="/signup" class="btn btn-signup">Sign Up</a>
+            </div>
 
-        <!-- Sign Up Form -->
-        <div id="signup-form" class="form-container">
-            <h2>Sign Up</h2>
-            <label for="signup-first-name">First Name</label>
-            <input id="signup-first-name" type="text" placeholder="Enter your first name" />
-            <label for="signup-last-name">Last Name</label>
-            <input id="signup-last-name" type="text" placeholder="Enter your last name" />
-            <label for="signup-username">Username</label>
-            <input id="signup-username" type="text" placeholder="Choose a username" />
-            <label for="signup-email">Email</label>
-            <input id="signup-email" type="email" placeholder="Enter your email" />
-            <label for="signup-password">Password</label>
-            <input id="signup-password" type="password" placeholder="Choose a password" />
-            <label for="signup-confirm-password">Confirm Password</label>
-            <input id="signup-confirm-password" type="password" placeholder="Confirm your password" />
-            <button onclick="signup_btn()">Sign Up</button>
-            <div id="signup-message" class="message"></div>
+            <button class="mobile-menu-toggle">☰</button>
         </div>
-    </div>
+    </nav>
 
-    <script src="/static/js/auth.js"></script>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-badge">✨ Premium Shopping Experience</span>
+            <h1>Welcome to <span class="highlight">TamilMart</span></h1>
+            <p>Experience the finest blend of traditional Tamil culture and modern e-commerce. Discover authentic products, premium quality, and exceptional service.</p>
+            <div class="hero-buttons">
+                <a href="/signup" class="btn btn-primary">Get Started</a>
+                <a href="#categories" class="btn btn-secondary">Explore Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <h2 class="section-title">Why Choose <span class="accent">TamilMart</span>?</h2>
+            <p class="section-subtitle">Experience premium shopping with authentic Tamil cultural values and modern convenience</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🛍️</div>
+                <h3>Premium Quality</h3>
+                <p>Handpicked products that meet the highest standards of quality and authenticity</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Fast Delivery</h3>
+                <p>Swift and secure delivery to your doorstep with real-time tracking</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💎</div>
+                <h3>Authentic Products</h3>
+                <p>100% genuine products sourced directly from trusted Tamil artisans and vendors</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Secure Payments</h3>
+                <p>Multiple payment options with bank-grade security for your peace of mind</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="section-header">
+            <h2 class="section-title">Explore Our <span class="accent">Categories</span></h2>
+            <p class="section-subtitle">Discover a wide range of products celebrating Tamil heritage and modern lifestyle</p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-image">👗</div>
+                <div class="category-content">
+                    <h3>Traditional Wear</h3>
+                    <p>Elegant sarees, dhotis, and ethnic clothing</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-image">💍</div>
+                <div class="category-content">
+                    <h3>Jewelry & Accessories</h3>
+                    <p>Exquisite gold, silver, and temple jewelry</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-image">🎨</div>
+                <div class="category-content">
+                    <h3>Arts & Crafts</h3>
+                    <p>Handcrafted items and traditional artwork</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-image">🏠</div>
+                <div class="category-content">
+                    <h3>Home Decor</h3>
+                    <p>Beautiful items for your sacred space</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-image">📚</div>
+                <div class="category-content">
+                    <h3>Books & Literature</h3>
+                    <p>Tamil classics and contemporary works</p>
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-image">🍛</div>
+                <div class="category-content">
+                    <h3>Food & Spices</h3>
+                    <p>Authentic Tamil cuisine ingredients</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Start Shopping?</h2>
+            <p>Join thousands of satisfied customers and experience the best of Tamil culture and modern e-commerce</p>
+            <div class="hero-buttons">
+                <a href="/signup" class="btn btn-primary">Create Account</a>
+                <a href="/login" class="btn btn-secondary">Sign In</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About TamilMart</h3>
+                <p>Your trusted destination for authentic Tamil products and premium e-commerce experience.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Customer Service</h3>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Track Order</a></li>
+                    <li><a href="#">Returns</a></li>
+                    <li><a href="#">Shipping Info</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect With Us</h3>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">YouTube</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 TamilMart. All rights reserved. Made with ❤️ for Tamil culture.</p>
+        </div>
+    </footer>
 </body>
 </html>

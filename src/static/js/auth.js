@@ -8,29 +8,11 @@ const CONFIG = {
 let signupElements = null;
 let loginElements = null;
 
-function switchTab(tab) {
-    // Update tab buttons
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
-
-    // Update form visibility
-    const forms = document.querySelectorAll('.form-container');
-    forms.forEach(f => f.classList.remove('active'));
-    
-    if (tab === 'login') {
-        document.getElementById('login-form').classList.add('active');
-    } else {
-        document.getElementById('signup-form').classList.add('active');
-    }
-
-    // Clear messages
-    clearMessages();
-}
-
 function clearMessages() {
-    document.getElementById('login-message').style.display = 'none';
-    document.getElementById('signup-message').style.display = 'none';
+    const loginMsg = document.getElementById('login-message');
+    const signupMsg = document.getElementById('signup-message');
+    if (loginMsg) loginMsg.style.display = 'none';
+    if (signupMsg) signupMsg.style.display = 'none';
 }
 
 function showMessage(elementId, message, isError) {
@@ -185,9 +167,7 @@ async function signup_btn() {
         if (result.result === true) {
             showMessage('signup-message', 'Account created successfully! Redirecting to login...', false);
             setTimeout(() => {
-                switchTab('login');
-                const loginElements = getLoginElements();
-                loginElements.username.value = elements.username.value;
+                window.location.href = '/login';
             }, CONFIG.REDIRECT_DELAY);
         } else {
             showMessage('signup-message', result.message || 'Sign up failed. Username may already exist.', true);
@@ -200,12 +180,18 @@ async function signup_btn() {
 
 // Add Enter key support
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('login-password').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') login_btn();
-    });
-    document.getElementById('signup-confirm-password').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') signup_btn();
-    });
+    const loginPassword = document.getElementById('login-password');
+    const signupConfirmPassword = document.getElementById('signup-confirm-password');
+    
+    if (loginPassword) {
+        loginPassword.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login_btn();
+        });
+    }
+    
+    if (signupConfirmPassword) {
+        signupConfirmPassword.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') signup_btn();
+        });
+    }
 });
-
-// Made with Bob
