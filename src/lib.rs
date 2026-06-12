@@ -4,9 +4,10 @@ pub mod schema;
 pub mod dbutils;
 
 use tokio;
-use axum::{Router, response::Html, routing::{get,post}}; 
-use crate::routes::auth::login;
+use axum::{Router, response::Html, routing::{get,post}};
+use crate::routes::auth::{signup,login};
 use tower_http::cors::{CorsLayer, Any};
+use tower_http::services::ServeDir;
 
 pub async fn run(){
 
@@ -17,9 +18,11 @@ pub async fn run(){
 
     let app = Router::new()
         .route("/", get(index))
+        .route("/signup", post(signup))
         .route("/login", post(login))
         .route("/success", get(success))
         .route("/error", get(error))
+        .nest_service("/static", ServeDir::new("src/static"))
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
