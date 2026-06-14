@@ -70,6 +70,29 @@ Built with modern, robust technologies:
 - **Database**: PostgreSQL with Diesel ORM
 - **Authentication**: Secure user authentication and authorization
 - **Frontend**: Modern web technologies for responsive design
+- **Deployment**: Docker & Docker Compose for containerization
+
+## 🐳 Docker Deployment
+
+This application can be easily deployed using Docker. See [DOCKER.md](DOCKER.md) for detailed instructions.
+
+### Quick Start with Docker
+
+```bash
+# Copy environment file
+cp .env.example .env
+
+# Build and start services
+docker-compose up -d
+
+# Run database migrations
+diesel migration run --database-url="postgresql://authuser:authpassword@localhost:5432/authdb"
+
+# Access the application
+open http://localhost:3000
+```
+
+For detailed Docker setup, troubleshooting, and production deployment guides, see [DOCKER.md](DOCKER.md).
 
 ## 🤝 Join the Movement
 
