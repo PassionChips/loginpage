@@ -1,0 +1,12 @@
+# CODEOWNERS file
+# This file defines the code owners for this repository
+# Each line is a file pattern followed by one or more owners
+
+# Default owner for everything in the repo
+* @Pushpak2861
+
+# You can also specify owners for specific directories or files
+# Examples (uncomment and modify as needed):
+# /src/ @Pushpak2861
+# *.rs @Pushpak2861
+# /docs/ @Pushpak2861
