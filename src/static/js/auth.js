@@ -170,7 +170,7 @@ async function signup_btn() {
                 window.location.href = '/login';
             }, CONFIG.REDIRECT_DELAY);
         } else {
-            showMessage('signup-message', result.message || 'Sign up failed. Username may already exist.', true);
+            showMessage('signup-message', result.message || 'Sign up failed. Username or Email may already exist.', true);
         }
     } catch (error) {
         console.error('Signup error:', error);
