@@ -5,11 +5,18 @@ pub mod dbutils;
 
 use tokio;
 use axum::{Router, response::Html, routing::{get,post}};
+use std::sync::Arc;
 use crate::routes::auth::{signup,login};
 use tower_http::cors::{CorsLayer, Any};
 use tower_http::services::ServeDir;
+use crate::dbutils::dbconfig::{create_pool,Appstate};
 
 pub async fn run(){
+
+    let pool = create_pool();
+    let appstate = Arc::new(Appstate{
+        pool:pool
+    });
 
     let cors = CorsLayer::new()
         .allow_origin(Any)
@@ -25,7 +32,8 @@ pub async fn run(){
         .route("/success", get(success))
         .route("/error", get(error))
         .nest_service("/static", ServeDir::new("src/static")) //when the html requests for /static/auth.js you don't need to create a separate route instead you use nest_service("/static" , ServeDir::new("src/static")) it will take whatever it needs
-        .layer(cors);
+        .layer(cors)
+        .with_state(appstate);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000").await.unwrap();
     println!("listening on {}",listener.local_addr().unwrap());
