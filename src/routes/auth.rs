@@ -1,37 +1,45 @@
+use std::sync::Arc;
+
 use crate::model::auth::{User,Login};
-use axum::response::Json;
+use axum::{extract::Json, response::Json as ResponseJson};
 use serde_json::{json,Value};
 use crate::dbutils::write_users::create_users;
 use crate::dbutils::dbconfig::{user_verifier,email_finder,user_finder};
+use axum::extract::State;
+use crate::dbutils::dbconfig::{Appstate};
 
-pub async fn signup(Json(user): Json<User>)->Json<Value>{
+pub async fn signup(State(state): State<Arc<Appstate>>, Json(user): Json<User>)->ResponseJson<Value>{
     println!("{}" , user.username);
     println!("{}" , user.password);
 
-    if email_finder(&user.email).is_some(){
-        return Json(json!({
+    let mut conn = state.pool.get().expect("Unable to get connection");
+
+    if email_finder(&user.email,&mut conn).is_some(){
+        return ResponseJson(json!({
             "result":false
         }));
     }
 
-    if user_finder(&user.username).is_some(){
-        return Json(json!({
+    if user_finder(&user.username,&mut conn).is_some(){
+        return ResponseJson(json!({
             "result":false
         }));
     }
-    create_users(&user);
+    create_users(&user,&mut conn);
 
-    Json(json!({
+    ResponseJson(json!({
         "result":true
     }))
-} 
+}
 
-pub async fn login(Json(login): Json<Login>)->Json<Value>{
+pub async fn login(State(state): State<Arc<Appstate>>,Json(login): Json<Login>)->ResponseJson<Value>{
     println!("{}" , login.username);
     println!("{}" , login.password);
 
-    let user = user_finder(&login.username);
-    let email = email_finder(&login.username);
+    let mut conn = state.pool.get().expect("unable to get the db pool");
+
+    let user = user_finder(&login.username,&mut conn);
+    let email = email_finder(&login.username,&mut conn);
 
     if user.is_some(){
         return user_verifier(&login, &user.unwrap());
@@ -40,7 +48,7 @@ pub async fn login(Json(login): Json<Login>)->Json<Value>{
         return user_verifier(&login, &email.unwrap());
     }
 
-    Json(json!({
+    ResponseJson(json!({
         "result":false
     }))
     

@@ -1,5 +1,4 @@
 use diesel::prelude::*;
-use crate::dbutils::dbconfig::establish_connection;
 use crate::schema::users;
 use crate::model::auth::User;
 use crate::model::userdb::{NewUsers,Users};
@@ -12,8 +11,7 @@ use argon2::{
 use rand::rngs::OsRng;
 
 //here we write the users into db
-pub fn create_users(data: &User)->Users{
-    let mut conn = establish_connection();
+pub fn create_users(data: &User, conn:&mut PgConnection)->Users{
 
     let password = data.password.as_bytes();
     let hashed_password = password_hasher(password).unwrap();
@@ -29,7 +27,7 @@ pub fn create_users(data: &User)->Users{
     diesel::insert_into(users::table)
         .values(new_user)
         .returning(Users::as_returning())
-        .get_result(&mut conn)
+        .get_result(conn)
         .expect("unable to insert users")
     
 }
