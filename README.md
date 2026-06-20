@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**Empowering Tamil Entrepreneurs to Reach the World**
+***Empowering Tamil Entrepreneurs to Reach the World***
 
 [![Built with Rust](https://img.shields.io/badge/Built%20with-Rust-orange.svg)](https://www.rust-lang.org/)
 [![Tokio](https://img.shields.io/badge/Async-Tokio-blue.svg)](https://tokio.rs/)

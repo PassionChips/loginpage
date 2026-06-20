@@ -1,11 +1,10 @@
 use std::sync::Arc;
 
 use crate::model::auth::{User,Login};
-use axum::{extract::Json, response::Json as ResponseJson};
+use axum::{extract::{Json,State}, response::Json as ResponseJson};
 use serde_json::{json,Value};
 use crate::dbutils::write_users::create_users;
 use crate::dbutils::dbconfig::{user_verifier,email_finder,user_finder};
-use axum::extract::State;
 use crate::dbutils::dbconfig::{Appstate};
 
 pub async fn signup(State(state): State<Arc<Appstate>>, Json(user): Json<User>)->ResponseJson<Value>{
