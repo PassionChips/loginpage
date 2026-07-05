@@ -22,6 +22,7 @@ pub fn create_users(data: &User, conn:&mut PgConnection)->Users{
         username : data.username.clone(),
         email: data.email.clone(),
         password : hashed_password,
+        role: data.role.clone(),
     };
 
     diesel::insert_into(users::table)

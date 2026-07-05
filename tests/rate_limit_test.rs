@@ -15,8 +15,8 @@ use serde_json::json;
 /// Helper function to create a test router with rate limiting
 fn create_test_router() -> Router {
     let limiters = Ratelimiters::new();
-    let login_rate_limiter = limiters.login;
-    let signup_rate_limiter = limiters.signup;
+    let login_rate_limiter = limiters.auth;
+    let signup_rate_limiter = limiters.profile;
 
     let pool = create_pool();
     let appstate = Arc::new(Appstate { pool });

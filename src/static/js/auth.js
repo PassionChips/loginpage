@@ -40,7 +40,9 @@ function getSignupElements() {
             username: document.getElementById("signup-username"),
             email: document.getElementById("signup-email"),
             password: document.getElementById("signup-password"),
-            confirmPassword: document.getElementById("signup-confirm-password")
+            confirmPassword: document.getElementById("signup-confirm-password"),
+            roleCustomer: document.getElementById("role-customer"),
+            roleClient: document.getElementById("role-client")
         };
     }
     return signupElements;
@@ -74,12 +76,29 @@ async function login_btn() {
     };
     
     try {
-        const result = await apiRequest('/login', data);
+        const result = await apiRequest('/auth/login', data);
         
         if (result.result === true) {
-            location.href = `${CONFIG.API_BASE_URL}/success`;
+            // Store user_id, username, and role in sessionStorage
+            sessionStorage.setItem('userId', result.user_id);
+            sessionStorage.setItem('username', result.username);
+            sessionStorage.setItem('role', result.role);
+            
+            showMessage('login-message', 'Login successful! Redirecting...', false);
+            
+            // Redirect based on role to profile page
+            setTimeout(() => {
+                if (result.role === 'customer') {
+                    window.location.href = '/profile/customerprofilecreation';
+                } else if (result.role === 'client') {
+                    window.location.href = '/profile/clientprofileextraction';
+                } else {
+                    // If role is not set, redirect to home
+                    window.location.href = '/';
+                }
+            }, CONFIG.REDIRECT_DELAY);
         } else {
-            location.href = `${CONFIG.API_BASE_URL}/error`;
+            showMessage('login-message', 'Invalid username or password', true);
         }
     } catch (error) {
         console.error('Login error:', error);
@@ -153,21 +172,41 @@ async function signup_btn() {
         return;
     }
     
+    // Get selected role
+    const role = elements.roleCustomer.checked ? 'customer' :
+                 elements.roleClient.checked ? 'client' : null;
+    
+    if (!role) {
+        showMessage('signup-message', 'Please select an account type', true);
+        return;
+    }
+    
     const data = {
         first_name: elements.firstName.value,
         last_name: elements.lastName.value,
         username: elements.username.value,
         password: elements.password.value,
-        email: elements.email.value || null
+        email: elements.email.value || null,
+        role: role
     };
     
     try {
-        const result = await apiRequest('/signup', data);
+        const result = await apiRequest('/auth/signup', data);
         
         if (result.result === true) {
-            showMessage('signup-message', 'Account created successfully! Redirecting to login...', false);
+            // Store user_id, username, and role in sessionStorage
+            sessionStorage.setItem('userId', result.user_id);
+            sessionStorage.setItem('username', result.username);
+            sessionStorage.setItem('role', result.role);
+            
+            showMessage('signup-message', 'Account created successfully! Redirecting to profile setup...', false);
             setTimeout(() => {
-                window.location.href = '/login';
+                // Redirect based on role
+                if (result.role === 'customer') {
+                    window.location.href = '/profile/customerprofilecreation';
+                } else if (result.role === 'client') {
+                    window.location.href = '/profile/clientprofileextraction';
+                }
             }, CONFIG.REDIRECT_DELAY);
         } else {
             showMessage('signup-message', result.message || 'Sign up failed. Username or Email may already exist.', true);
