@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Information - TamilMart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Mukta:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #D32F2F;
+            --secondary-color: #FF6F00;
+            --accent-color: #FFC107;
+            --dark-bg: #1A1A1A;
+            --light-bg: #FFFFFF;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --border-color: #E0E0E0;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --tamil-gold: #FFD700;
+            --tamil-maroon: #800020;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--tamil-maroon) 0%, var(--primary-color) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><pattern id="kolam" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="2" fill="rgba(255,215,0,0.1)"/><circle cx="25" cy="25" r="1.5" fill="rgba(255,215,0,0.08)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,215,0,0.08)"/><circle cx="25" cy="75" r="1.5" fill="rgba(255,215,0,0.08)"/><circle cx="75" cy="25" r="1.5" fill="rgba(255,215,0,0.08)"/></pattern></defs><rect width="1200" height="800" fill="url(%23kolam)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .container {
+            background: var(--light-bg);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            padding: 3rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--tamil-gold);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--tamil-maroon);
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .header h1 {
+            font-family: 'Mukta', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 1rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: var(--error-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--light-bg);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-light);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .terms-container {
+            background: #f9f9f9;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .terms-content {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding-right: 0.5rem;
+        }
+
+        .terms-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .terms-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .terms-content::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+
+        .terms-content h3 {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .terms-content p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.8rem;
+        }
+
+        .terms-content ul {
+            margin-left: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .terms-content li {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-top: 0.2rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .checkbox-group label {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .message {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.error {
+            background: #FFEBEE;
+            color: var(--error-color);
+            border: 1px solid #FFCDD2;
+        }
+
+        .message.success {
+            background: #E8F5E9;
+            color: var(--success-color);
+            border: 1px solid #C8E6C9;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--tamil-maroon) 0%, var(--primary-color) 100%);
+            color: var(--light-bg);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(211, 47, 47, 0.4);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-icon">தி</div>
+            <h1>Customer Information</h1>
+            <p>Complete your profile to start shopping</p>
+        </div>
+
+        <div id="customer-message" class="message"></div>
+
+        <form id="customer-form" onsubmit="event.preventDefault(); submitCustomerInfo();">
+            <div class="form-section">
+                <div class="section-title">Account Information</div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="user-id">User ID (Auto-assigned)</label>
+                        <input
+                            type="text"
+                            id="user-id"
+                            readonly
+                            style="background-color: #f5f5f5; cursor: not-allowed; color: #666; font-weight: 600;"
+                            placeholder="Loading..."
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="display-username">Username</label>
+                        <input
+                            type="text"
+                            id="display-username"
+                            readonly
+                            style="background-color: #f5f5f5; cursor: not-allowed; color: #666; font-weight: 600;"
+                            placeholder="Loading..."
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Contact Information</div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        placeholder="+91 XXXXX XXXXX"
+                        pattern="[0-9+\s-]+"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="alternate-phone">Alternate Phone Number</label>
+                    <input 
+                        type="tel" 
+                        id="alternate-phone" 
+                        placeholder="+91 XXXXX XXXXX (Optional)"
+                        pattern="[0-9+\s-]+"
+                    />
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Address Details</div>
+                
+                <div class="form-group">
+                    <label for="address-line1">Address Line 1 <span class="required">*</span></label>
+                    <input 
+                        type="text" 
+                        id="address-line1" 
+                        placeholder="House/Flat No., Building Name"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="address-line2">Address Line 2</label>
+                    <input 
+                        type="text" 
+                        id="address-line2" 
+                        placeholder="Street, Area, Landmark (Optional)"
+                    />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="city" 
+                            placeholder="Enter city"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state">State <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="state" 
+                            placeholder="Enter state"
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pincode">Pincode <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="pincode" 
+                            placeholder="6-digit pincode"
+                            pattern="[0-9]{6}"
+                            maxlength="6"
+                            required
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country <span class="required">*</span></label>
+                        <input 
+                            type="text" 
+                            id="country" 
+                            value="India"
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="section-title">Terms and Conditions</div>
+                
+                <div class="terms-container">
+                    <div class="terms-content">
+                        <h3>Customer Terms & Conditions</h3>
+                        <p><strong>Please read carefully before proceeding:</strong></p>
+                        
+                        <p><strong>1. Liability Disclaimer:</strong></p>
+                        <ul>
+                            <li>TamilMart acts solely as a platform connecting buyers and sellers</li>
+                            <li>All transactions are between you and the seller directly</li>
+                            <li>Any losses, damages, or disputes arising from purchases are your responsibility</li>
+                            <li>We do not guarantee product quality, delivery times, or seller reliability</li>
+                        </ul>
+
+                        <p><strong>2. User Responsibilities:</strong></p>
+                        <ul>
+                            <li>Provide accurate information for delivery and communication</li>
+                            <li>Verify product details before making purchases</li>
+                            <li>Report any fraudulent activities immediately</li>
+                            <li>Maintain confidentiality of your account credentials</li>
+                        </ul>
+
+                        <p><strong>3. Platform Usage:</strong></p>
+                        <ul>
+                            <li>You agree to use the platform for lawful purposes only</li>
+                            <li>TamilMart reserves the right to suspend accounts for violations</li>
+                            <li>We may update these terms periodically</li>
+                        </ul>
+
+                        <p><strong>4. Dispute Resolution:</strong></p>
+                        <ul>
+                            <li>Disputes should be resolved directly with sellers</li>
+                            <li>TamilMart may assist in mediation but is not liable for outcomes</li>
+                            <li>Legal jurisdiction is subject to Indian laws</li>
+                        </ul>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="accept-terms" required />
+                        <label for="accept-terms">
+                            I have read and accept the terms and conditions. I understand that TamilMart is a platform service and all losses incurred through transactions are my own responsibility.
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submit-btn">Complete Registration</button>
+        </form>
+    </div>
+
+    <script src="/static/js/customer.js"></script>
+</body>
+</html>

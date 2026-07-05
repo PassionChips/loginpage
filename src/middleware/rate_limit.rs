@@ -9,8 +9,8 @@ use governor::middleware::NoOpMiddleware;
 
 pub struct Ratelimiters{
     pub general: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
-    pub login: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
-    pub signup: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
+    pub auth: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
+    pub profile: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
 }
 
 impl Ratelimiters{
@@ -24,7 +24,7 @@ impl Ratelimiters{
                 .unwrap()
         );
 
-        let login = Arc::new(
+        let auth = Arc::new(
             GovernorConfigBuilder::default()
                 .key_extractor(SmartIpKeyExtractor)
                 .per_second(2)
@@ -33,7 +33,7 @@ impl Ratelimiters{
                 .unwrap()
         );
 
-        let signup = Arc::new(
+        let profile = Arc::new(
             GovernorConfigBuilder::default()
                 .key_extractor(SmartIpKeyExtractor)
                 .per_second(2)
@@ -44,20 +44,20 @@ impl Ratelimiters{
 
         Self { 
             general:general, 
-            login:login,
-            signup:signup,
+            auth:auth,
+            profile:profile,
         }
     }
 
     pub fn cleanup(&self){
         let general_limiter = self.general.limiter().clone();
-        let login_limiter=self.login.limiter().clone();
-        let signup_limiter = self.signup.limiter().clone();
+        let auth_limiter=self.auth.limiter().clone();
+        let profile_limiter = self.profile.limiter().clone();
         std::thread::spawn(move ||{
             std::thread::sleep(Duration::from_secs(60));
             general_limiter.retain_recent();
-            login_limiter.retain_recent();
-            signup_limiter.retain_recent();
+            auth_limiter.retain_recent();
+            profile_limiter.retain_recent();
         });
     }
 }

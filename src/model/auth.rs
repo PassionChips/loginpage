@@ -21,13 +21,14 @@ pub struct User{
     pub email:String,
     #[validate(custom(function ="validate_password"))]
     pub password:String,
+    pub role:String,
 }
 
 #[derive(Debug, Deserialize, Validate)]
 pub struct Login {
     #[validate(custom(function = "validate_username_or_email"))]
     pub username: String,
-    #[validate(length(min = 1, message = "Password is required"))]
+    #[validate(length(min = 7, message = "Password is required"))]
     pub password: String,
 }
 
@@ -53,7 +54,7 @@ fn validate_username_or_email(username_or_email:&str)->Result<(),validator::Vali
         return Ok(());
     }
 
-    if username_or_email.len()>=3 && username_or_email.len()<=10{
+    if username_or_email.len()>=3 && username_or_email.len()<=20{
         return Ok(());
     }
 
