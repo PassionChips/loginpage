@@ -108,6 +108,6 @@ See the [LICENSE](LICENSE) file for complete terms and conditions.
 
 *தமிழ் தொழில்முனைவோரை உலகளவில் இணைக்கிறோம்*
 
-(Connecting Tamil Entrepreneurs Globally)
+(Connecting Tamil Entrepreneurs Globally vanakam)
 
 </div>
