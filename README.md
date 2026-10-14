@@ -1,6 +1,6 @@
 # India Guide
 
-Plain-language guides to Indian government procedures (passport, Aadhaar, PAN and so on), in English and Tamil. Free to use, no accounts, funded by ads later.
+Plain-language guides to Indian government procedures (passport, Aadhaar, PAN and so on), in 12 languages: English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Urdu, Kannada, Odia, Malayalam and Punjabi. Free to use, no accounts, funded by ads later.
 
 Every guide links to the official source and shows when it was last checked. The site explains; it never files, collects documents or takes payments. That is deliberate: it keeps legal and privacy risk low.
 
@@ -20,9 +20,18 @@ Settings come from environment variables:
 | `SITE_CONTACT_EMAIL` | `contact@example.com` | Target of the "report an error" link. **Set before launch.** |
 | `BIND_ADDR` | `127.0.0.1:3000` | Listen address |
 
+## Languages
+
+- The interface text lives in `content/ui/<code>.txt`, one `key = value` per line. English must define every key (the server refuses to start otherwise); any key another language leaves out falls back to English. Unknown keys are rejected, which catches typos.
+- Guides live in `content/guides/<code>/<slug>.md`. A guide with no translation is shown in English, with a notice, so every link works. Those fallback pages point search engines at the English original and are left out of the sitemap.
+- First-time visitors are sent to the language their browser asks for (`Accept-Language`), English otherwise. Urdu is laid out right to left.
+- The server logs a `translation gap` line at startup for each language with missing text or guides.
+- To add a language: add a row to `LANGS` in `src/content.rs` and a `content/ui/<code>.txt` file.
+- **The interface text and the Hindi guides were machine-written. Have a native speaker proofread each language before launch**, especially anything about fees, documents or deadlines.
+
 ## Add a guide
 
-Create `content/guides/en/<slug>.md` (and the same `<slug>.md` under `ta/`):
+Create `content/guides/en/<slug>.md`, then add translations as the same `<slug>.md` under the other language folders:
 
 ```md
 ---
@@ -49,7 +58,7 @@ The slug is the file name (lowercase letters, digits, `-`). The server refuses t
 ## Before launch
 
 - [ ] Verify every guide against the official portal and update `updated`.
-- [ ] Have a Tamil speaker proofread the Tamil guides.
+- [ ] Have native speakers proofread every language's interface text and guides.
 - [ ] Have a lawyer review `content/pages/` (disclaimer, terms, privacy). They are drafts.
 - [ ] Set `SITE_URL` and `SITE_CONTACT_EMAIL`.
 - [ ] Put the site behind HTTPS (for example a reverse proxy) before exposing it.
@@ -58,7 +67,8 @@ The slug is the file name (lowercase letters, digits, `-`). The server refuses t
 ## Layout
 
 ```
-content/guides/{en,ta}/   guides (Markdown + front matter)
+content/guides/<lang>/    guides (Markdown + front matter)
+content/ui/<lang>.txt     interface text per language
 content/pages/            about, disclaimer, terms, privacy
 static/css/site.css       styles
 src/content.rs            loads and validates content

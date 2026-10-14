@@ -3,33 +3,88 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::Path;
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-pub enum Lang {
-    En,
-    Ta,
+pub struct LangInfo {
+    pub code: &'static str,
+    /// The language's name in its own script, shown in the language menu.
+    pub native: &'static str,
+    pub rtl: bool,
 }
 
-impl Lang {
-    pub const ALL: [Lang; 2] = [Lang::En, Lang::Ta];
+/// Supported languages, biggest first. English is index 0 and is the fallback for everything.
+/// To add a language: add a row here and a `content/ui/<code>.txt` file.
+pub const LANGS: [LangInfo; 12] = [
+    LangInfo { code: "en", native: "English", rtl: false },
+    LangInfo { code: "hi", native: "हिन्दी", rtl: false },
+    LangInfo { code: "bn", native: "বাংলা", rtl: false },
+    LangInfo { code: "mr", native: "मराठी", rtl: false },
+    LangInfo { code: "te", native: "తెలుగు", rtl: false },
+    LangInfo { code: "ta", native: "தமிழ்", rtl: false },
+    LangInfo { code: "gu", native: "ગુજરાતી", rtl: false },
+    LangInfo { code: "ur", native: "اردو", rtl: true },
+    LangInfo { code: "kn", native: "ಕನ್ನಡ", rtl: false },
+    LangInfo { code: "or", native: "ଓଡ଼ିଆ", rtl: false },
+    LangInfo { code: "ml", native: "മലയാളം", rtl: false },
+    LangInfo { code: "pa", native: "ਪੰਜਾਬੀ", rtl: false },
+];
 
-    pub fn code(self) -> &'static str {
-        match self {
-            Lang::En => "en",
-            Lang::Ta => "ta",
-        }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
+pub struct Lang(usize);
+
+impl Lang {
+    pub const EN: Lang = Lang(0);
+
+    pub fn all() -> impl Iterator<Item = Lang> {
+        (0..LANGS.len()).map(Lang)
     }
 
-    pub fn from_code(code: &str) -> Option<Lang> {
-        Lang::ALL.into_iter().find(|l| l.code() == code)
+    pub fn code(self) -> &'static str {
+        LANGS[self.0].code
     }
 
     pub fn native_name(self) -> &'static str {
-        match self {
-            Lang::En => "English",
-            Lang::Ta => "தமிழ்",
-        }
+        LANGS[self.0].native
+    }
+
+    pub fn is_rtl(self) -> bool {
+        LANGS[self.0].rtl
+    }
+
+    pub fn from_code(code: &str) -> Option<Lang> {
+        LANGS.iter().position(|l| l.code == code).map(Lang)
+    }
+
+    /// Picks the best supported language from an Accept-Language header, e.g. "hi-IN,hi;q=0.9,en;q=0.8".
+    pub fn from_accept_language(header: &str) -> Option<Lang> {
+        let mut prefs: Vec<(f32, &str)> = header
+            .split(',')
+            .filter_map(|part| {
+                let mut pieces = part.trim().split(';');
+                let tag = pieces.next()?.trim();
+                let q = pieces
+                    .find_map(|p| p.trim().strip_prefix("q=").and_then(|v| v.parse::<f32>().ok()))
+                    .unwrap_or(1.0);
+                (q > 0.0 && !tag.is_empty()).then_some((q, tag))
+            })
+            .collect();
+        prefs.sort_by(|a, b| b.0.total_cmp(&a.0));
+        prefs.into_iter().find_map(|(_, tag)| {
+            let primary = tag.split('-').next().unwrap_or(tag).to_ascii_lowercase();
+            Lang::from_code(&primary)
+        })
     }
 }
+
+/// Every interface string the templates use. English must define all of them; other languages
+/// may leave some out and fall back to English.
+pub const UI_KEYS: &[&str] = &[
+    "tagline", "disclaimer", "skip", "guides", "updated", "official_source", "open_official", "report_error",
+    "not_found", "back", "empty", "about", "disclaimer_link", "terms", "privacy", "language", "untranslated",
+    "english_badge", "footer_note", "find_title", "find_sub", "find_label", "find_placeholder", "all",
+    "count_one", "count_many", "no_match", "how_title", "how_intro", "how1", "how1_value", "how2",
+    "how2_value", "how3", "how3_value", "how_final", "how_final_value", "fact1_title", "fact1_text",
+    "fact2_title", "fact2_text", "fact3_title", "fact3_text", "faq_title", "faq1_q", "faq1_a", "faq2_q",
+    "faq2_a", "faq3_q", "faq3_a", "faq4_q", "faq4_a", "faq5_q", "faq5_a",
+];
 
 pub struct Guide {
     pub slug: String,
@@ -53,6 +108,7 @@ pub struct Page {
 pub struct Site {
     guides: HashMap<(Lang, String), Guide>,
     pages: HashMap<String, Page>,
+    ui: HashMap<Lang, HashMap<String, String>>,
 }
 
 impl Site {
@@ -60,7 +116,19 @@ impl Site {
     /// so a typo in front matter fails at startup instead of publishing a broken page.
     pub fn load(root: &Path) -> Result<Site, String> {
         let mut site = Site::default();
-        for lang in Lang::ALL {
+        for lang in Lang::all() {
+            let file = root.join("ui").join(format!("{}.txt", lang.code()));
+            if file.exists() {
+                let text = fs::read_to_string(&file).map_err(|e| format!("{}: {e}", file.display()))?;
+                let map = parse_ui(&text).map_err(|e| format!("ui/{}.txt: {e}", lang.code()))?;
+                site.ui.insert(lang, map);
+            }
+        }
+        let missing_en = site.missing_ui_keys(Lang::EN);
+        if !missing_en.is_empty() {
+            return Err(format!("ui/en.txt is missing keys: {}", missing_en.join(", ")));
+        }
+        for lang in Lang::all() {
             for (slug, src) in read_markdown_dir(&root.join("guides").join(lang.code()))? {
                 let guide = parse_guide(&slug, &src).map_err(|e| format!("guides/{}/{slug}.md: {e}", lang.code()))?;
                 site.guides.insert((lang, slug), guide);
@@ -71,6 +139,53 @@ impl Site {
             site.pages.insert(slug, page);
         }
         Ok(site)
+    }
+
+    /// Interface text for `lang`, falling back to English, then to the key itself.
+    pub fn t<'a>(&'a self, lang: Lang, key: &'a str) -> &'a str {
+        self.ui
+            .get(&lang)
+            .and_then(|m| m.get(key))
+            .or_else(|| self.ui.get(&Lang::EN).and_then(|m| m.get(key)))
+            .map(String::as_str)
+            .unwrap_or(key)
+    }
+
+    pub fn missing_ui_keys(&self, lang: Lang) -> Vec<&'static str> {
+        let have = self.ui.get(&lang);
+        UI_KEYS.iter().copied().filter(|k| !have.is_some_and(|m| m.contains_key(*k))).collect()
+    }
+
+    /// The guide in `lang`, or the English one when it has not been translated (`false` = fallback).
+    pub fn guide_or_fallback(&self, lang: Lang, slug: &str) -> Option<(&Guide, bool)> {
+        self.guide(lang, slug)
+            .map(|g| (g, true))
+            .or_else(|| self.guide(Lang::EN, slug).map(|g| (g, false)))
+    }
+
+    /// Every guide a reader of `lang` can open: translated ones, plus English ones not yet translated.
+    pub fn guides_for_index(&self, lang: Lang) -> Vec<(&Guide, bool)> {
+        let mut slugs: Vec<&str> = self.guides.keys().map(|(_, s)| s.as_str()).collect();
+        slugs.sort_unstable();
+        slugs.dedup();
+        let mut list: Vec<(&Guide, bool)> = slugs.into_iter().filter_map(|s| self.guide_or_fallback(lang, s)).collect();
+        list.sort_by(|a, b| (&a.0.category, &a.0.title).cmp(&(&b.0.category, &b.0.title)));
+        list
+    }
+
+    /// One line per language that is incomplete, for the startup log.
+    pub fn coverage_report(&self) -> Vec<String> {
+        let total = self.guides(Lang::EN).len();
+        Lang::all()
+            .filter(|l| *l != Lang::EN)
+            .filter_map(|l| {
+                let ui = self.missing_ui_keys(l).len();
+                let guides = self.guides(l).len();
+                (ui > 0 || guides < total).then(|| {
+                    format!("{}: {} interface strings missing, {guides}/{total} guides translated", l.code(), ui)
+                })
+            })
+            .collect()
     }
 
     pub fn guide(&self, lang: Lang, slug: &str) -> Option<&Guide> {
@@ -112,6 +227,24 @@ fn read_markdown_dir(dir: &Path) -> Result<Vec<(String, String)>, String> {
         out.push((slug, src));
     }
     Ok(out)
+}
+
+/// Parses `key = value` lines. Blank lines and lines starting with '#' are ignored.
+fn parse_ui(text: &str) -> Result<HashMap<String, String>, String> {
+    let mut map = HashMap::new();
+    for (n, line) in text.lines().enumerate() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        let (key, value) = line.split_once('=').ok_or(format!("line {}: expected 'key = value'", n + 1))?;
+        let key = key.trim();
+        if !UI_KEYS.contains(&key) {
+            return Err(format!("line {}: unknown key '{key}'", n + 1));
+        }
+        map.insert(key.to_string(), value.trim().to_string());
+    }
+    Ok(map)
 }
 
 pub fn valid_slug(slug: &str) -> bool {
@@ -223,6 +356,22 @@ mod tests {
         let html = render_markdown("<script>alert(1)</script>\n\n[x](javascript:alert(1))");
         assert!(!html.contains("<script>"));
         assert!(!html.contains("javascript:"));
+    }
+
+    #[test]
+    fn accept_language_picks_best_supported_language() {
+        assert_eq!(Lang::from_accept_language("hi-IN,hi;q=0.9,en;q=0.8"), Lang::from_code("hi"));
+        assert_eq!(Lang::from_accept_language("fr,ta;q=0.5,en;q=0.2"), Lang::from_code("ta"));
+        assert_eq!(Lang::from_accept_language("en;q=0.2, ur;q=0.9"), Lang::from_code("ur"));
+        assert_eq!(Lang::from_accept_language("fr,de"), None);
+        assert_eq!(Lang::from_accept_language("hi;q=0"), None);
+    }
+
+    #[test]
+    fn ui_files_reject_unknown_keys() {
+        assert!(parse_ui("tagline = ok\n# note\n\n").is_ok());
+        assert!(parse_ui("taglnie = typo").is_err());
+        assert!(parse_ui("no equals sign").is_err());
     }
 
     #[test]

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let category = '';
   const params = new URLSearchParams(location.search);
   input.value = params.get('q') || '';
-  chipBox.hidden = false;
+  if (chipBox) chipBox.hidden = false;
 
   const apply = () => {
     const terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);

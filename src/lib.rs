@@ -40,6 +40,9 @@ pub fn app(state: Arc<AppState>, limiter: middleware::rate_limit::LimiterConfig)
 pub async fn run() {
     let config = Config::from_env();
     let site = Site::load(&config.content_dir).unwrap_or_else(|e| panic!("content error: {e}"));
+    for line in site.coverage_report() {
+        println!("translation gap: {line}");
+    }
     let addr = config.bind;
 
     let limiter = middleware::rate_limit::limiter(5, 30);
