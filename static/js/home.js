@@ -1,4 +1,4 @@
-// Live search, category filter and reveal-on-scroll for the front page.
+// Live search and category filter for the guide list, and reveal-on-scroll for the front and guide pages.
 // The page is complete without this script; it only makes it faster to use.
 document.documentElement.classList.add('js');
 
@@ -9,8 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const chips = [...document.querySelectorAll('.chip')];
   const count = document.getElementById('count');
   const empty = document.querySelector('.empty');
-  if (!input || !count) return;
+  if (input && count) finder(input, items, chipBox, chips, count, empty);
+  reveal();
+});
 
+function finder(input, items, chipBox, chips, count, empty) {
   let category = '';
   const params = new URLSearchParams(location.search);
   input.value = params.get('q') || '';
@@ -20,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);
     let shown = 0;
     items.forEach((li) => {
-      const ok = (!category || li.dataset.cat === category) && terms.every((t) => li.dataset.text.includes(t));
+      const ok = (!category || li.dataset.cat === category) && terms.every((t) => (' ' + li.dataset.text).includes(' ' + t));
       li.hidden = !ok;
       if (ok) {
         li.style.setProperty('--d', Math.min(shown, 8) * 50 + 'ms');
@@ -60,7 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   apply();
+}
 
+function reveal() {
   const reveal = [...document.querySelectorAll('.reveal')];
   if (!('IntersectionObserver' in window)) {
     reveal.forEach((el) => el.classList.add('in'));
@@ -80,4 +85,4 @@ document.addEventListener('DOMContentLoaded', () => {
     el.style.setProperty('--d', (i % 3) * 80 + 'ms');
     io.observe(el);
   });
-});
+}

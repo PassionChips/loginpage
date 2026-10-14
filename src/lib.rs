@@ -5,7 +5,7 @@ pub mod render;
 pub mod routes;
 
 use axum::Router;
-use axum::http::{HeaderName, HeaderValue};
+use axum::http::{HeaderName, HeaderValue, header};
 use config::Config;
 use content::Site;
 use routes::AppState;
@@ -14,7 +14,7 @@ use std::sync::Arc;
 use tower_governor::GovernorLayer;
 use tower_http::compression::CompressionLayer;
 use tower_http::services::ServeDir;
-use tower_http::set_header::SetResponseHeaderLayer;
+use tower_http::set_header::{SetResponseHeader, SetResponseHeaderLayer};
 
 /// The site has no forms, scripts or cookies, so the CSP can be strict.
 /// Loosen `script-src`/`img-src`/`frame-src` only for the ad provider when ads are added.
@@ -25,10 +25,17 @@ fn header(name: &'static str, value: &'static str) -> SetResponseHeaderLayer<Hea
 }
 
 pub fn app(state: Arc<AppState>, limiter: middleware::rate_limit::LimiterConfig) -> Router {
-    let static_dir = state.config.static_dir.clone();
+    // Static files are cheap to serve and one page loads several of them, so they sit outside the
+    // per-IP limiter (which would otherwise block styles and scripts after a few reloads) and are
+    // cached briefly by the browser instead.
+    let static_files = SetResponseHeader::if_not_present(
+        ServeDir::new(state.config.static_dir.clone()),
+        header::CACHE_CONTROL,
+        HeaderValue::from_static("public, max-age=600"),
+    );
     routes::router()
-        .nest_service("/static", ServeDir::new(static_dir))
         .layer(GovernorLayer::new(limiter))
+        .nest_service("/static", static_files)
         .layer(CompressionLayer::new())
         .layer(header("content-security-policy", CSP))
         .layer(header("x-content-type-options", "nosniff"))
@@ -39,7 +46,9 @@ pub fn app(state: Arc<AppState>, limiter: middleware::rate_limit::LimiterConfig)
 
 pub async fn run() {
     let config = Config::from_env();
-    let site = Site::load(&config.content_dir).unwrap_or_else(|e| panic!("content error: {e}"));
+    let site = Site::load(&config.content_dir)
+        .unwrap_or_else(|e| panic!("content error: {e}"))
+        .with_icons(&config.static_dir.join("icons"));
     for line in site.coverage_report() {
         println!("translation gap: {line}");
     }

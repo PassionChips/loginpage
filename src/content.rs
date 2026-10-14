@@ -83,8 +83,48 @@ pub const UI_KEYS: &[&str] = &[
     "count_one", "count_many", "no_match", "how_title", "how_intro", "how1", "how1_value", "how2",
     "how2_value", "how3", "how3_value", "how_final", "how_final_value", "fact1_title", "fact1_text",
     "fact2_title", "fact2_text", "fact3_title", "fact3_text", "faq_title", "faq1_q", "faq1_a", "faq2_q",
-    "faq2_a", "faq3_q", "faq3_a", "faq4_q", "faq4_a", "faq5_q", "faq5_a",
+    "faq2_a", "faq3_q", "faq3_a", "faq4_q", "faq4_a", "faq5_q", "faq5_a", "links_nav", "links_title",
+    "links_sub", "links_search", "links_placeholder", "links_count_one", "links_count_many", "links_none",
+    "links_disclaimer", "links_categories", "badge_free", "badge_tier", "badge_oss", "cat_pdf", "cat_invoice",
+    "cat_llm", "cat_aiart", "cat_video", "cat_audio", "cat_design", "cat_files", "cat_dev", "cat_learn",
+    "cat_anime", "cat_manga", "tb_prev", "tb_next", "tb_onpage", "tb_sections", "tb_documents", "tb_copy",
+    "tb_copied", "tb_print", "tb_visit", "dx_filters", "dx_sort", "dx_sort_curated", "dx_sort_az", "dx_sort_za", "dx_saved", "dx_save", "dx_unsave", "dx_details", "dx_visit", "dx_compare", "dx_compare_title", "dx_compare_limit", "dx_compare_need", "dx_remove", "dx_clear", "dx_active", "dx_view", "dx_grid", "dx_list", "dx_density", "dx_comfortable", "dx_compact", "dx_close", "dx_category", "dx_pricing", "dx_website", "dx_description", "dx_yes", "dx_no", "dx_try", "dx_saved_toast", "dx_removed_toast", "dx_added_compare", "dx_palette", "dx_palette_hint", "dx_no_saved", "dx_scroll_prev", "dx_scroll_next", "dx_selected", "dx_see_all", "dx_back_all", "dx_sort_stars", "dx_stars_title", "dx_photo", "home_title", "home_sub", "choice_tools_title", "choice_tools_text", "choice_tools_cta", "choice_guides_title", "choice_guides_text", "choice_guides_cta", "home_popular", "home_categories",
 ];
+
+/// Groups in the free tools directory, in display order. Each needs a `cat_<id>` interface string
+/// in every language and an icon in `render::icon`.
+pub const LINK_CATEGORIES: [&str; 12] =
+    ["pdf", "invoice", "llm", "aiart", "video", "audio", "design", "files", "dev", "learn", "anime", "manga"];
+
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum Badge {
+    Free,
+    Tier,
+    Oss,
+}
+
+pub struct Link {
+    pub name: String,
+    pub url: String,
+    pub badge: Badge,
+    pub description: String,
+    /// "owner/repo" of the tool's public GitHub repository, if it has one.
+    pub repo: Option<String>,
+}
+
+/// A hero background photo and its credit (see content/links/backgrounds.tsv).
+pub struct Background {
+    pub file: String,
+    pub title: String,
+    pub creator: String,
+    pub license: String,
+    pub page: String,
+}
+
+pub struct LinkGroup {
+    pub id: &'static str,
+    pub links: Vec<Link>,
+}
 
 pub struct Guide {
     pub slug: String,
@@ -96,6 +136,13 @@ pub struct Guide {
     /// ISO date (YYYY-MM-DD) of the last time the content was checked against the official source.
     pub updated: String,
     pub body_html: String,
+    /// The `##` headings of the guide, for the toolbar's jump menu.
+    pub sections: Vec<Section>,
+}
+
+pub struct Section {
+    pub id: String,
+    pub title: String,
 }
 
 pub struct Page {
@@ -109,6 +156,15 @@ pub struct Site {
     guides: HashMap<(Lang, String), Guide>,
     pages: HashMap<String, Page>,
     ui: HashMap<Lang, HashMap<String, String>>,
+    link_groups: Vec<LinkGroup>,
+    /// Host -> file name in the icons folder, for tools whose own icon has been downloaded.
+    icons: HashMap<String, String>,
+    /// GitHub stars per "owner/repo", copied from GitHub by tools/fetch_stars.py.
+    stars: HashMap<String, u64>,
+    /// The date those star counts were checked.
+    stars_checked: Option<String>,
+    /// Hero photo per directory page: "all" for the main page, otherwise a category id.
+    backgrounds: HashMap<String, Background>,
 }
 
 impl Site {
@@ -132,6 +188,45 @@ impl Site {
             for (slug, src) in read_markdown_dir(&root.join("guides").join(lang.code()))? {
                 let guide = parse_guide(&slug, &src).map_err(|e| format!("guides/{}/{slug}.md: {e}", lang.code()))?;
                 site.guides.insert((lang, slug), guide);
+            }
+        }
+        let directory = root.join("links").join("directory.txt");
+        if directory.exists() {
+            let text = fs::read_to_string(&directory).map_err(|e| format!("{}: {e}", directory.display()))?;
+            site.link_groups = parse_links(&text).map_err(|e| format!("links/directory.txt: {e}"))?;
+        }
+        let stars_file = root.join("links").join("github.tsv");
+        if stars_file.exists() {
+            let text = fs::read_to_string(&stars_file).map_err(|e| format!("{}: {e}", stars_file.display()))?;
+            for (n, line) in text.lines().enumerate() {
+                if let Some(rest) = line.strip_prefix("# GitHub stars, checked ") {
+                    site.stars_checked = rest.split('.').next().filter(|d| valid_date(d)).map(str::to_string);
+                    continue;
+                }
+                if line.trim().is_empty() || line.starts_with('#') {
+                    continue;
+                }
+                let (repo, count) = line.split_once('\t').ok_or(format!("links/github.tsv line {}: expected repo<TAB>stars", n + 1))?;
+                let count = count.trim().parse().map_err(|_| format!("links/github.tsv line {}: '{count}' is not a number", n + 1))?;
+                site.stars.insert(repo.to_string(), count);
+            }
+        }
+        let bg_file = root.join("links").join("backgrounds.tsv");
+        if bg_file.exists() {
+            let text = fs::read_to_string(&bg_file).map_err(|e| format!("{}: {e}", bg_file.display()))?;
+            for (n, line) in text.lines().enumerate() {
+                if line.trim().is_empty() || line.starts_with('#') {
+                    continue;
+                }
+                let f: Vec<&str> = line.split('\t').collect();
+                let [id, file, title, creator, license, page] = f[..] else {
+                    return Err(format!("links/backgrounds.tsv line {}: expected 6 tab-separated fields", n + 1));
+                };
+                if !page.starts_with("https://") || !valid_slug(file.trim_end_matches(".jpg")) {
+                    return Err(format!("links/backgrounds.tsv line {}: bad file name or source page", n + 1));
+                }
+                let bg = Background { file: file.into(), title: title.into(), creator: creator.into(), license: license.into(), page: page.into() };
+                site.backgrounds.insert(id.to_string(), bg);
             }
         }
         for (slug, src) in read_markdown_dir(&root.join("pages"))? {
@@ -186,6 +281,42 @@ impl Site {
                 })
             })
             .collect()
+    }
+
+    /// Records which tools have a downloaded icon (see tools/fetch_icons.py). Files are named after the
+    /// link's host; only raster formats the fetcher keeps are accepted.
+    pub fn with_icons(mut self, dir: &Path) -> Self {
+        if let Ok(entries) = fs::read_dir(dir) {
+            for entry in entries.flatten() {
+                let name = entry.file_name().to_string_lossy().into_owned();
+                if let Some((host, ext)) = name.rsplit_once('.') {
+                    if matches!(ext, "png" | "ico" | "jpg" | "webp" | "gif") {
+                        self.icons.insert(host.to_string(), name);
+                    }
+                }
+            }
+        }
+        self
+    }
+
+    pub fn stars(&self, link: &Link) -> Option<u64> {
+        link.repo.as_ref().and_then(|r| self.stars.get(r)).copied()
+    }
+
+    pub fn background(&self, id: &str) -> Option<&Background> {
+        self.backgrounds.get(id)
+    }
+
+    pub fn stars_checked(&self) -> Option<&str> {
+        self.stars_checked.as_deref()
+    }
+
+    pub fn icon_for(&self, host: &str) -> Option<&str> {
+        self.icons.get(host).map(String::as_str)
+    }
+
+    pub fn link_groups(&self) -> &[LinkGroup] {
+        &self.link_groups
     }
 
     pub fn guide(&self, lang: Lang, slug: &str) -> Option<&Guide> {
@@ -247,6 +378,70 @@ fn parse_ui(text: &str) -> Result<HashMap<String, String>, String> {
     Ok(map)
 }
 
+/// Parses the directory file: `[group]` headers followed by `Name | https url | badge | description`.
+/// Rejects unknown groups, non-https links, duplicate URLs and empty groups, so a typo fails at startup.
+fn parse_links(text: &str) -> Result<Vec<LinkGroup>, String> {
+    let mut groups: Vec<LinkGroup> = Vec::new();
+    let mut seen: Vec<String> = Vec::new();
+    for (n, line) in text.lines().enumerate() {
+        let line = line.trim();
+        let at = |msg: String| format!("line {}: {msg}", n + 1);
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some(id) = line.strip_prefix('[').and_then(|l| l.strip_suffix(']')) {
+            let id = LINK_CATEGORIES.iter().find(|c| **c == id).ok_or(at(format!("unknown group '{id}'")))?;
+            if groups.iter().any(|g| g.id == *id) {
+                return Err(at(format!("group '{id}' appears twice")));
+            }
+            groups.push(LinkGroup { id, links: Vec::new() });
+            continue;
+        }
+        let group = groups.last_mut().ok_or(at("link before any [group] header".into()))?;
+        let parts: Vec<&str> = line.split(" | ").map(str::trim).collect();
+        let (name, url, badge, description, extra) = match parts[..] {
+            [n, u, b, d] => (n, u, b, d, None),
+            [n, u, b, d, e] => (n, u, b, d, Some(e)),
+            _ => return Err(at("expected 'Name | https url | badge | description' and optionally '| github=owner/repo'".into())),
+        };
+        let repo = match extra {
+            None => None,
+            Some(e) => {
+                let repo = e.strip_prefix("github=").ok_or(at(format!("unknown field '{e}', expected github=owner/repo")))?;
+                let valid = repo.split_once('/').is_some_and(|(o, r)| {
+                    let ok = |x: &str| !x.is_empty() && x.bytes().all(|b| b.is_ascii_alphanumeric() || b"-_.".contains(&b));
+                    ok(o) && ok(r)
+                });
+                if !valid {
+                    return Err(at(format!("'{repo}' is not a GitHub owner/repo")));
+                }
+                Some(repo.to_string())
+            }
+        };
+        if name.is_empty() || description.is_empty() {
+            return Err(at("name and description must not be empty".into()));
+        }
+        if !url.starts_with("https://") || url.contains(char::is_whitespace) {
+            return Err(at(format!("'{url}' must be an https:// link")));
+        }
+        if seen.iter().any(|u| u == url) {
+            return Err(at(format!("duplicate link {url}")));
+        }
+        let badge = match badge {
+            "free" => Badge::Free,
+            "tier" => Badge::Tier,
+            "oss" => Badge::Oss,
+            other => return Err(at(format!("badge must be free, tier or oss, not '{other}'"))),
+        };
+        seen.push(url.to_string());
+        group.links.push(Link { name: name.into(), url: url.into(), badge, description: description.into(), repo });
+    }
+    if let Some(empty) = groups.iter().find(|g| g.links.is_empty()) {
+        return Err(format!("group '{}' has no links", empty.id));
+    }
+    Ok(groups)
+}
+
 pub fn valid_slug(slug: &str) -> bool {
     !slug.is_empty() && slug.bytes().all(|b| b.is_ascii_lowercase() || b.is_ascii_digit() || b == b'-')
 }
@@ -262,8 +457,13 @@ fn parse_guide(slug: &str, src: &str) -> Result<Guide, String> {
         official_name: take("official_name")?,
         official_url: take("official_url")?,
         updated: take("updated")?,
-        body_html: render_markdown(body),
+        body_html: String::new(),
+        sections: Vec::new(),
     };
+    let mut guide = guide;
+    let (numbered, sections) = number_headings(body);
+    guide.body_html = render_markdown(&numbered);
+    guide.sections = sections;
     if !guide.official_url.starts_with("https://") {
         return Err("official_url must start with https://".into());
     }
@@ -308,10 +508,41 @@ fn split_front_matter(src: &str) -> Result<(HashMap<String, String>, &str), Stri
     Err("front matter block is not closed with '---'".into())
 }
 
+/// Gives every `##` heading an id so the toolbar can link to it. A heading may choose its own id with a
+/// trailing `{#id}` (the documents section uses `{#documents}`); the others become `s1`, `s2`, and so on.
+fn number_headings(md: &str) -> (String, Vec<Section>) {
+    let mut out = String::with_capacity(md.len() + 64);
+    let mut sections: Vec<Section> = Vec::new();
+    let mut in_fence = false;
+    for line in md.lines() {
+        if line.trim_start().starts_with("```") {
+            in_fence = !in_fence;
+        }
+        match line.strip_prefix("## ").filter(|_| !in_fence) {
+            Some(rest) => {
+                let rest = rest.trim_end();
+                let (title, id) = match rest.rsplit_once(" {#") {
+                    Some((title, tail)) if tail.ends_with('}') && valid_slug(&tail[..tail.len() - 1]) => {
+                        (title.trim(), tail[..tail.len() - 1].to_string())
+                    }
+                    _ => (rest.trim(), format!("s{}", sections.len() + 1)),
+                };
+                out.push_str(&format!("## {title} {{#{id}}}\n"));
+                sections.push(Section { id, title: title.to_string() });
+            }
+            None => {
+                out.push_str(line);
+                out.push('\n');
+            }
+        }
+    }
+    (out, sections)
+}
+
 /// Markdown to HTML. Raw HTML in the source is shown as text, and links may only be
 /// http(s), mailto or relative, so content files cannot inject markup or scripts.
 fn render_markdown(md: &str) -> String {
-    let events = Parser::new_ext(md, Options::ENABLE_TABLES | Options::ENABLE_STRIKETHROUGH).map(|event| match event {
+    let events = Parser::new_ext(md, Options::ENABLE_TABLES | Options::ENABLE_STRIKETHROUGH | Options::ENABLE_HEADING_ATTRIBUTES).map(|event| match event {
         Event::Html(t) | Event::InlineHtml(t) => Event::Text(t),
         Event::Start(Tag::Link { link_type, dest_url, title, id }) => {
             let lower = dest_url.to_ascii_lowercase();
@@ -326,8 +557,53 @@ fn render_markdown(md: &str) -> String {
         other => other,
     });
     let mut out = String::new();
-    html::push_html(&mut out, events);
+    html::push_html(&mut out, figures(events.collect()).into_iter());
     out
+}
+
+/// Guide screenshots. An image alone in its paragraph becomes a `<figure>` whose caption is the image
+/// title (where the screenshot came from), lazy-loaded with a link to the full-size file. Images may only
+/// come from `/static/guides/`; anything else is dropped, keeping its alt text.
+fn figures(events: Vec<Event<'_>>) -> Vec<Event<'_>> {
+    let mut out = Vec::with_capacity(events.len());
+    let mut i = 0;
+    while i < events.len() {
+        let alone = matches!(events[i], Event::Start(Tag::Paragraph)) && matches!(events.get(i + 1), Some(Event::Start(Tag::Image { .. })));
+        let at = if alone { i + 1 } else { i };
+        if let Event::Start(Tag::Image { dest_url, title, .. }) = &events[at] {
+            let end = (at..events.len()).find(|&j| matches!(events[j], Event::End(pulldown_cmark::TagEnd::Image))).unwrap_or(events.len() - 1);
+            let alt: String = events[at + 1..end].iter().filter_map(|e| if let Event::Text(t) | Event::Code(t) = e { Some(t.as_ref()) } else { None }).collect();
+            let figure_ok = alone && matches!(events.get(end + 1), Some(Event::End(pulldown_cmark::TagEnd::Paragraph)));
+            let src = dest_url.as_ref();
+            let safe = src.starts_with("/static/guides/") && !src.contains("..") && !src.contains(['"', '<', '>', ' ']);
+            let html = if !safe {
+                html_escape(&alt)
+            } else if figure_ok {
+                let caption = if title.is_empty() { String::new() } else { format!("<figcaption>{}</figcaption>", html_escape(title)) };
+                format!(r#"<figure class="shot"><a href="{src}"><img src="{src}" alt="{}" loading="lazy" decoding="async"></a>{caption}</figure>"#, html_escape(&alt))
+            } else {
+                format!(r#"<img src="{src}" alt="{}" loading="lazy" decoding="async">"#, html_escape(&alt))
+            };
+            if figure_ok {
+                out.push(Event::Html(CowStr::from(html)));
+                i = end + 2;
+            } else {
+                if alone {
+                    out.push(Event::Start(Tag::Paragraph));
+                }
+                out.push(Event::InlineHtml(CowStr::from(html)));
+                i = end + 1;
+            }
+            continue;
+        }
+        out.push(events[i].clone());
+        i += 1;
+    }
+    out
+}
+
+fn html_escape(s: &str) -> String {
+    s.replace('&', "&amp;").replace('<', "&lt;").replace('>', "&gt;").replace('"', "&quot;")
 }
 
 #[cfg(test)]
@@ -359,6 +635,16 @@ mod tests {
     }
 
     #[test]
+    fn screenshots_become_captioned_figures_and_only_local_images_load() {
+        let html = render_markdown("![The \"Link\" button](/static/guides/x/1.png \"Screenshot: example.gov.in\")\n\nText ![a](https://evil.example/t.png) end");
+        assert!(html.contains(r#"<figure class="shot"><a href="/static/guides/x/1.png"><img src="/static/guides/x/1.png" alt="The &quot;Link&quot; button""#));
+        assert!(html.contains("<figcaption>Screenshot: example.gov.in</figcaption></figure>"));
+        assert!(!html.contains("<p><figure"));
+        assert!(!html.contains("evil.example"));
+        assert!(html.contains("<p>Text a end</p>"));
+    }
+
+    #[test]
     fn accept_language_picks_best_supported_language() {
         assert_eq!(Lang::from_accept_language("hi-IN,hi;q=0.9,en;q=0.8"), Lang::from_code("hi"));
         assert_eq!(Lang::from_accept_language("fr,ta;q=0.5,en;q=0.2"), Lang::from_code("ta"));
@@ -372,6 +658,35 @@ mod tests {
         assert!(parse_ui("tagline = ok\n# note\n\n").is_ok());
         assert!(parse_ui("taglnie = typo").is_err());
         assert!(parse_ui("no equals sign").is_err());
+    }
+
+    #[test]
+    fn directory_parser_accepts_good_and_rejects_bad_input() {
+        let ok = "# c\n[pdf]\nA | https://a.example | free | Does a thing.\nB | https://b.example | oss | Another.\n";
+        let groups = parse_links(ok).unwrap();
+        assert_eq!((groups.len(), groups[0].links.len(), groups[0].links[1].badge), (1, 2, Badge::Oss));
+        assert!(parse_links("[nope]\nA | https://a.example | free | x").is_err(), "unknown group");
+        assert!(parse_links("A | https://a.example | free | x").is_err(), "no group header");
+        assert!(parse_links("[pdf]\nA | http://a.example | free | x").is_err(), "not https");
+        assert!(parse_links("[pdf]\nA | https://a.example | cheap | x").is_err(), "bad badge");
+        assert!(parse_links("[pdf]\nA | https://a.example | free").is_err(), "missing description");
+        assert!(parse_links("[pdf]\nA | https://a.example | free | x\nB | https://a.example | free | y").is_err(), "duplicate url");
+        assert!(parse_links("[pdf]\n").is_err(), "empty group");
+        let with_repo = parse_links("[pdf]\nA | https://a.example | oss | x | github=owner/repo-1.2\n").unwrap();
+        assert_eq!(with_repo[0].links[0].repo.as_deref(), Some("owner/repo-1.2"));
+        assert!(parse_links("[pdf]\nA | https://a.example | oss | x | github=not a repo").is_err(), "bad repo");
+        assert!(parse_links("[pdf]\nA | https://a.example | oss | x | stars=5").is_err(), "unknown extra field");
+    }
+
+    #[test]
+    fn headings_get_ids_and_explicit_ids_are_kept() {
+        let (md, sections) = number_headings("intro\n## First\ntext\n## Documents you need {#documents}\n### Sub\n");
+        assert_eq!(sections.len(), 2);
+        assert_eq!((sections[0].id.as_str(), sections[0].title.as_str()), ("s1", "First"));
+        assert_eq!((sections[1].id.as_str(), sections[1].title.as_str()), ("documents", "Documents you need"));
+        let html = render_markdown(&md);
+        assert!(html.contains(r#"<h2 id="s1">First</h2>"#) && html.contains(r#"<h2 id="documents">"#), "{html}");
+        assert!(html.contains("<h3>Sub</h3>"), "### headings are untouched");
     }
 
     #[test]

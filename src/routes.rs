@@ -22,6 +22,9 @@ pub fn router() -> Router<Arc<AppState>> {
         .route("/sitemap.xml", get(sitemap))
         .route("/p/{slug}", get(static_page))
         .route("/{lang}", get(index))
+        .route("/{lang}/links", get(links))
+        .route("/{lang}/links/{category}", get(links_category))
+        .route("/{lang}/guides", get(guides))
         .route("/{lang}/guides/{slug}", get(guide))
         .fallback(not_found)
 }
@@ -48,6 +51,29 @@ async fn index(State(state): Shared, Path(lang): Path<String>) -> Response {
     match Lang::from_code(&lang) {
         Some(lang) => Html(render::index_page(&state.config, &state.site, lang)).into_response(),
         None => not_found_response(&state),
+    }
+}
+
+async fn guides(State(state): Shared, Path(lang): Path<String>) -> Response {
+    match Lang::from_code(&lang) {
+        Some(lang) => Html(render::guides_page(&state.config, &state.site, lang)).into_response(),
+        None => not_found_response(&state),
+    }
+}
+
+async fn links(State(state): Shared, Path(lang): Path<String>) -> Response {
+    match Lang::from_code(&lang) {
+        Some(lang) => Html(render::links_page(&state.config, &state.site, lang, None)).into_response(),
+        None => not_found_response(&state),
+    }
+}
+
+async fn links_category(State(state): Shared, Path((lang, category)): Path<(String, String)>) -> Response {
+    let lang = Lang::from_code(&lang);
+    let exists = state.site.link_groups().iter().any(|g| g.id == category);
+    match lang {
+        Some(lang) if exists => Html(render::links_page(&state.config, &state.site, lang, Some(&category))).into_response(),
+        _ => not_found_response(&state),
     }
 }
 
@@ -84,6 +110,11 @@ async fn sitemap(State(state): Shared) -> impl IntoResponse {
     };
     for lang in Lang::all() {
         url(&format!("/{}", lang.code()), None);
+        url(&format!("/{}/guides", lang.code()), None);
+        url(&format!("/{}/links", lang.code()), None);
+        for g in state.site.link_groups() {
+            url(&format!("/{}/links/{}", lang.code(), g.id), None);
+        }
         for g in state.site.guides(lang) {
             url(&format!("/{}/guides/{}", lang.code(), g.slug), Some(&g.updated));
         }

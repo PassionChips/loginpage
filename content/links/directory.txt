@@ -1,0 +1,183 @@
+# Free tools directory. One link per line: Name | https URL | badge | short English description
+# badge: free = free to use, tier = free plan with limits, oss = open source
+# optional 5th field: github=owner/repo for the tool's public repository (star counts come from tools/fetch_stars.py)
+# Only legal services are listed. Group ids must match LINK_CATEGORIES in src/content.rs.
+
+[pdf]
+PDF24 Tools | https://tools.pdf24.org | free | Merge, split, compress, convert and edit PDFs online or on the desktop.
+Stirling-PDF | https://github.com/Stirling-Tools/Stirling-PDF | oss | Self-hosted PDF toolbox with dozens of operations, so files stay on your machine. | github=Stirling-Tools/Stirling-PDF
+PDFsam Basic | https://pdfsam.org | oss | Split, merge, rotate and extract pages on your own computer. | github=torakiki/pdfsam
+PDFgear | https://www.pdfgear.com | free | Free PDF editor, converter and reader for desktop and mobile.
+iLovePDF | https://www.ilovepdf.com | tier | Everyday PDF tools in the browser. Free use has daily limits.
+Smallpdf | https://smallpdf.com | tier | Browser PDF tools with a limited number of free tasks per day.
+Sejda PDF | https://www.sejda.com | tier | Edit, sign and fill PDFs online. Free tasks have size and daily limits.
+OCRmyPDF | https://ocrmypdf.readthedocs.io | oss | Adds a searchable text layer to scanned PDFs. | github=ocrmypdf/OCRmyPDF
+SumatraPDF | https://www.sumatrapdfreader.org | oss | Fast, lightweight PDF and ebook reader for Windows. | github=sumatrapdfreader/sumatrapdf
+BentoPDF | https://bentopdf.com | oss | PDF toolkit that runs entirely in your browser, so files never leave your device. | github=alam00000/bentopdf
+Xournal++ | https://xournalpp.github.io | oss | Handwrite notes and annotate PDFs with a pen or mouse. | github=xournalpp/xournalpp
+PDF Arranger | https://github.com/pdfarranger/pdfarranger | oss | Merge, split, rotate and reorder PDF pages on the desktop. | github=pdfarranger/pdfarranger
+
+[invoice]
+Refrens | https://www.refrens.com | tier | Invoice, quotation and GST billing tools made for Indian businesses.
+Zoho Invoice | https://www.zoho.com/invoice/ | free | Free invoicing for small businesses, with reminders and payment links.
+Invoice Ninja | https://invoiceninja.com | oss | Open-source invoicing you can self-host, with a free hosted plan. | github=invoiceninja/invoiceninja
+Invoice Generator | https://invoice-generator.com | tier | Quick one-off PDF invoices without needing an account.
+Vyapar | https://vyaparapp.in | tier | Billing and GST invoice app for small shops. The free plan is limited.
+Akaunting | https://akaunting.com | oss | Open-source accounting and invoicing for small businesses. | github=akaunting/akaunting
+ERPNext | https://frappe.io/erpnext | oss | Open-source ERP with invoicing, accounting and inventory that you can self-host. | github=frappe/erpnext
+Odoo Community | https://www.odoo.com | oss | Business apps including invoicing and accounting. The Community edition is free to self-host. | github=odoo/odoo
+
+[llm]
+ChatGPT | https://chatgpt.com | tier | OpenAI's assistant. The free plan has usage limits.
+Claude | https://claude.ai | tier | Anthropic's assistant, free to try with message limits.
+Gemini | https://gemini.google.com | tier | Google's assistant, with a free tier on a Google account.
+Microsoft Copilot | https://copilot.microsoft.com | tier | Microsoft's assistant for chat, search and images.
+Perplexity | https://www.perplexity.ai | tier | AI search that answers with sources.
+Mistral Le Chat | https://chat.mistral.ai | tier | Assistant from Mistral AI with a free tier.
+DeepSeek | https://chat.deepseek.com | tier | Chat with DeepSeek's models in the browser.
+Meta AI | https://www.meta.ai | free | Meta's assistant. Availability varies by region.
+HuggingChat | https://huggingface.co/chat | free | Chat with open models hosted on Hugging Face.
+Groq | https://groq.com | tier | Very fast hosted open models. The developer console has a free tier.
+OpenRouter | https://openrouter.ai | tier | One API for many models, including some free ones.
+Ollama | https://ollama.com | oss | Run open models locally on your own computer. | github=ollama/ollama
+LM Studio | https://lmstudio.ai | free | Desktop app for downloading and running local models.
+Open WebUI | https://openwebui.com | free | Self-hosted chat interface for local and cloud models. Source-available licence. | github=open-webui/open-webui
+llama.cpp | https://github.com/ggml-org/llama.cpp | oss | Runs large language models efficiently on ordinary computers. | github=ggml-org/llama.cpp
+AnythingLLM | https://anythingllm.com | oss | Chat with your own documents using local or cloud models. | github=Mintplex-Labs/anything-llm
+LocalAI | https://localai.io | oss | Self-hosted, OpenAI-compatible API for running models locally. | github=mudler/LocalAI
+Text Generation WebUI | https://github.com/oobabooga/textgen | oss | Browser interface for running local language models. | github=oobabooga/textgen
+LibreChat | https://librechat.ai | oss | Self-hosted chat app that connects to many AI providers. | github=LibreChat-AI/LibreChat
+Jan | https://jan.ai | oss | Desktop app for chatting with local models offline. | github=janhq/jan
+
+[aiart]
+Bing Image Creator | https://www.bing.com/images/create | tier | Text-to-image from Microsoft. Fast generations are limited.
+Leonardo AI | https://leonardo.ai | tier | Image generation with a daily free token allowance.
+Ideogram | https://ideogram.ai | tier | Image generator that handles text in images well. Free daily credits.
+Craiyon | https://www.craiyon.com | tier | Simple, no-fuss image generation with a free tier.
+Krea | https://www.krea.ai | tier | Real-time image generation and enhancement with a free allowance.
+ComfyUI | https://www.comfy.org | oss | Node-based open-source engine for local image and video generation. | github=Comfy-Org/ComfyUI
+Hugging Face Spaces | https://huggingface.co/spaces | free | Thousands of free demo apps for image, audio and video AI.
+Suno | https://suno.com | tier | Make songs from a text prompt. Free daily credits.
+ElevenLabs | https://elevenlabs.io | tier | Realistic text-to-speech with a monthly free allowance.
+Stable Diffusion WebUI | https://github.com/AUTOMATIC1111/stable-diffusion-webui | oss | Popular browser interface for running Stable Diffusion locally. | github=AUTOMATIC1111/stable-diffusion-webui
+Whisper | https://github.com/openai/whisper | oss | Speech recognition that turns audio into text, offline. | github=openai/whisper
+Upscayl | https://upscayl.org | oss | Upscale and enhance images with AI on your own computer. | github=upscayl/upscayl
+Fooocus | https://github.com/lllyasviel/Fooocus | oss | Local image generator that gives good results with few settings. | github=lllyasviel/Fooocus
+InvokeAI | https://invoke-ai.github.io/InvokeAI/ | oss | Creative studio for local image generation and editing. | github=invoke-ai/InvokeAI
+Piper | https://github.com/OHF-Voice/piper1-gpl | oss | Fast, local text-to-speech with many voices. | github=OHF-Voice/piper1-gpl
+
+[video]
+DaVinci Resolve | https://www.blackmagicdesign.com/products/davinciresolve | free | Professional editor and colour grader with a capable free version.
+CapCut | https://www.capcut.com | tier | Easy editing with templates. Some effects need a paid plan.
+OpusClip | https://www.opus.pro | tier | AI clipper: picks the best moments of a long video and turns them into vertical shorts. Free plan adds a watermark and keeps clips for 3 days.
+Vizard | https://vizard.ai | tier | AI clipper that cuts long videos into short clips. Free plan: 60 minutes a month, 720p export.
+quso.ai | https://quso.ai | tier | Turns long videos into short captioned clips with AI. Free plan: about 75 minutes a month at 720p.
+2short.ai | https://www.2short.ai | tier | Paste a YouTube link and AI finds the best short clips. Free plan: 30 minutes of analysis a month.
+Shotcut | https://shotcut.org | oss | Cross-platform editor with a wide range of formats and filters. | github=mltframework/shotcut
+Kdenlive | https://kdenlive.org | oss | Multi-track editor with a long feature list. | github=KDE/kdenlive
+OpenShot | https://www.openshot.org | oss | Simple, friendly editor for beginners. | github=OpenShot/openshot-qt
+OBS Studio | https://obsproject.com | oss | Record your screen and live stream. | github=obsproject/obs-studio
+HandBrake | https://handbrake.fr | oss | Convert and compress video files. | github=HandBrake/HandBrake
+Clipchamp | https://clipchamp.com | tier | Browser video editor from Microsoft. The free plan exports at 1080p.
+VLC | https://www.videolan.org/vlc/ | oss | Plays almost any video or audio file. | github=videolan/vlc
+FFmpeg | https://ffmpeg.org | oss | Command-line toolkit to convert, record and stream audio and video. | github=FFmpeg/FFmpeg
+LosslessCut | https://losslesscut.app | oss | Trim and cut video and audio quickly without re-encoding. | github=mifi/lossless-cut
+mpv | https://mpv.io | oss | Minimal, keyboard-driven media player. | github=mpv-player/mpv
+
+[audio]
+Audacity | https://www.audacityteam.org | oss | Record and edit audio on your computer. | github=audacity/audacity
+Ocenaudio | https://www.ocenaudio.com | free | Fast, easy audio editor with live effect previews.
+LMMS | https://lmms.io | oss | Music production studio for making beats and tracks. | github=LMMS/lmms
+BandLab | https://www.bandlab.com | free | Make and share music in the browser or on your phone.
+MuseScore | https://musescore.org | oss | Write, play and print sheet music. | github=musescore/MuseScore
+Freesound | https://freesound.org | free | Huge library of Creative Commons sounds. Check each licence.
+Free Music Archive | https://freemusicarchive.org | free | Free music for projects, with the licence shown per track.
+Mixxx | https://mixxx.org | oss | DJ software for mixing music live. | github=mixxxdj/mixxx
+Ardour | https://ardour.org | oss | Recording, editing and mixing workstation. Official ready-made downloads ask for a small payment. | github=Ardour/ardour
+
+[design]
+Canva | https://www.canva.com | tier | Templates for posters, social posts and presentations.
+Figma | https://www.figma.com | tier | Interface design and collaboration, with a free starter plan.
+Penpot | https://penpot.app | oss | Open-source design and prototyping tool. | github=penpot/penpot
+Photopea | https://www.photopea.com | free | Photoshop-style editor in the browser, supported by ads.
+GIMP | https://www.gimp.org | oss | Powerful free image editor. | github=GNOME/gimp
+Krita | https://krita.org | oss | Digital painting and illustration. | github=KDE/krita
+Inkscape | https://inkscape.org | oss | Vector graphics editor.
+Blender | https://www.blender.org | oss | 3D modelling, animation and video editing. | github=blender/blender
+Excalidraw | https://excalidraw.com | oss | Virtual whiteboard for hand-drawn style diagrams. | github=excalidraw/excalidraw
+diagrams.net | https://www.drawio.com | oss | Flowcharts and diagrams in the browser or on your desktop. | github=jgraph/drawio
+Unsplash | https://unsplash.com | free | Free photos under the Unsplash licence.
+Pexels | https://www.pexels.com | free | Free photos and videos under the Pexels licence.
+Darktable | https://www.darktable.org | oss | Photo editing and RAW development, a free alternative to Lightroom. | github=darktable-org/darktable
+
+[files]
+LibreOffice | https://www.libreoffice.org | oss | Full office suite for documents, spreadsheets and slides. | github=LibreOffice/core
+ONLYOFFICE | https://www.onlyoffice.com | oss | Office editors that work well with Microsoft file formats. | github=ONLYOFFICE/DesktopEditors
+CloudConvert | https://cloudconvert.com | tier | Convert files between hundreds of formats. Free daily conversions.
+Squoosh | https://squoosh.app | oss | Compress and convert images in the browser. | github=GoogleChromeLabs/squoosh
+TinyPNG | https://tinypng.com | tier | Shrink PNG and JPEG images. Free use has file limits.
+7-Zip | https://www.7-zip.org | oss | Open and create zip and other archive files. | github=ip7z/7zip
+Bitwarden | https://bitwarden.com | tier | Password manager with a free personal plan. | github=bitwarden/clients
+Obsidian | https://obsidian.md | free | Notes stored as local Markdown files. Free for personal use.
+Proton | https://proton.me | tier | Private email, storage and VPN with free plans.
+LocalSend | https://localsend.org | oss | Share files with nearby devices without using the internet. | github=localsend/localsend
+Syncthing | https://syncthing.net | oss | Sync files between your own devices without a cloud service. | github=syncthing/syncthing
+AppFlowy | https://appflowy.com | oss | Open-source alternative to Notion for notes and projects. | github=AppFlowy-IO/AppFlowy
+Joplin | https://joplinapp.org | oss | Notes and to-do lists with sync and end-to-end encryption. | github=laurent22/joplin
+Logseq | https://logseq.com | oss | Privacy-first outliner for notes and knowledge. | github=logseq/logseq
+KeePassXC | https://keepassxc.org | oss | Offline password manager that keeps your vault on your own device. | github=keepassxreboot/keepassxc
+PeaZip | https://peazip.github.io | oss | Archive manager that opens and creates over 200 formats. | github=peazip/PeaZip
+
+[dev]
+GitHub | https://github.com | tier | Host code and collaborate. Free for individuals and open source.
+Visual Studio Code | https://code.visualstudio.com | free | Popular code editor with a large extension library. | github=microsoft/vscode
+Vercel | https://vercel.com | tier | Deploy websites with a free hobby plan.
+Netlify | https://www.netlify.com | tier | Host static sites with a free plan.
+Cloudflare Pages | https://www.cloudflare.com/products/pages/ | tier | Fast static site hosting with a generous free plan.
+Supabase | https://supabase.com | tier | Postgres database and sign-in with a free project. | github=supabase/supabase
+Neon | https://neon.com | tier | Serverless Postgres with a free plan.
+MDN Web Docs | https://developer.mozilla.org | free | Reference for HTML, CSS and JavaScript.
+regex101 | https://regex101.com | free | Build and test regular expressions with explanations.
+freeCodeCamp | https://www.freecodecamp.org | free | Free coding courses and certifications. | github=freeCodeCamp/freeCodeCamp
+The Rust Book | https://doc.rust-lang.org/book/ | free | The official free guide to learning Rust.
+Neovim | https://neovim.io | oss | Extensible terminal-based text editor. | github=neovim/neovim
+Zed | https://zed.dev | oss | Fast, collaborative code editor. | github=zed-industries/zed
+Hoppscotch | https://hoppscotch.io | oss | Lightweight API development tool in the browser. | github=hoppscotch/hoppscotch
+Coolify | https://coolify.io | oss | Self-hosted alternative to Heroku and Vercel for deploying apps. | github=coollabsio/coolify
+Bruno | https://www.usebruno.com | oss | Offline-first API client that stores collections as plain files. | github=usebruno/bruno
+VSCodium | https://vscodium.com | oss | VS Code built without Microsoft's telemetry and branding. | github=VSCodium/vscodium
+
+[learn]
+Khan Academy | https://www.khanacademy.org | free | Free lessons in maths, science and more.
+NPTEL | https://nptel.ac.in | free | Free courses from the IITs and IISc.
+SWAYAM | https://swayam.gov.in | free | The Government of India's free online courses platform.
+MIT OpenCourseWare | https://ocw.mit.edu | free | Course materials from MIT, free to use.
+CS50 | https://cs50.harvard.edu/x/ | free | Harvard's free introduction to computer science.
+Project Gutenberg | https://www.gutenberg.org | free | Tens of thousands of free public-domain ebooks.
+Internet Archive | https://archive.org | free | Free library of books, media and archived websites.
+Duolingo | https://www.duolingo.com | tier | Language lessons. Free with ads.
+Anki | https://apps.ankiweb.net | oss | Flashcards with spaced repetition. | github=ankitects/anki
+Calibre | https://calibre-ebook.com | oss | Manage, convert and read your ebook library. | github=kovidgoyal/calibre
+Zotero | https://www.zotero.org | oss | Collect, organise and cite research sources. | github=zotero/zotero
+Moodle | https://moodle.org | oss | Learning platform that schools and universities use to run courses. | github=moodle/moodle
+
+[anime]
+Crunchyroll | https://www.crunchyroll.com | tier | Official anime streaming. What is free depends on your region.
+Ani-One Asia | https://www.youtube.com/@AniOneAsia | free | Official YouTube channel streaming licensed anime. Region limits apply.
+Muse Asia | https://www.youtube.com/@MuseAsia | free | Official YouTube channel streaming licensed anime. Region limits apply.
+Bilibili | https://www.bilibili.tv | tier | Licensed anime and donghua, many episodes free with ads.
+AniList | https://anilist.co | free | Track what you watch and read, and find recommendations.
+MyAnimeList | https://myanimelist.net | free | Large anime and manga database with lists and reviews.
+Kitsu | https://kitsu.app | free | Track and discover anime and manga.
+Anime News Network | https://www.animenewsnetwork.com | free | News, reviews and an encyclopedia of anime and manga.
+
+[manga]
+MANGA Plus | https://mangaplus.shueisha.co.jp | free | Shueisha's official reader with the latest Jump chapters, free.
+WEBTOON | https://www.webtoons.com | free | Official daily webcomics and manhwa. Some episodes use coins.
+Tapas | https://tapas.io | tier | Official webcomics and novels with many free episodes.
+Tappytoon | https://www.tappytoon.com | tier | Official manhwa and webnovels with wait-to-read-free chapters.
+Comikey | https://comikey.com | tier | Licensed manga and manhwa with free chapters.
+VIZ | https://www.viz.com | tier | Official publisher of Shonen Jump and more, with free chapters.
+Manga Library Z | https://www.mangaz.com | free | Official ad-supported library of classic manga.
+Kavita | https://www.kavitareader.com | oss | Self-hosted reader for the manga, comics and books you own. | github=Kareadita/Kavita
+Komga | https://komga.org | oss | Self-hosted server for your own comic and manga collection. | github=gotson/komga
