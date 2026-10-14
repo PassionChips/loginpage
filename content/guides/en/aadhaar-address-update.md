@@ -14,7 +14,7 @@ This is a general overview. UIDAI decides which documents are accepted and what 
 - You usually need the mobile number linked to your Aadhaar, because a one-time password (OTP) is sent to it.
 - Keep one proof of address for your new address ready (see the list below).
 
-## Documents you will need
+## Documents you will need {#documents}
 
 You upload **one proof of address** that shows your name and your address in India. The documents below are the ones UIDAI's official list (List IV, for updates) accepts as proof of address. The portal asks you to pick from this list.
 

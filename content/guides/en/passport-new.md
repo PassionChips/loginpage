@@ -14,7 +14,7 @@ This is a general overview of the usual process. The portal decides the exact ru
 - Keep a working email address and mobile number. The portal sends confirmations there.
 - Check the documents listed below against the portal's Document Advisor for your case (adult, minor, senior citizen, normal or Tatkaal). The portal's list is the final word.
 
-## Documents you will need
+## Documents you will need {#documents}
 
 Take the **original documents** and **one set of self-attested photocopies** to the Passport Seva Kendra. For a fresh passport you normally need proof of your date of birth and proof of your present address. The lists below are the ones the Passport Seva portal publishes (checked on the date shown above).
 
