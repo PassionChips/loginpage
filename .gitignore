@@ -1,0 +1,7 @@
+/target
+
+# Local tooling, not part of the site
+/.agents/
+/.claude/
+/.taste-skill/
+/skills-lock.json

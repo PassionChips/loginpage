@@ -1,8 +1,4 @@
-use auth::run;
-
 #[tokio::main]
-async fn main(){
-    run().await;
+async fn main() {
+    indiaguide::run().await;
 }
-
-

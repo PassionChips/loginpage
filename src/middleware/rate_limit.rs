@@ -1,63 +1,30 @@
-use tower_governor::{
-    governor::{GovernorConfigBuilder,GovernorConfig},
-    key_extractor::SmartIpKeyExtractor
-   
-};
-use std::time::Duration;
-use std::sync::Arc;
 use governor::middleware::NoOpMiddleware;
+use std::sync::Arc;
+use std::time::Duration;
+use tower_governor::{
+    governor::{GovernorConfig, GovernorConfigBuilder},
+    key_extractor::SmartIpKeyExtractor,
+};
 
-pub struct Ratelimiters{
-    pub general: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
-    pub auth: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
-    pub profile: Arc<GovernorConfig<SmartIpKeyExtractor,NoOpMiddleware,>>,
+pub type LimiterConfig = Arc<GovernorConfig<SmartIpKeyExtractor, NoOpMiddleware>>;
+
+/// Per-IP limiter for the whole site: a steady `per_second` rate with a `burst` allowance.
+pub fn limiter(per_second: u64, burst: u32) -> LimiterConfig {
+    Arc::new(
+        GovernorConfigBuilder::default()
+            .key_extractor(SmartIpKeyExtractor)
+            .per_second(per_second)
+            .burst_size(burst)
+            .finish()
+            .expect("per_second and burst must be non-zero"),
+    )
 }
 
-impl Ratelimiters{
-    pub fn new()-> Self{
-        let general = Arc::new(
-            GovernorConfigBuilder::default()
-                .key_extractor(SmartIpKeyExtractor)
-                .per_second(2)
-                .burst_size(5)
-                .finish()
-                .unwrap()
-        );
-
-        let auth = Arc::new(
-            GovernorConfigBuilder::default()
-                .key_extractor(SmartIpKeyExtractor)
-                .per_second(2)
-                .burst_size(5)
-                .finish()
-                .unwrap()
-        );
-
-        let profile = Arc::new(
-            GovernorConfigBuilder::default()
-                .key_extractor(SmartIpKeyExtractor)
-                .per_second(2)
-                .burst_size(5)
-                .finish()
-                .unwrap()
-        );
-
-        Self { 
-            general:general, 
-            auth:auth,
-            profile:profile,
-        }
-    }
-
-    pub fn cleanup(&self){
-        let general_limiter = self.general.limiter().clone();
-        let auth_limiter=self.auth.limiter().clone();
-        let profile_limiter = self.profile.limiter().clone();
-        std::thread::spawn(move ||{
-            std::thread::sleep(Duration::from_secs(60));
-            general_limiter.retain_recent();
-            auth_limiter.retain_recent();
-            profile_limiter.retain_recent();
-        });
-    }
+/// Periodically drop limiter entries for IPs that have gone quiet.
+pub fn spawn_cleanup(config: &LimiterConfig) {
+    let limiter = config.limiter().clone();
+    std::thread::spawn(move || loop {
+        std::thread::sleep(Duration::from_secs(60));
+        limiter.retain_recent();
+    });
 }
