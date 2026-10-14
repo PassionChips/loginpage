@@ -1,57 +1,52 @@
-pub mod routes;
-pub mod model;
-pub mod schema;
-pub mod dbutils;
+pub mod config;
+pub mod content;
 pub mod middleware;
+pub mod render;
+pub mod routes;
 
-use crate::routes::{auth::auth_router,pages::{index,success,error},profile::profile_router};
-use tokio;
-use axum::{Router, routing::get};
-use std::sync::Arc;
-use tower_http::cors::{CorsLayer, Any};
-use tower_http::services::ServeDir;
-use crate::dbutils::dbconfig::{create_pool,Appstate};
+use axum::Router;
+use axum::http::{HeaderName, HeaderValue};
+use config::Config;
+use content::Site;
+use routes::AppState;
 use std::net::SocketAddr;
+use std::sync::Arc;
 use tower_governor::GovernorLayer;
-use crate::middleware::rate_limit::Ratelimiters;
+use tower_http::compression::CompressionLayer;
+use tower_http::services::ServeDir;
+use tower_http::set_header::SetResponseHeaderLayer;
 
-pub async fn run(){
+/// The site has no forms, scripts or cookies, so the CSP can be strict.
+/// Loosen `script-src`/`img-src`/`frame-src` only for the ad provider when ads are added.
+const CSP: &str = "default-src 'self'; img-src 'self' data:; style-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
 
-    let limiters = Ratelimiters::new();
-    limiters.cleanup();
-    let auth_rate_limiter = limiters.auth;
-    let profile_rate_limiter=limiters.profile;
-    
-
-    let pool = create_pool();
-    let appstate = Arc::new(Appstate{
-        pool:pool
-    });
-
-    let cors = CorsLayer::new()
-        .allow_origin(Any)
-        .allow_methods(Any)
-        .allow_headers(Any);
-
-    let app = Router::new()
-        .route("/", get(index))
-        .route("/success", get(success))
-        .route("/error", get(error))
-        .nest("/auth", auth_router())
-        .layer(GovernorLayer::new(auth_rate_limiter))
-        .nest("/profile", profile_router())
-        .layer(GovernorLayer::new(profile_rate_limiter))
-        .nest_service("/static", ServeDir::new("src/static")) //when the html requests for /static/auth.js you don't need to create a separate route instead you use nest_service("/static" , ServeDir::new("src/static")) it will take whatever it needs
-        .layer(cors)
-        .with_state(appstate);
-    let addr = SocketAddr::from(([127,0,0,1],3000));
-    let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
-    println!("listening on {}",listener.local_addr().unwrap());
-
-    axum::serve(listener,app.into_make_service_with_connect_info::<SocketAddr>()).await.unwrap();
-
+fn header(name: &'static str, value: &'static str) -> SetResponseHeaderLayer<HeaderValue> {
+    SetResponseHeaderLayer::overriding(HeaderName::from_static(name), HeaderValue::from_static(value))
 }
 
+pub fn app(state: Arc<AppState>, limiter: middleware::rate_limit::LimiterConfig) -> Router {
+    let static_dir = state.config.static_dir.clone();
+    routes::router()
+        .nest_service("/static", ServeDir::new(static_dir))
+        .layer(GovernorLayer::new(limiter))
+        .layer(CompressionLayer::new())
+        .layer(header("content-security-policy", CSP))
+        .layer(header("x-content-type-options", "nosniff"))
+        .layer(header("x-frame-options", "DENY"))
+        .layer(header("referrer-policy", "strict-origin-when-cross-origin"))
+        .with_state(state)
+}
 
+pub async fn run() {
+    let config = Config::from_env();
+    let site = Site::load(&config.content_dir).unwrap_or_else(|e| panic!("content error: {e}"));
+    let addr = config.bind;
 
+    let limiter = middleware::rate_limit::limiter(5, 30);
+    middleware::rate_limit::spawn_cleanup(&limiter);
 
+    let app = app(Arc::new(AppState { site, config }), limiter);
+    let listener = tokio::net::TcpListener::bind(addr).await.expect("could not bind BIND_ADDR");
+    println!("listening on {}", listener.local_addr().unwrap());
+    axum::serve(listener, app.into_make_service_with_connect_info::<SocketAddr>()).await.unwrap();
+}

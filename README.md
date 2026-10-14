@@ -1,113 +1,68 @@
-# 🛍️ Tamil E-Commerce Platform
+# India Guide
 
-<div align="center">
+Plain-language guides to Indian government procedures (passport, Aadhaar, PAN and so on), in English and Tamil. Free to use, no accounts, funded by ads later.
 
-***Empowering Tamil Entrepreneurs to Reach the World***
+Every guide links to the official source and shows when it was last checked. The site explains; it never files, collects documents or takes payments. That is deliberate: it keeps legal and privacy risk low.
 
-[![Built with Rust](https://img.shields.io/badge/Built%20with-Rust-orange.svg)](https://www.rust-lang.org/)
-[![Tokio](https://img.shields.io/badge/Async-Tokio-blue.svg)](https://tokio.rs/)
-[![License](https://img.shields.io/badge/License-Proprietary-red.svg)](LICENSE)
+## Run it
 
-*Connecting Tamil businesses with global customers through technology*
+```sh
+cargo run --bin run_main        # http://127.0.0.1:3000
+cargo test
+```
 
-</div>
+Settings come from environment variables:
 
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `SITE_URL` | `http://localhost:3000` | Public address, used in canonical links and the sitemap |
+| `SITE_NAME` | `India Guide` | Name in the header and page titles |
+| `SITE_CONTACT_EMAIL` | `contact@example.com` | Target of the "report an error" link. **Set before launch.** |
+| `BIND_ADDR` | `127.0.0.1:3000` | Listen address |
+
+## Add a guide
+
+Create `content/guides/en/<slug>.md` (and the same `<slug>.md` under `ta/`):
+
+```md
+---
+title: How to ...
+summary: One sentence for the list and search results.
+category: Identity documents
+official_name: Name of the department or portal
+official_url: https://official.site.gov.in
+updated: 2026-10-14
 ---
 
-## 🌟 Vision
+Body in Markdown.
+```
 
-This e-commerce platform is built with a powerful mission: **to empower Tamil entrepreneurs** by providing them with a digital marketplace where they can showcase their products to the Tamil community and customers worldwide.
+The slug is the file name (lowercase letters, digits, `-`). The server refuses to start if front matter is missing or malformed, `official_url` is not `https://`, or `updated` is not `YYYY-MM-DD`. Raw HTML in the body is shown as text and `javascript:` links are removed.
 
-### 🎯 Our Purpose
+## Writing rules (keep risk low)
 
-In an increasingly digital world, many talented Tamil entrepreneurs struggle to reach beyond their local markets. This platform bridges that gap by:
+- Describe the process; send people to the official site to act. Do not promise outcomes.
+- Cite the official source and keep `updated` honest. Re-check the guide when you change it, and remove it if you cannot keep it current.
+- Write in your own words. Do not copy other sites or official text.
+- No government logos or look-alike names. Do not collect personal data.
 
-- 🌏 **Global Reach**: Enabling Tamil businesses to connect with customers across the world
-- 🏪 **Local Pride**: Celebrating Tamil culture, craftsmanship, and entrepreneurship
-- 💼 **Business Growth**: Providing tools for small businesses to scale and thrive
-- 🤝 **Community Building**: Creating a marketplace that brings the Tamil community together
+## Before launch
 
-## 🚀 What We're Building
+- [ ] Verify every guide against the official portal and update `updated`.
+- [ ] Have a Tamil speaker proofread the Tamil guides.
+- [ ] Have a lawyer review `content/pages/` (disclaimer, terms, privacy). They are drafts.
+- [ ] Set `SITE_URL` and `SITE_CONTACT_EMAIL`.
+- [ ] Put the site behind HTTPS (for example a reverse proxy) before exposing it.
+- [ ] Before adding ads, update the privacy page, add consent where required, and relax the Content-Security-Policy in `src/lib.rs` for the ad provider only.
 
-### For Tamil Entrepreneurs
-- **Easy Product Listing**: Simple, intuitive interface to showcase your products
-- **Secure Transactions**: Built-in payment processing and order management
-- **Business Analytics**: Understand your customers and grow your business
-- **Multi-language Support**: Reach customers in Tamil, English, and more
-- **Mobile-First Design**: Manage your store from anywhere
+## Layout
 
-### For Customers
-- **Discover Authentic Products**: Find genuine Tamil products and crafts
-- **Support Local Businesses**: Directly support Tamil entrepreneurs
-- **Secure Shopping**: Safe and reliable purchasing experience
-- **Global Delivery**: Get Tamil products delivered worldwide
-- **Community Reviews**: Make informed decisions with community feedback
-
-## 🌈 The Future
-
-This platform is more than just an e-commerce website—it's a movement to:
-
-1. **Preserve Tamil Heritage**: By promoting traditional crafts and products
-2. **Create Economic Opportunities**: Helping entrepreneurs build sustainable businesses
-3. **Connect Diaspora**: Bringing Tamil products to Tamil communities worldwide
-4. **Foster Innovation**: Encouraging new Tamil entrepreneurs to go digital
-
-### Upcoming Features
-- 🎨 Showcase for Tamil artisans and craftspeople
-- 📱 Mobile applications for iOS and Android
-- 🌐 Multi-currency support for international transactions
-- 🎥 Video product demonstrations and virtual store tours
-- 🤖 AI-powered product recommendations
-- 📊 Advanced seller analytics and insights
-- 🎁 Gift registry and wishlist features
-- 💬 Live chat support in Tamil and English
-
-## 🛠️ Technology Stack
-
-Built with modern, robust technologies:
-
-- **Backend**: Rust with Tokio for high-performance async operations
-- **Database**: PostgreSQL with Diesel ORM
-- **Authentication**: Secure user authentication and authorization
-- **Frontend**: Modern web technologies for responsive design
-
-## 🤝 Join the Movement
-
-Whether you're a Tamil entrepreneur looking to expand your business, a developer wanting to contribute, or a customer eager to support Tamil businesses—there's a place for you here.
-
-### For Entrepreneurs
-Are you a Tamil business owner? This platform is being built for you. Stay tuned for our launch!
-
-### For Developers
-Want to contribute to empowering Tamil entrepreneurs? Check out our contribution guidelines (coming soon).
-
-### For Supporters
-Spread the word! Help us reach Tamil entrepreneurs who could benefit from this platform.
-
-## 📬 Contact & Community
-
-- **Website**: Coming Soon
-- **Email**: Coming Soon
-- **Social Media**: Coming Soon
-
-## 📄 License
-
-**Proprietary and Confidential**
-
-This software is proprietary and confidential. All rights reserved. Unauthorized copying, distribution, modification, or use of this software is strictly prohibited and may result in legal action.
-
-See the [LICENSE](LICENSE) file for complete terms and conditions.
-
-⚠️ **Important**: This code is NOT open source and may NOT be copied, distributed, or used without explicit written permission from the copyright holder.
-
----
-
-<div align="center">
-
-**Built with ❤️ for the Tamil Community**
-
-*தமிழ் தொழில்முனைவோரை உலகளவில் இணைக்கிறோம்*
-
-(Connecting Tamil Entrepreneurs Globally)
-
-</div>
+```
+content/guides/{en,ta}/   guides (Markdown + front matter)
+content/pages/            about, disclaimer, terms, privacy
+static/css/site.css       styles
+src/content.rs            loads and validates content
+src/render.rs             HTML templates and interface text per language
+src/routes.rs             routes, sitemap, robots
+src/middleware/           per-IP rate limiting
+```
