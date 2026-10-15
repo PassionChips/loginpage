@@ -118,13 +118,28 @@ Headlines use Newsreader, labels and buttons JetBrains Mono, and the dot-matrix 
 - Write in your own words. Do not copy other sites or official text.
 - No government logos or look-alike names. Do not collect personal data.
 
+## Deploy (Cloudflare, free)
+
+The site is published as static files: `cargo run --release --bin export -- public` writes every page to `public/` as `<path>.html` (`/en/guides` -> `public/en/guides.html`), copies `static/`, and adds `sitemap.xml`, `robots.txt`, a `_headers` file (the same security headers the server sends, plus caching for `/static/*`) and a `_redirects` file (`/` -> `/en`). `wrangler.jsonc` tells Cloudflare to serve that folder with clean URLs and `404.html` for unknown paths. No Worker code runs. A test exports the site and checks every internal link, image, script and stylesheet points at a real file.
+
+In the Cloudflare dashboard (Workers & Pages -> Create -> import the GitHub repository):
+
+| Field | Value |
+| --- | --- |
+| Build command | `bash tools/cloudflare-build.sh` |
+| Deploy command | `npx wrangler deploy` |
+| Build variable | `SITE_URL` = the public https address, e.g. `https://guideboy.fyi` (or the `*.workers.dev` address until the domain is set up) |
+
+Cloudflare's build machine has no Rust, so the build script installs it first (the first build takes a few minutes). The export refuses to run without an `https://` SITE_URL, because canonical links, hreflang, the sitemap and robots.txt are built from it. To try the export locally: `EXPORT_ALLOW_LOCAL=1 SITE_URL=http://localhost:8787 cargo run --bin export -- public`, then `npx wrangler dev`.
+
+Differences from the server: `/` always goes to `/en` (the server picks the browser's language), and there is no per-IP rate limit (Cloudflare absorbs traffic). The Rust server still works for local development and could be hosted on a VPS later if the site ever needs server features.
+
 ## Before launch
 
 - [ ] Verify every guide against the official portal and update `updated`.
 - [ ] Have native speakers proofread every language's interface text and guides.
 - [ ] Have a lawyer review `content/pages/` (disclaimer, terms, privacy). They are drafts.
-- [ ] Set `SITE_URL`.
-- [ ] Put the site behind HTTPS (for example a reverse proxy) before exposing it.
+- [ ] Set the `SITE_URL` build variable in Cloudflare to the real https address.
 - [ ] Before adding ads, update the privacy page, add consent where required, and relax the Content-Security-Policy in `src/lib.rs` for the ad provider only.
 
 ## Layout

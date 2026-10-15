@@ -454,3 +454,62 @@ async fn not_found_page_is_kept_out_of_search() {
     assert_eq!(status, StatusCode::NOT_FOUND);
     assert!(body.contains(r#"<meta name="robots" content="noindex">"#));
 }
+
+#[test]
+fn static_export_has_every_page_headers_and_no_broken_internal_links() {
+    let mut config = Config::from_env();
+    config.base_url = "https://guideboy.example".into();
+    let site = Site::load(&config.content_dir).unwrap().with_icons(&config.static_dir.join("icons"));
+    let out = std::env::temp_dir().join(format!("guideboy-export-test-{}", std::process::id()));
+    let pages = guideboy::export::export(&config, &site, &out).expect("export");
+    assert!(pages > 200, "only {pages} pages");
+
+    // Pages the server serves are files at the same clean URL.
+    for path in ["en.html", "en/guides.html", "en/links/video.html", "hi/guides/rti-online.html", "p/privacy.html", "404.html"] {
+        assert!(out.join(path).is_file(), "missing {path}");
+    }
+    let headers = std::fs::read_to_string(out.join("_headers")).unwrap();
+    assert!(headers.starts_with("/*\n") && headers.contains("content-security-policy: default-src 'self'") && headers.contains("x-frame-options: DENY"));
+    assert_eq!(std::fs::read_to_string(out.join("_redirects")).unwrap(), "/ /en 302\n");
+    assert!(std::fs::read_to_string(out.join("sitemap.xml")).unwrap().contains("<loc>https://guideboy.example/en/guides</loc>"));
+
+    // Every internal link, image, script and stylesheet on every page points at a file in the export.
+    let exists = |target: &str| -> bool {
+        let clean = target.split(['?', '#']).next().unwrap().trim_start_matches('/');
+        clean.is_empty() || out.join(clean).is_file() || out.join(format!("{clean}.html")).is_file()
+    };
+    let mut checked = 0;
+    let mut stack = vec![out.clone()];
+    while let Some(dir) = stack.pop() {
+        for entry in std::fs::read_dir(&dir).unwrap() {
+            let path = entry.unwrap().path();
+            if path.is_dir() {
+                stack.push(path);
+            } else if path.extension().is_some_and(|e| e == "html") {
+                let html = std::fs::read_to_string(&path).unwrap();
+                for attr in ["href=\"/", "src=\""] {
+                    for part in html.split(attr).skip(1) {
+                        let target = part.split('"').next().unwrap();
+                        let target = if attr == "src=\"" { target.to_string() } else { format!("/{target}") };
+                        if !target.starts_with('/') || target.starts_with("//") {
+                            continue;
+                        }
+                        assert!(exists(&target), "{}: broken link {target}", path.display());
+                        checked += 1;
+                    }
+                }
+            }
+        }
+    }
+    assert!(checked > 1000, "only {checked} links checked");
+
+    // A second export into the same folder replaces it; a folder it did not make is refused.
+    guideboy::export::export(&config, &site, &out).expect("re-export");
+    let foreign = std::env::temp_dir().join(format!("guideboy-foreign-{}", std::process::id()));
+    std::fs::create_dir_all(&foreign).unwrap();
+    std::fs::write(foreign.join("keep.txt"), "mine").unwrap();
+    assert!(guideboy::export::export(&config, &site, &foreign).is_err());
+    assert!(foreign.join("keep.txt").exists());
+    std::fs::remove_dir_all(&out).unwrap();
+    std::fs::remove_dir_all(&foreign).unwrap();
+}

@@ -1,7 +1,9 @@
 /target
 
-# Release archives built for deployment (rebuild them from source instead)
+# Build output: release archives and the static export for Cloudflare (rebuilt from source)
 /dist/
+/public/
+/.wrangler/
 *.tar.gz
 *.zip
 

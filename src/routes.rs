@@ -93,12 +93,19 @@ async fn static_page(State(state): Shared, Path(slug): Path<String>) -> Response
 }
 
 async fn robots(State(state): Shared) -> impl IntoResponse {
-    let body = format!("User-agent: *\nAllow: /\n\nSitemap: {}/sitemap.xml\n", state.config.base_url);
-    ([(header::CONTENT_TYPE, "text/plain; charset=utf-8")], body)
+    ([(header::CONTENT_TYPE, "text/plain; charset=utf-8")], robots_txt(&state.config))
+}
+
+pub fn robots_txt(config: &Config) -> String {
+    format!("User-agent: *\nAllow: /\n\nSitemap: {}/sitemap.xml\n", config.base_url)
 }
 
 async fn sitemap(State(state): Shared) -> impl IntoResponse {
-    let base = &state.config.base_url;
+    ([(header::CONTENT_TYPE, "application/xml; charset=utf-8")], sitemap_xml(&state.config, &state.site))
+}
+
+pub fn sitemap_xml(config: &Config, site: &Site) -> String {
+    let base = &config.base_url;
     let mut xml = String::from("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
     let mut url = |path: &str, lastmod: Option<&str>| {
         debug_assert!(path.split('/').all(|seg| seg.is_empty() || valid_slug(seg)));
@@ -112,16 +119,16 @@ async fn sitemap(State(state): Shared) -> impl IntoResponse {
         url(&format!("/{}", lang.code()), None);
         url(&format!("/{}/guides", lang.code()), None);
         url(&format!("/{}/links", lang.code()), None);
-        for g in state.site.link_groups() {
+        for g in site.link_groups() {
             url(&format!("/{}/links/{}", lang.code(), g.id), None);
         }
-        for g in state.site.guides(lang) {
+        for g in site.guides(lang) {
             url(&format!("/{}/guides/{}", lang.code(), g.slug), Some(&g.updated));
         }
     }
-    for p in state.site.pages() {
+    for p in site.pages() {
         url(&format!("/p/{}", p.slug), None);
     }
     xml.push_str("</urlset>\n");
-    ([(header::CONTENT_TYPE, "application/xml; charset=utf-8")], xml)
+    xml
 }
