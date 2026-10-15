@@ -141,3 +141,7 @@ choice_guides_text = ಪಾಸ್‌ಪೋರ್ಟ್, ಆಧಾರ್ ಮತ�
 choice_guides_cta = ಮಾರ್ಗದರ್ಶಿ ಹುಡುಕಿ
 home_popular = ಜನಪ್ರಿಯ ಉಚಿತ ಸಾಧನಗಳು
 home_categories = ವರ್ಗದ ಪ್ರಕಾರ ನೋಡಿ
+foot_hello = ಸಂಪರ್ಕಿಸಿ.
+foot_copy = ನಕಲಿಸಿ
+foot_copied = ನಕಲಿಸಲಾಗಿದೆ
+foot_contact = ಸಂಪರ್ಕ

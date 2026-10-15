@@ -141,3 +141,7 @@ choice_guides_text = ਪਾਸਪੋਰਟ, ਆਧਾਰ ਅਤੇ ਹੋਰ ਲ
 choice_guides_cta = ਗਾਈਡ ਲੱਭੋ
 home_popular = ਪ੍ਰਸਿੱਧ ਮੁਫ਼ਤ ਟੂਲ
 home_categories = ਸ਼੍ਰੇਣੀ ਅਨੁਸਾਰ ਵੇਖੋ
+foot_hello = ਸੰਪਰਕ ਕਰੋ।
+foot_copy = ਕਾਪੀ ਕਰੋ
+foot_copied = ਕਾਪੀ ਹੋ ਗਿਆ
+foot_contact = ਸੰਪਰਕ

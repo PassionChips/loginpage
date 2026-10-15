@@ -141,3 +141,7 @@ choice_guides_text = پاسپورٹ، آدھار اور بہت کچھ کے لی�
 choice_guides_cta = رہنما تلاش کریں
 home_popular = مقبول مفت ٹولز
 home_categories = زمرے کے مطابق دیکھیں
+foot_hello = رابطہ کریں۔
+foot_copy = کاپی کریں
+foot_copied = کاپی ہو گیا
+foot_contact = رابطہ

@@ -142,3 +142,7 @@ choice_guides_text = Step-by-step help for passports, Aadhaar and more, always w
 choice_guides_cta = Find a guide
 home_popular = Popular free tools
 home_categories = Browse by category
+foot_hello = Get in touch.
+foot_copy = Copy
+foot_copied = Copied
+foot_contact = Contact

@@ -141,3 +141,7 @@ choice_guides_text = பாஸ்போர்ட், ஆதார் மற்�
 choice_guides_cta = வழிகாட்டியைத் தேடு
 home_popular = பிரபலமான இலவசக் கருவிகள்
 home_categories = வகை வாரியாகப் பார்
+foot_hello = தொடர்பு கொள்ளுங்கள்.
+foot_copy = நகலெடு
+foot_copied = நகலெடுக்கப்பட்டது
+foot_contact = தொடர்பு

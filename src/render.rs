@@ -127,14 +127,23 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
 {body}
 </main>
 <footer>
-<nav aria-label="Site">
+<div class="foot-hello">
+<p class="foot-title">{foot_hello}</p>
+<div class="copybox"><a href="mailto:{email}">{email}</a><button type="button" class="button copy-btn" data-copy="{email}" data-done="{foot_copied}" hidden>{foot_copy}</button></div>
+</div>
+<nav class="dotnav" aria-label="{site_name}">
+<a href="{home}/guides">{guides}</a>
+<a href="{home}/links">{links_nav}</a>
+<a href="/p/about">{about}</a>
+<a href="mailto:{email}">{foot_contact}</a>
+</nav>
+<nav class="legal" aria-label="Site">
 <a href="/p/about">{about}</a>
 <a href="/p/disclaimer">{disclaimer_link}</a>
 <a href="/p/terms">{terms}</a>
 <a href="/p/privacy">{privacy}</a>
 </nav>
 <p>{footer_note}</p>
-<p class="wordmark" aria-hidden="true">{site_name}</p>
 </footer>
 </body>
 </html>
@@ -151,6 +160,11 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
         terms = t("terms"),
         privacy = t("privacy"),
         footer_note = t("footer_note"),
+        foot_hello = t("foot_hello"),
+        foot_copy = t("foot_copy"),
+        foot_copied = t("foot_copied"),
+        foot_contact = t("foot_contact"),
+        email = escape(&cfg.contact_email),
     )
 }
 
@@ -219,6 +233,7 @@ fn front_sections(site: &Site, lang: Lang, guide_count: usize) -> String {
     format!(
         r##"<section class="front">
 <div class="front-in">
+<p class="dotmark" aria-hidden="true">guideboy</p>
 <h1>{home_title}</h1>
 <p class="lede">{home_sub}</p>
 <div class="choices">

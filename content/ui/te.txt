@@ -141,3 +141,7 @@ choice_guides_text = పాస్‌పోర్ట్, ఆధార్ మర�
 choice_guides_cta = మార్గదర్శకం వెతకండి
 home_popular = ప్రసిద్ధ ఉచిత సాధనాలు
 home_categories = వర్గాల వారీగా చూడండి
+foot_hello = సంప్రదించండి.
+foot_copy = కాపీ చేయండి
+foot_copied = కాపీ అయింది
+foot_contact = సంప్రదించండి

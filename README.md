@@ -107,6 +107,10 @@ Name | https://example.com | oss | One-line English description. | github=owner/
 - Bookmarks are stored in the visitor's browser (`localStorage`), and the comparison list and view choice for the current session (`sessionStorage`). Nothing is sent to the server. The Privacy page says so.
 - The code is in `static/js/directory/`: `filters.mjs` (pure rules, unit-tested), `saved.mjs`, `compare.mjs`, `details.mjs`, `palette.mjs`, `rail.mjs`, `toast.mjs`, wired together by `main.mjs`.
 
+## Fonts
+
+Headlines use Newsreader, labels and buttons JetBrains Mono, and the dot-matrix wordmark and footer links Doto (round dots via its `ROND` axis). All three are SIL Open Font License fonts, self-hosted in `static/fonts/` with their licence files (`OFL-*.txt`), so visitors never contact Google Fonts. They only cover Latin letters: on Indian-language pages headings keep the bold sans font, and the dotted footer links fall back to it.
+
 ## Writing rules (keep risk low)
 
 - Describe the process; send people to the official site to act. Do not promise outcomes.

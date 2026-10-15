@@ -141,3 +141,7 @@ choice_guides_text = ପାସପୋର୍ଟ, ଆଧାର ଓ ଅଧିକ ପ
 choice_guides_cta = ଗାଇଡ୍ ଖୋଜନ୍ତୁ
 home_popular = ଲୋକପ୍ରିୟ ମାଗଣା ଟୁଲ୍
 home_categories = ବର୍ଗ ଅନୁସାରେ ଦେଖନ୍ତୁ
+foot_hello = ଯୋଗାଯୋଗ କରନ୍ତୁ।
+foot_copy = କପି କରନ୍ତୁ
+foot_copied = କପି ହେଲା
+foot_contact = ଯୋଗାଯୋଗ
