@@ -141,3 +141,7 @@ choice_guides_text = পাসপোর্ট, আধার ও আরও অন
 choice_guides_cta = গাইড খুঁজুন
 home_popular = জনপ্রিয় বিনামূল্যের টুল
 home_categories = বিভাগ অনুযায়ী দেখুন
+foot_hello = যোগাযোগ করুন।
+foot_copy = কপি করুন
+foot_copied = কপি হয়েছে
+foot_contact = যোগাযোগ

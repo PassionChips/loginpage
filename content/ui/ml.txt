@@ -141,3 +141,7 @@ choice_guides_text = പാസ്‌പോർട്ട്, ആധാർ തു�
 choice_guides_cta = ഗൈഡ് കണ്ടെത്തുക
 home_popular = ജനപ്രിയ സൗജന്യ ടൂളുകൾ
 home_categories = വിഭാഗം അനുസരിച്ച് കാണുക
+foot_hello = ബന്ധപ്പെടുക.
+foot_copy = പകർത്തുക
+foot_copied = പകർത്തി
+foot_contact = ബന്ധപ്പെടുക

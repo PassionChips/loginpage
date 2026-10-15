@@ -141,3 +141,7 @@ choice_guides_text = પાસપોર્ટ, આધાર અને વધુ 
 choice_guides_cta = માર્ગદર્શિકા શોધો
 home_popular = લોકપ્રિય મફત ટૂલ્સ
 home_categories = શ્રેણી પ્રમાણે જુઓ
+foot_hello = સંપર્ક કરો.
+foot_copy = કૉપિ કરો
+foot_copied = કૉપિ થયું
+foot_contact = સંપર્ક

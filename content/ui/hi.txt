@@ -141,3 +141,7 @@ choice_guides_text = पासपोर्ट, आधार और बहुत 
 choice_guides_cta = गाइड खोजें
 home_popular = लोकप्रिय मुफ़्त टूल
 home_categories = श्रेणी के अनुसार देखें
+foot_hello = संपर्क करें।
+foot_copy = कॉपी करें
+foot_copied = कॉपी हो गया
+foot_contact = संपर्क
