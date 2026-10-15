@@ -52,6 +52,9 @@ pub async fn run() {
     for line in site.coverage_report() {
         println!("translation gap: {line}");
     }
+    if config.base_url.contains("localhost") || config.base_url.contains("127.0.0.1") {
+        println!("warning: SITE_URL is {}; set it to the public https address before launch, or canonical links, the sitemap and robots.txt will point to this machine", config.base_url);
+    }
     let addr = config.bind;
 
     let limiter = middleware::rate_limit::limiter(5, 30);

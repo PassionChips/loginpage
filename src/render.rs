@@ -28,6 +28,49 @@ pub struct Meta<'a> {
     pub alternates: Vec<(Lang, String)>,
     /// Path of a page-specific script to load, e.g. the live search.
     pub script: Option<&'static str>,
+    /// Open Graph type: "website" for lists, "article" for guides and pages.
+    pub og_type: &'static str,
+    /// Structured data blocks (JSON-LD objects), already serialised.
+    pub jsonld: Vec<String>,
+    /// Keep the page out of search results (the 404 page).
+    pub noindex: bool,
+}
+
+/// Plain text of an HTML fragment, squeezed to at most `max` characters on a word boundary. Used for
+/// meta descriptions taken from page bodies.
+fn summary_text(html_src: &str, max: usize) -> String {
+    let mut text = String::new();
+    let mut in_tag = false;
+    for c in html_src.chars() {
+        match c {
+            '<' => in_tag = true,
+            '>' => { in_tag = false; text.push(' '); }
+            c if !in_tag => text.push(c),
+            _ => {}
+        }
+    }
+    let text = text.replace("&amp;", "&").replace("&quot;", "\"").replace("&#39;", "'").replace("&lt;", "<").replace("&gt;", ">");
+    let words: Vec<&str> = text.split_whitespace().collect();
+    let mut out = String::new();
+    for w in words {
+        if out.chars().count() + w.chars().count() + 1 > max {
+            out.push('…');
+            break;
+        }
+        if !out.is_empty() { out.push(' '); }
+        out.push_str(w);
+    }
+    out
+}
+
+/// A BreadcrumbList for structured data: (name, path) pairs from the site root down to this page.
+fn breadcrumbs(cfg: &Config, items: &[(&str, String)]) -> String {
+    let list: Vec<String> = items
+        .iter()
+        .enumerate()
+        .map(|(i, (name, path))| format!(r#"{{"@type":"ListItem","position":{},"name":{},"item":{}}}"#, i + 1, json_string(name), json_string(&format!("{}{}", cfg.base_url, path))))
+        .collect();
+    format!(r#"{{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{}]}}"#, list.join(","))
 }
 
 /// A version tag for the CSS and JS links: the newest change time of any file under `static/css` and
@@ -69,6 +112,27 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
             cfg.base_url,
             escape(path)
         ));
+    }
+    // Visitors whose language is not one of ours get the English version.
+    if let Some((_, en_path)) = meta.alternates.iter().find(|(l, _)| *l == Lang::EN) {
+        head_links.push_str(&format!(r#"<link rel="alternate" hreflang="x-default" href="{}{}">"#, cfg.base_url, escape(en_path)));
+    }
+    if meta.noindex {
+        head_links.push_str(r#"<meta name="robots" content="noindex">"#);
+    }
+    // Link previews in WhatsApp, X, Facebook and others.
+    head_links.push_str(&format!(
+        r#"<meta property="og:type" content="{}"><meta property="og:site_name" content="{site_name}"><meta property="og:title" content="{}"><meta property="og:description" content="{}"><meta property="og:url" content="{}{}"><meta property="og:locale" content="{}_IN"><meta name="twitter:card" content="summary">"#,
+        meta.og_type,
+        escape(meta.title),
+        escape(meta.description),
+        cfg.base_url,
+        escape(meta.path),
+        meta.lang.code(),
+    ));
+    // Structured data is a data block, not a script, so the strict CSP does not block it.
+    for block in &meta.jsonld {
+        head_links.push_str(&format!(r#"<script type="application/ld+json">{block}</script>"#));
     }
 
     let mut menu = String::new();
@@ -317,14 +381,24 @@ pub fn index_page(cfg: &Config, site: &Site, lang: Lang) -> String {
         front = front_sections(site, lang, guide_count),
     );
     let path = format!("/{}", lang.code());
+    let website = format!(
+        r#"{{"@context":"https://schema.org","@type":"WebSite","name":{},"url":{},"inLanguage":{},"description":{}}}"#,
+        json_string(&cfg.site_name),
+        json_string(&format!("{}{}", cfg.base_url, path)),
+        json_string(lang.code()),
+        json_string(site.t(lang, "home_sub"))
+    );
     let meta = Meta {
         lang,
-        title: site.t(lang, "guides"),
-        description: site.t(lang, "find_sub"),
+        title: site.t(lang, "home_title"),
+        description: site.t(lang, "home_sub"),
         path: &path,
         switcher: all_languages(|l| format!("/{}", l.code())),
         alternates: all_languages(|l| format!("/{}", l.code())),
         script: Some("/static/js/home.js"),
+        og_type: "website",
+        jsonld: vec![website],
+        noindex: false,
     };
     layout(cfg, site, &meta, &body, "wide")
 }
@@ -407,14 +481,18 @@ pub fn guides_page(cfg: &Config, site: &Site, lang: Lang) -> String {
         no_match = t("no_match"),
     );
     let path = format!("/{}/guides", lang.code());
+    let crumbs = breadcrumbs(cfg, &[(&cfg.site_name, format!("/{}", lang.code())), (site.t(lang, "guides"), path.clone())]);
     let meta = Meta {
         lang,
-        title: site.t(lang, "guides"),
+        title: site.t(lang, "choice_guides_title"),
         description: site.t(lang, "find_sub"),
         path: &path,
         switcher: all_languages(|l| format!("/{}/guides", l.code())),
         alternates: all_languages(|l| format!("/{}/guides", l.code())),
         script: Some("/static/js/home.js"),
+        og_type: "website",
+        jsonld: vec![crumbs],
+        noindex: false,
     };
     layout(cfg, site, &meta, &body, "wide")
 }
@@ -538,6 +616,25 @@ pub fn guide_page(cfg: &Config, site: &Site, lang: Lang, g: &Guide, translated: 
         switcher: all_languages(|l| format!("/{}/guides/{}", l.code(), g.slug)),
         alternates,
         script: Some("/static/js/guide.js"),
+        og_type: "article",
+        jsonld: vec![
+            format!(
+                r#"{{"@context":"https://schema.org","@type":"Article","headline":{},"description":{},"inLanguage":{},"dateModified":{},"mainEntityOfPage":{},"publisher":{{"@type":"Organization","name":{}}},"isBasedOn":{}}}"#,
+                json_string(&g.title),
+                json_string(&g.summary),
+                json_string(if translated { lang.code() } else { "en" }),
+                json_string(&g.updated),
+                json_string(&format!("{}{}", cfg.base_url, path)),
+                json_string(&cfg.site_name),
+                json_string(&g.official_url)
+            ),
+            breadcrumbs(cfg, &[
+                (&cfg.site_name, format!("/{}", lang.code())),
+                (site.t(lang, "guides"), format!("/{}/guides", lang.code())),
+                (&g.title, path.clone()),
+            ]),
+        ],
+        noindex: false,
     };
     layout(cfg, site, &meta, &body, "wide")
 }
@@ -545,14 +642,15 @@ pub fn guide_page(cfg: &Config, site: &Site, lang: Lang, g: &Guide, translated: 
 pub fn static_page(cfg: &Config, site: &Site, p: &Page) -> String {
     let body = format!("<article class=\"prose\">\n<h1>{}</h1>\n{}\n</article>", escape(&p.title), p.body_html);
     let path = format!("/p/{}", p.slug);
-    let meta = Meta { lang: Lang::EN, title: &p.title, description: &p.title, path: &path, switcher: Vec::new(), alternates: Vec::new(), script: None };
+    let description = summary_text(&p.body_html, 155);
+    let meta = Meta { lang: Lang::EN, title: &p.title, description: &description, path: &path, switcher: Vec::new(), alternates: Vec::new(), script: None, og_type: "article", jsonld: Vec::new(), noindex: false };
     layout(cfg, site, &meta, &body, "")
 }
 
 pub fn not_found_page(cfg: &Config, site: &Site, lang: Lang) -> String {
     let title = escape(site.t(lang, "not_found"));
     let body = format!("<h1>{title}</h1>\n<p><a href=\"/{}\">{}</a></p>", lang.code(), escape(site.t(lang, "back")));
-    let meta = Meta { lang, title: site.t(lang, "not_found"), description: site.t(lang, "not_found"), path: "/404", switcher: Vec::new(), alternates: Vec::new(), script: None };
+    let meta = Meta { lang, title: site.t(lang, "not_found"), description: site.t(lang, "not_found"), path: "/404", switcher: Vec::new(), alternates: Vec::new(), script: None, og_type: "website", jsonld: Vec::new(), noindex: true };
     layout(cfg, site, &meta, &body, "")
 }
 
@@ -938,14 +1036,31 @@ pub fn links_page(cfg: &Config, site: &Site, lang: Lang, only: Option<&str>) -> 
         Some(c) => format!("{} · {}", site.t(lang, &format!("cat_{c}")), site.t(lang, "links_nav")),
         None => site.t(lang, "links_title").to_string(),
     };
+    // Each category page names its own tools, so no two directory pages share a description.
+    let description = match only.and_then(|c| all_groups.iter().find(|g| g.id == c)) {
+        Some(g) => {
+            let names: Vec<&str> = g.links.iter().take(5).map(|l| l.name.as_str()).collect();
+            let count = site.t(lang, "links_count_many").replace("{n}", &g.links.len().to_string());
+            format!("{} ({count}): {}…", site.t(lang, &format!("cat_{}", g.id)), names.join(", "))
+        }
+        None => site.t(lang, "links_sub").to_string(),
+    };
+    let cat_key = only.map(|c| format!("cat_{c}"));
+    let mut crumbs = vec![(cfg.site_name.as_str(), format!("/{}", lang.code())), (site.t(lang, "links_nav"), format!("/{}/links", lang.code()))];
+    if let Some(key) = &cat_key {
+        crumbs.push((site.t(lang, key), path.clone()));
+    }
     let meta = Meta {
         lang,
         title: &title_text,
-        description: site.t(lang, "links_sub"),
+        description: &description,
         path: &path,
         switcher: all_languages(|l| format!("/{}/links{suffix}", l.code())),
         alternates: all_languages(|l| format!("/{}/links{suffix}", l.code())),
         script: Some("/static/js/links.js"),
+        og_type: "website",
+        jsonld: vec![breadcrumbs(cfg, &crumbs)],
+        noindex: false,
     };
     layout(cfg, site, &meta, &body, "wide")
 }

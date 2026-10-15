@@ -1,17 +1,17 @@
 use axum::body::Body;
 use axum::http::{Request, StatusCode, header};
 use http_body_util::BodyExt;
-use indiaguide::config::Config;
-use indiaguide::content::Site;
-use indiaguide::middleware::rate_limit::limiter;
-use indiaguide::routes::AppState;
+use guideboy::config::Config;
+use guideboy::content::Site;
+use guideboy::middleware::rate_limit::limiter;
+use guideboy::routes::AppState;
 use std::sync::Arc;
 use tower::ServiceExt;
 
 fn app_with(per_second: u64, burst: u32) -> axum::Router {
     let config = Config::from_env();
     let site = Site::load(&config.content_dir).expect("content must load").with_icons(&config.static_dir.join("icons"));
-    indiaguide::app(Arc::new(AppState { site, config }), limiter(per_second, burst))
+    guideboy::app(Arc::new(AppState { site, config }), limiter(per_second, burst))
 }
 
 async fn get(app: axum::Router, uri: &str) -> (StatusCode, axum::http::HeaderMap, String) {
@@ -101,7 +101,7 @@ async fn guide_list_has_live_search_that_works_without_script() {
 
 #[tokio::test]
 async fn every_language_home_page_loads_with_the_right_direction() {
-    for lang in indiaguide::content::Lang::all() {
+    for lang in guideboy::content::Lang::all() {
         let uri = format!("/{}", lang.code());
         let (status, _, body) = get(app_with(50, 50), &uri).await;
         assert_eq!(status, StatusCode::OK, "{uri}");
@@ -115,7 +115,7 @@ async fn every_language_home_page_loads_with_the_right_direction() {
 async fn all_languages_have_every_interface_string() {
     let config = Config::from_env();
     let site = Site::load(&config.content_dir).unwrap();
-    for lang in indiaguide::content::Lang::all() {
+    for lang in guideboy::content::Lang::all() {
         assert!(site.missing_ui_keys(lang).is_empty(), "{}: {:?}", lang.code(), site.missing_ui_keys(lang));
     }
 }
@@ -157,7 +157,7 @@ async fn every_guide_screenshot_exists_is_served_and_names_its_source() {
     let config = Config::from_env();
     let site = Site::load(&config.content_dir).unwrap();
     let mut seen = 0;
-    for g in site.guides(indiaguide::content::Lang::EN) {
+    for g in site.guides(guideboy::content::Lang::EN) {
         let (_, _, body) = get(app_with(50, 50), &format!("/en/guides/{}", g.slug)).await;
         for figure in body.split(r#"<figure class="shot">"#).skip(1) {
             let figure = &figure[..figure.find("</figure>").expect("figure is closed")];
@@ -176,7 +176,7 @@ async fn every_guide_screenshot_exists_is_served_and_names_its_source() {
 async fn every_english_guide_lists_the_documents_needed() {
     let config = Config::from_env();
     let site = Site::load(&config.content_dir).unwrap();
-    for g in site.guides(indiaguide::content::Lang::EN) {
+    for g in site.guides(guideboy::content::Lang::EN) {
         let (_, _, body) = get(app_with(50, 50), &format!("/en/guides/{}", g.slug)).await;
         assert!(body.contains("Documents you will need"), "{}: missing the documents section", g.slug);
     }
@@ -184,7 +184,7 @@ async fn every_english_guide_lists_the_documents_needed() {
 
 #[tokio::test]
 async fn free_tools_directory_loads_in_every_language() {
-    for lang in indiaguide::content::Lang::all() {
+    for lang in guideboy::content::Lang::all() {
         let uri = format!("/{}/links", lang.code());
         let (status, _, body) = get(app_with(50, 50), &uri).await;
         assert_eq!(status, StatusCode::OK, "{uri}");
@@ -231,7 +231,7 @@ async fn guide_toolbar_has_every_control_wired_to_something_real() {
     assert!(body.contains(r#"class="tb-circle" href="/en" aria-label="Back to all guides""#), "close goes to the list");
     // Prev/next follow the guide list order (category, then title): the first guide has no previous one.
     let config = Config::from_env();
-    let order: Vec<String> = Site::load(&config.content_dir).unwrap().guides(indiaguide::content::Lang::EN).iter().map(|g| g.slug.clone()).collect();
+    let order: Vec<String> = Site::load(&config.content_dir).unwrap().guides(guideboy::content::Lang::EN).iter().map(|g| g.slug.clone()).collect();
     let (_, _, first) = get(app_with(50, 50), &format!("/en/guides/{}", order[0])).await;
     assert!(first.contains(r#"is-disabled" role="link" aria-disabled="true" aria-label="Previous guide""#), "no previous guide at the start");
     assert!(first.contains(&format!(r#"href="/en/guides/{}" aria-label="Next guide""#, order[1])), "next guide");
@@ -247,7 +247,7 @@ async fn guide_toolbar_has_every_control_wired_to_something_real() {
 
 #[tokio::test]
 async fn toolbar_works_in_every_language() {
-    for lang in indiaguide::content::Lang::all() {
+    for lang in guideboy::content::Lang::all() {
         let uri = format!("/{}/guides/aadhaar-address-update", lang.code());
         let (status, _, body) = get(app_with(50, 50), &uri).await;
         assert_eq!(status, StatusCode::OK, "{uri}");
@@ -288,7 +288,7 @@ async fn directory_cards_carry_real_data_and_working_controls() {
 
 #[tokio::test]
 async fn directory_text_block_is_valid_and_cannot_break_out_of_its_tag() {
-    for lang in indiaguide::content::Lang::all() {
+    for lang in guideboy::content::Lang::all() {
         let (_, _, body) = get(app_with(50, 50), &format!("/{}/links", lang.code())).await;
         let json = body.split(r#"<script type="application/json" id="dx-text">"#).nth(1).unwrap().split("</script>").next().unwrap();
         assert!(json.starts_with('{') && json.ends_with('}'), "{}: JSON object", lang.code());
@@ -387,7 +387,7 @@ async fn open_source_tools_show_github_stars_with_the_date_checked() {
 async fn directory_heroes_have_a_credited_background_photo_per_category() {
     let config = Config::from_env();
     let site = Site::load(&config.content_dir).unwrap();
-    for id in std::iter::once("all").chain(indiaguide::content::LINK_CATEGORIES) {
+    for id in std::iter::once("all").chain(guideboy::content::LINK_CATEGORIES) {
         let bg = site.background(id).unwrap_or_else(|| panic!("{id}: no background photo"));
         assert!(config.static_dir.join("backgrounds").join(&bg.file).exists(), "{id}: photo file exists");
         assert!(bg.license == "CC0" || bg.license == "public domain", "{id}: only CC0 or public domain ({})", bg.license);
@@ -414,4 +414,43 @@ async fn front_page_offers_two_choices_popular_tools_and_categories() {
     let categories = home.split(r#"<ul class="ctiles reveal">"#).nth(1).unwrap().split("</ul>").next().unwrap();
     assert_eq!(categories.matches(r#"<a href="/en/links/"#).count(), 12, "every category");
     assert!(home.contains(r#"<p class="front-credit">Photo: "#), "photos are credited");
+}
+
+#[tokio::test]
+async fn every_sitemap_page_has_unique_title_and_description_social_tags_and_structured_data() {
+    let (_, _, sitemap) = get(app_with(500, 500), "/sitemap.xml").await;
+    let mut titles = std::collections::HashMap::new();
+    let mut descriptions = std::collections::HashMap::new();
+    for loc in sitemap.split("<loc>").skip(1) {
+        let url = loc.split("</loc>").next().unwrap();
+        let path = &url[url.find("://").map(|i| i + 3).unwrap()..];
+        let path = &path[path.find('/').unwrap()..];
+        let (status, _, body) = get(app_with(500, 500), path).await;
+        assert_eq!(status, StatusCode::OK, "{path}");
+        let between = |a: &str, b: &str| body.split(a).nth(1).and_then(|s| s.split(b).next()).unwrap_or("").to_string();
+        let title = between("<title>", "</title>");
+        let description = between(r#"<meta name="description" content=""#, "\"");
+        assert!(description.chars().count() >= 40, "{path}: description too short: {description:?}");
+        assert!(body.contains(r#"<meta property="og:title""#) && body.contains(r#"<meta name="twitter:card""#), "{path}: social tags");
+        if let Some(prev) = titles.insert(title.clone(), path.to_string()) {
+            panic!("{path} and {prev} share the title {title:?}");
+        }
+        if let Some(prev) = descriptions.insert(description.clone(), path.to_string()) {
+            // A guide that is not translated yet falls back to English and is not in the sitemap, so every
+            // listed page should describe itself.
+            panic!("{path} and {prev} share the description {description:?}");
+        }
+        if !path.starts_with("/p/") {
+            assert!(body.contains(r#"hreflang="x-default""#), "{path}: x-default");
+            assert!(body.contains(r#"<script type="application/ld+json">{"@context":"https://schema.org""#), "{path}: structured data");
+        }
+    }
+    assert!(titles.len() > 100);
+}
+
+#[tokio::test]
+async fn not_found_page_is_kept_out_of_search() {
+    let (status, _, body) = get(app_with(50, 50), "/en/guides/does-not-exist").await;
+    assert_eq!(status, StatusCode::NOT_FOUND);
+    assert!(body.contains(r#"<meta name="robots" content="noindex">"#));
 }

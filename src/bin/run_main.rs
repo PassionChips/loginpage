@@ -1,4 +1,4 @@
 #[tokio::main]
 async fn main() {
-    indiaguide::run().await;
+    guideboy::run().await;
 }
