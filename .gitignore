@@ -1,5 +1,29 @@
 /target
 
+# Release archives built for deployment (rebuild them from source instead)
+/dist/
+*.tar.gz
+*.zip
+
+# Local settings and secrets (SITE_URL, keys for a host, etc.)
+.env
+.env.*
+
+# Logs and scratch files
+*.log
+*.tmp
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Node (only used to run tests/js)
+node_modules/
+
 # Local tooling, not part of the site
 /.agents/
 /.claude/
