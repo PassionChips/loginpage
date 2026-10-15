@@ -1,5 +1,6 @@
 pub mod config;
 pub mod content;
+pub mod export;
 pub mod middleware;
 pub mod render;
 pub mod routes;
@@ -20,6 +21,14 @@ use tower_http::set_header::{SetResponseHeader, SetResponseHeaderLayer};
 /// Loosen `script-src`/`img-src`/`frame-src` only for the ad provider when ads are added.
 const CSP: &str = "default-src 'self'; img-src 'self' data:; style-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
 
+/// Security headers sent with every response, by the server and (through `_headers`) by the static export.
+pub const SECURITY_HEADERS: [(&str, &str); 4] = [
+    ("content-security-policy", CSP),
+    ("x-content-type-options", "nosniff"),
+    ("x-frame-options", "DENY"),
+    ("referrer-policy", "strict-origin-when-cross-origin"),
+];
+
 fn header(name: &'static str, value: &'static str) -> SetResponseHeaderLayer<HeaderValue> {
     SetResponseHeaderLayer::overriding(HeaderName::from_static(name), HeaderValue::from_static(value))
 }
@@ -37,10 +46,10 @@ pub fn app(state: Arc<AppState>, limiter: middleware::rate_limit::LimiterConfig)
         .layer(GovernorLayer::new(limiter))
         .nest_service("/static", static_files)
         .layer(CompressionLayer::new())
-        .layer(header("content-security-policy", CSP))
-        .layer(header("x-content-type-options", "nosniff"))
-        .layer(header("x-frame-options", "DENY"))
-        .layer(header("referrer-policy", "strict-origin-when-cross-origin"))
+        .layer(header(SECURITY_HEADERS[0].0, SECURITY_HEADERS[0].1))
+        .layer(header(SECURITY_HEADERS[1].0, SECURITY_HEADERS[1].1))
+        .layer(header(SECURITY_HEADERS[2].0, SECURITY_HEADERS[2].1))
+        .layer(header(SECURITY_HEADERS[3].0, SECURITY_HEADERS[3].1))
         .with_state(state)
 }
 

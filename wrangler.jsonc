@@ -1,0 +1,13 @@
+// Cloudflare deploys the static export in public/ (built by tools/cloudflare-build.sh). No Worker code runs:
+// every request is a file, so hosting is free and nothing can crash.
+{
+  "name": "guideboy",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./public",
+    // /en/guides is served from en/guides.html; /en/guides/ redirects to /en/guides (matches canonical links).
+    "html_handling": "drop-trailing-slash",
+    // Unknown paths get public/404.html with a 404 status.
+    "not_found_handling": "404-page"
+  }
+}
