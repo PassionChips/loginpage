@@ -89,12 +89,40 @@ pub const UI_KEYS: &[&str] = &[
     "cat_llm", "cat_aiart", "cat_video", "cat_audio", "cat_design", "cat_files", "cat_dev", "cat_learn",
     "cat_anime", "cat_manga", "tb_prev", "tb_next", "tb_onpage", "tb_sections", "tb_documents", "tb_copy",
     "tb_copied", "tb_print", "tb_visit", "dx_filters", "dx_sort", "dx_sort_curated", "dx_sort_az", "dx_sort_za", "dx_saved", "dx_save", "dx_unsave", "dx_details", "dx_visit", "dx_compare", "dx_compare_title", "dx_compare_limit", "dx_compare_need", "dx_remove", "dx_clear", "dx_active", "dx_view", "dx_grid", "dx_list", "dx_density", "dx_comfortable", "dx_compact", "dx_close", "dx_category", "dx_pricing", "dx_website", "dx_description", "dx_yes", "dx_no", "dx_try", "dx_saved_toast", "dx_removed_toast", "dx_added_compare", "dx_palette", "dx_palette_hint", "dx_no_saved", "dx_scroll_prev", "dx_scroll_next", "dx_selected", "dx_see_all", "dx_back_all", "dx_sort_stars", "dx_stars_title", "dx_photo", "home_title", "home_sub", "choice_tools_title", "choice_tools_text", "choice_tools_cta", "choice_guides_title", "choice_guides_text", "choice_guides_cta", "home_popular", "home_categories", "foot_hello", "foot_copy", "foot_copied", "foot_contact",
+    "st_india", "st_tamil-nadu", "st_andhra-pradesh", "st_telangana", "st_karnataka", "st_maharashtra", "st_kerala",
+    "gt_jobs", "gt_certificates", "gt_scholarships", "gt_admissions", "gt_welfare", "gt_land", "gt_citizen", "gt_id",
+    "gx_states", "gx_topics", "gx_topic", "gx_count_one", "gx_count_many", "gx_see_all", "gx_back_all", "gx_state_sub",
+    "gx_disclaimer", "gx_map_label", "gx_pick_state", "gx_find_state", "gx_no_page",
 ];
 
 /// Groups in the free tools directory, in display order. Each needs a `cat_<id>` interface string
 /// in every language and an icon in `render::icon`.
 pub const LINK_CATEGORIES: [&str; 12] =
     ["pdf", "invoice", "llm", "aiart", "video", "audio", "design", "files", "dev", "learn", "anime", "manga"];
+
+/// Sections of the guides directory, in display order: India-wide guides, then one per state. Each id is
+/// also the URL of that section's page (`/<lang>/guides/<id>`), needs a `st_<id>` interface string, and must
+/// not be used as a guide slug.
+pub const GUIDE_STATES: [&str; 7] = ["india", "tamil-nadu", "andhra-pradesh", "telangana", "karnataka", "maharashtra", "kerala"];
+
+/// Topics within each state (filters on the guides directory, and sections on a state's page), in display
+/// order. Each needs a `gt_<id>` interface string and an icon in `render::icon`.
+pub const GUIDE_TOPICS: [&str; 8] = ["jobs", "certificates", "scholarships", "admissions", "welfare", "land", "citizen", "id"];
+
+/// One entry of the guides directory: an official portal, or one of this site's own guides.
+pub struct StateLink {
+    pub topic: &'static str,
+    /// For a guide on this site, its slug; name and description then come from the guide in the reader's language.
+    pub guide: Option<String>,
+    pub name: String,
+    pub url: String,
+    pub description: String,
+}
+
+pub struct StateGroup {
+    pub id: &'static str,
+    pub links: Vec<StateLink>,
+}
 
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum Badge {
@@ -157,6 +185,7 @@ pub struct Site {
     pages: HashMap<String, Page>,
     ui: HashMap<Lang, HashMap<String, String>>,
     link_groups: Vec<LinkGroup>,
+    state_groups: Vec<StateGroup>,
     /// Host -> file name in the icons folder, for tools whose own icon has been downloaded.
     icons: HashMap<String, String>,
     /// GitHub stars per "owner/repo", copied from GitHub by tools/fetch_stars.py.
@@ -189,6 +218,21 @@ impl Site {
                 let guide = parse_guide(&slug, &src).map_err(|e| format!("guides/{}/{slug}.md: {e}", lang.code()))?;
                 site.guides.insert((lang, slug), guide);
             }
+        }
+        let states = root.join("guides").join("directory.txt");
+        if states.exists() {
+            let text = fs::read_to_string(&states).map_err(|e| format!("{}: {e}", states.display()))?;
+            site.state_groups = parse_states(&text).map_err(|e| format!("guides/directory.txt: {e}"))?;
+            for link in site.state_groups.iter().flat_map(|g| &g.links) {
+                if let Some(slug) = &link.guide {
+                    if site.guide(Lang::EN, slug).is_none() {
+                        return Err(format!("guides/directory.txt: no English guide '{slug}'"));
+                    }
+                }
+            }
+        }
+        if let Some(clash) = GUIDE_STATES.iter().find(|id| site.guides.keys().any(|(_, s)| s == *id)) {
+            return Err(format!("a guide is named '{clash}', which is the address of a guides directory section"));
         }
         let directory = root.join("links").join("directory.txt");
         if directory.exists() {
@@ -237,13 +281,13 @@ impl Site {
     }
 
     /// Interface text for `lang`, falling back to English, then to the key itself.
-    pub fn t<'a>(&'a self, lang: Lang, key: &'a str) -> &'a str {
+    pub fn t(&self, lang: Lang, key: &str) -> &str {
         self.ui
             .get(&lang)
             .and_then(|m| m.get(key))
             .or_else(|| self.ui.get(&Lang::EN).and_then(|m| m.get(key)))
             .map(String::as_str)
-            .unwrap_or(key)
+            .unwrap_or_else(|| UI_KEYS.iter().copied().find(|k| *k == key).unwrap_or("?"))
     }
 
     pub fn missing_ui_keys(&self, lang: Lang) -> Vec<&'static str> {
@@ -317,6 +361,10 @@ impl Site {
 
     pub fn link_groups(&self) -> &[LinkGroup] {
         &self.link_groups
+    }
+
+    pub fn state_groups(&self) -> &[StateGroup] {
+        &self.state_groups
     }
 
     pub fn guide(&self, lang: Lang, slug: &str) -> Option<&Guide> {
@@ -438,6 +486,57 @@ fn parse_links(text: &str) -> Result<Vec<LinkGroup>, String> {
     }
     if let Some(empty) = groups.iter().find(|g| g.links.is_empty()) {
         return Err(format!("group '{}' has no links", empty.id));
+    }
+    Ok(groups)
+}
+
+/// Parses the guides directory: `[state]` headers followed by `topic | Name | https url | description`, or
+/// `topic | guide=<slug>` for one of this site's guides. Rejects unknown states and topics, non-https links,
+/// duplicates and empty states, so a typo fails at startup.
+fn parse_states(text: &str) -> Result<Vec<StateGroup>, String> {
+    let mut groups: Vec<StateGroup> = Vec::new();
+    let mut seen: Vec<String> = Vec::new();
+    for (n, line) in text.lines().enumerate() {
+        let line = line.trim();
+        let at = |msg: String| format!("line {}: {msg}", n + 1);
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some(id) = line.strip_prefix('[').and_then(|l| l.strip_suffix(']')) {
+            let id = GUIDE_STATES.iter().find(|s| **s == id).ok_or(at(format!("unknown state '{id}'")))?;
+            if groups.iter().any(|g| g.id == *id) {
+                return Err(at(format!("state '{id}' appears twice")));
+            }
+            groups.push(StateGroup { id, links: Vec::new() });
+            continue;
+        }
+        let group = groups.last_mut().ok_or(at("entry before any [state] header".into()))?;
+        let parts: Vec<&str> = line.split(" | ").map(str::trim).collect();
+        let topic = GUIDE_TOPICS.iter().find(|t| **t == parts[0]).ok_or(at(format!("unknown topic '{}'", parts[0])))?;
+        let link = match parts[1..] {
+            [guide] => {
+                let slug = guide.strip_prefix("guide=").filter(|s| valid_slug(s)).ok_or(at(format!("expected guide=<slug>, not '{guide}'")))?;
+                StateLink { topic, guide: Some(slug.into()), name: String::new(), url: format!("/guides/{slug}"), description: String::new() }
+            }
+            [name, url, description] => {
+                if name.is_empty() || description.is_empty() {
+                    return Err(at("name and description must not be empty".into()));
+                }
+                if !url.starts_with("https://") || url.contains(char::is_whitespace) {
+                    return Err(at(format!("'{url}' must be an https:// link")));
+                }
+                StateLink { topic, guide: None, name: name.into(), url: url.into(), description: description.into() }
+            }
+            _ => return Err(at("expected 'topic | Name | https url | description' or 'topic | guide=<slug>'".into())),
+        };
+        if seen.contains(&link.url) {
+            return Err(at(format!("{} is listed twice", link.url)));
+        }
+        seen.push(link.url.clone());
+        group.links.push(link);
+    }
+    if let Some(empty) = groups.iter().find(|g| g.links.is_empty()) {
+        return Err(format!("state '{}' has no entries", empty.id));
     }
     Ok(groups)
 }
@@ -676,6 +775,21 @@ mod tests {
         assert_eq!(with_repo[0].links[0].repo.as_deref(), Some("owner/repo-1.2"));
         assert!(parse_links("[pdf]\nA | https://a.example | oss | x | github=not a repo").is_err(), "bad repo");
         assert!(parse_links("[pdf]\nA | https://a.example | oss | x | stars=5").is_err(), "unknown extra field");
+    }
+
+    #[test]
+    fn state_directory_parser_accepts_good_and_rejects_bad_input() {
+        let ok = "[india]\nid | guide=passport-new\n[kerala]\njobs | Kerala PSC | https://www.keralapsc.gov.in | Exams.\n";
+        let groups = parse_states(ok).unwrap();
+        assert_eq!((groups.len(), groups[0].links[0].guide.as_deref(), groups[1].links[0].topic), (2, Some("passport-new"), "jobs"));
+        assert!(parse_states("[goa]\njobs | A | https://a.example | x").is_err(), "unknown state");
+        assert!(parse_states("[kerala]\nfood | A | https://a.example | x").is_err(), "unknown topic");
+        assert!(parse_states("jobs | A | https://a.example | x").is_err(), "no state header");
+        assert!(parse_states("[kerala]\njobs | A | http://a.example | x").is_err(), "not https");
+        assert!(parse_states("[kerala]\njobs | A | https://a.example").is_err(), "missing description");
+        assert!(parse_states("[kerala]\njobs | A | https://a.example | x\n[india]\nland | B | https://a.example | y").is_err(), "duplicate url");
+        assert!(parse_states("[kerala]\nid | guide=../x").is_err(), "bad guide slug");
+        assert!(parse_states("[kerala]\n").is_err(), "empty state");
     }
 
     #[test]

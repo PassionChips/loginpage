@@ -1,0 +1,84 @@
+# Guides directory: one [section] per state (ids in GUIDE_STATES, src/content.rs), then one entry per line:
+#   topic | Name | https url | One-line description in plain English.
+#   topic | guide=<slug>          (one of this site's guides; title and summary come from the guide)
+# Topics: jobs, certificates, scholarships, admissions, welfare, land, citizen, id.
+# Only official government portals. Every URL may appear once in the whole file. Order within a state is the
+# order shown; the main page previews the first 8 of each state.
+
+[india]
+id | guide=passport-new
+id | guide=passport-renewal
+id | guide=aadhaar-address-update
+id | guide=pan-instant-epan
+id | guide=pan-aadhaar-link
+id | guide=learners-licence
+citizen | guide=rti-online
+citizen | guide=cpgrams-grievance
+
+[tamil-nadu]
+jobs | TNPSC | https://www.tnpsc.gov.in | Group 1, Group 2/2A, Group 4 and other notified state government posts.
+jobs | TNUSRB | https://www.tnusrb.tn.gov.in | Police constable, sub-inspector and other notified uniformed services recruitment.
+jobs | Teachers Recruitment Board (TRB) | https://www.trb.tn.gov.in | Teacher recruitment and teacher eligibility examinations.
+jobs | Medical Services Recruitment Board (MRB) | https://www.mrb.tn.gov.in | Recruitment for doctors, nurses and other health department posts.
+certificates | TN e-Sevai | https://www.tnesevai.tn.gov.in | Community, income, nativity, residence and other notified certificates.
+scholarships | UMIS scholarships | https://umis.tn.gov.in | State scholarships and fee assistance for college students.
+admissions | TNEA | https://www.tneaonline.org | Tamil Nadu Engineering Admissions: registration, rank list and counselling.
+welfare | Tamil Nadu Government | https://www.tn.gov.in | Women's assistance, student assistance, pensions and other notified benefits.
+land | TN e-Services (land records) | https://eservices.tn.gov.in | Patta, Chitta, land records and related applications.
+citizen | TNeGA | https://tnega.tn.gov.in | Online government services, application tracking and service guidance.
+
+[andhra-pradesh]
+jobs | APPSC | https://psc.ap.gov.in | Group 1, Group 2 and other notified state government posts.
+jobs | AP Police Recruitment Board (SLPRB) | https://slprb.ap.gov.in | Police constable, sub-inspector and other notified recruitment.
+jobs | AP DSC (teacher recruitment) | https://apdsc.apcfss.in | District Selection Committee teacher recruitment and related notices.
+certificates | AP Seva | https://vswsonline.ap.gov.in | Income, caste, residence, family member and other notified certificates.
+citizen | AP MeeSeva | https://ap.meeseva.gov.in | MeeSeva applications, certificate services and application status.
+admissions | AP EAPCET (APSCHE) | https://cets.apsche.ap.gov.in | Engineering, agriculture and pharmacy entrance test and admissions.
+scholarships | Jnanabhumi | https://jnanabhumi.ap.gov.in | Post-matric scholarships and fee reimbursement.
+welfare | Social security pensions | https://sspensions.ap.gov.in | Social security pensions and related welfare benefits.
+land | Meebhoomi | https://meebhoomi.ap.gov.in | Land records (Adangal, 1-B) and property-related services.
+citizen | PGRS (Meekosam) | https://pgrs.ap.gov.in | Public grievances to the government and status tracking.
+
+[telangana]
+jobs | TGPSC | https://www.tgpsc.gov.in | Group examinations and other notified state government posts.
+jobs | TG Police Recruitment Board | https://www.tgprb.in | Police constable, sub-inspector and other notified recruitment.
+jobs | TG DSC (teacher recruitment) | https://tgdsc.aptonline.in | District Selection Committee teacher recruitment.
+jobs | TG TET | https://tgtet.aptonline.in | Telangana Teacher Eligibility Test.
+certificates | Telangana MeeSeva | https://ts.meeseva.telangana.gov.in | Income, caste, residence and other notified certificates, and application status.
+citizen | MeeSeva services list | https://www.telangana.gov.in/services/meeseva-services/ | Revenue, police, registration, utility and other services offered through MeeSeva.
+scholarships | Telangana ePASS | https://telanganaepass.cgg.gov.in | State scholarships and fee reimbursement.
+admissions | TG EAPCET | https://eapcet.tgche.ac.in | Engineering, agriculture and pharmacy entrance test.
+welfare | Telangana Government | https://www.telangana.gov.in | Pensions, farmer assistance, housing and other eligible benefits.
+land | Bhu Bharati | https://bhubharati.telangana.gov.in | Land records, Record of Rights and related revenue services.
+citizen | GHMC | https://www.ghmc.gov.in | Greater Hyderabad municipal services: property tax, certificates and complaints.
+
+[karnataka]
+jobs | KPSC | https://kpsc.kar.nic.in | Gazetted probationers and other notified state government posts.
+jobs | Karnataka State Police | https://ksp.karnataka.gov.in | Police recruitment notices and other police services.
+certificates | Nadakacheri | https://nadakacheri.karnataka.gov.in | Caste, income, residence and other revenue certificates.
+citizen | Seva Sindhu | https://sevasindhu.karnataka.gov.in | Applications for state government services in one place.
+scholarships | State Scholarship Portal (SSP) | https://ssp.karnataka.gov.in | Pre-matric and post-matric scholarships from several departments.
+admissions | Karnataka Examinations Authority (KCET) | https://cetonline.karnataka.gov.in/kea | KCET entrance test, counselling and seat allotment.
+land | Bhoomi land records | https://landrecords.karnataka.gov.in | RTC (Pahani), mutation status and other land records.
+citizen | IPGRS | https://ipgrs.karnataka.gov.in | Public grievances to state departments and status tracking.
+
+[maharashtra]
+jobs | MPSC | https://mpsc.gov.in | State service examinations and other notified recruitment.
+jobs | Maharashtra Police | https://www.mahapolice.gov.in | Police recruitment notices and other police services.
+certificates | Aaple Sarkar | https://aaplesarkar.mahaonline.gov.in | Domicile, income, caste, non-creamy layer, senior citizen and other notified certificates.
+scholarships | MahaDBT | https://mahadbt.maharashtra.gov.in | Post-matric scholarships, fee concessions, farmer schemes and other benefits.
+admissions | State CET Cell | https://cetcell.mahacet.org | CET examinations, admissions and counselling.
+land | Mahabhumi | https://mahabhumi.gov.in | 7/12 extracts, land records and related services.
+citizen | Aaple Sarkar grievances | https://grievances.maharashtra.gov.in | Service complaints and appeals, with a token number to track them.
+
+[kerala]
+jobs | Kerala PSC | https://www.keralapsc.gov.in | Kerala PSC examinations and other notified posts, including police.
+jobs | KTET | https://ktet.kerala.gov.in | Kerala Teacher Eligibility Test.
+jobs | Kerala Police | https://keralapolice.gov.in | Police notices and services.
+certificates | Kerala e-District | https://edistrict.kerala.gov.in | Income, caste/community, nativity, domicile, legal heir and other certificates.
+citizen | Akshaya | https://akshaya.kerala.gov.in | Akshaya centres for assisted e-District and other government applications.
+scholarships | e-Grantz | https://egrantz.kerala.gov.in | State scholarships and education assistance.
+welfare | Welfare pensions | https://welfarepension.lsgkerala.gov.in | Social security pensions and related assistance.
+admissions | CEE Kerala (KEAM) | https://cee.kerala.gov.in | KEAM entrance examination and admissions.
+land | Kerala Revenue | https://revenue.kerala.gov.in | Land tax, revenue certificates and related land services.
+citizen | CM's public grievance cell | https://cmo.kerala.gov.in | Public grievances to the Chief Minister's office.
