@@ -31,3 +31,7 @@ node_modules/
 /.claude/
 /.taste-skill/
 /skills-lock.json
+
+# Source artwork for the Tamil Nadu character (the site uses the processed files in static/media)
+vijay.mp4
+vijay_img.png

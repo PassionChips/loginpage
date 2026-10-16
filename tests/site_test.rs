@@ -562,12 +562,17 @@ async fn every_guides_section_shows_its_true_outline() {
 }
 
 #[tokio::test]
-async fn tamil_nadu_transition_is_on_every_page_and_its_video_is_served() {
-    // One script on every page decides; the pages themselves are unchanged.
-    for uri in ["/en", "/en/guides", "/en/guides/kerala", "/ta/guides/tamil-nadu", "/en/links", "/en/guides/passport-new"] {
+async fn tamil_nadu_character_pops_out_of_the_map_and_its_animation_is_served() {
+    // Hovering Tamil Nadu on the map plays it; clicking is an ordinary link, like every other state.
+    for uri in ["/en/guides", "/en/guides/kerala", "/ta/guides/tamil-nadu"] {
         let (_, _, body) = get(app_with(50, 50), uri).await;
-        assert!(body.contains(r#"<script src="/static/js/tn-transition.js?v="#), "{uri}");
+        assert!(body.contains(r#"<a class="imap-r" href=""#) && body.contains(r#"data-id="tamil-nadu""#), "{uri}");
+        assert!(!body.contains("tn-transition"), "{uri}: no click transition");
     }
+    let (_, _, map) = get(app_with(50, 50), "/static/js/directory/indiamap.mjs").await;
+    assert!(map.contains("./tn-character.mjs"), "the map loads the character");
+    let (_, headers, _) = get(app_with(50, 50), "/en/guides").await;
+    assert!(headers["content-security-policy"].to_str().unwrap().contains("img-src 'self' data: blob:"), "fresh copies of the animated image for replays");
     let head = |uri: &'static str| async move {
         let req = Request::builder().method("HEAD").uri(uri).header("x-forwarded-for", "10.0.0.1").body(Body::empty()).unwrap();
         let res = app_with(50, 50).oneshot(req).await.unwrap();

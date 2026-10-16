@@ -783,7 +783,7 @@ a.imap-r:hover, a.imap-r.is-hot, a.imap-r.is-spy, a.imap-r:focus-visible, a.imap
 }
 a.imap-r[aria-current="page"] { fill: color-mix(in srgb, var(--accent) 38%, transparent); }
 a.imap-r:focus-visible { stroke-width: 2.2; }
-.imap-tip { position: absolute; left: var(--x, 50%); top: var(--y, 0); z-index: 3; margin: 0; transform: translate(-50%, calc(-100% - .7rem)); padding: .3rem .65rem; border-radius: .5rem; background: var(--ink); color: var(--bg); font-size: .8125rem; font-weight: 700; white-space: nowrap; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, .35); }
+.imap-tip { position: absolute; left: var(--x, 50%); top: var(--y, 0); z-index: 5; margin: 0; transform: translate(-50%, calc(-100% - .7rem)); padding: .3rem .65rem; border-radius: .5rem; background: var(--ink); color: var(--bg); font-size: .8125rem; font-weight: 700; white-space: nowrap; pointer-events: none; box-shadow: 0 6px 18px rgba(0, 0, 0, .35); }
 .imap-tip.is-off { background: var(--field); color: var(--ink); font-weight: 600; }
 .lhero:not(.has-photo) .imap-india { color: var(--geo-ink); }
 
@@ -810,17 +810,13 @@ a.imap-r:focus-visible { stroke-width: 2.2; }
 .geo-credit { margin-top: -2.5rem; font-size: .8125rem; }
 .geo-credit a { color: inherit; }
 
-/* Tamil Nadu page transition (static/js/tn-transition.js): the small cut-out character pops up from the
-   bottom of the screen over the dimmed page, does its hand movement, then the Tamil Nadu page loads. */
-.tn-overlay { position: fixed; inset: 0; z-index: 1000; overflow: hidden; cursor: pointer; background: rgba(9, 9, 11, .62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: tn-in .25s ease-out both; }
-.tn-char { position: absolute; bottom: 0; left: 50%; display: block; height: min(54vh, 26rem); width: auto; aspect-ratio: 9 / 16; object-fit: contain; transform: translate(-50%, 105%); filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .55)); }
-.tn-overlay.is-on .tn-char { animation: tn-rise .55s cubic-bezier(.2, 1.35, .45, 1) forwards; }
-.tn-glow { position: absolute; left: 50%; bottom: -12vh; width: min(70vw, 34rem); aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent); opacity: 0; transition: opacity .5s ease-out; pointer-events: none; }
-.tn-overlay.is-on .tn-glow { opacity: 1; }
-@keyframes tn-rise { from { transform: translate(-50%, 105%); } to { transform: translate(-50%, 0); } }
-html.tn-playing { overflow: hidden; }
-@keyframes tn-in { from { opacity: 0; } }
-/* Arriving on the Tamil Nadu page: start in the overlay's colour and fade into the page. */
-html.tn-reveal body::after { content: ""; position: fixed; inset: 0; z-index: 1000; background: #0b0b0d; pointer-events: none; animation: tn-out .55s .05s ease-out forwards; }
-@keyframes tn-out { to { opacity: 0; visibility: hidden; } }
-@media (prefers-reduced-motion: reduce) { .tn-overlay, .tn-overlay.is-on .tn-char { animation: none; } .tn-char { transform: translateX(-50%); } }
+/* Tamil Nadu's character on the India map (static/js/directory/tn-character.mjs): it grows up out of the
+   state on hover, does its hand movement, and sinks back in. Its feet fade into the state. */
+.tn-pop { position: absolute; z-index: 4; height: 62%; aspect-ratio: 9 / 16; pointer-events: none; transform-origin: 50% 100%; transform: translate(-50%, -100%) scale(.04); opacity: 0;
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #000 16%); mask-image: linear-gradient(to top, transparent 0, #000 16%); }
+.tn-pop-media { display: block; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .55)); }
+.tn-pop.is-out { animation: tn-emerge .45s cubic-bezier(.2, 1.3, .4, 1) forwards; }
+.tn-pop.is-in { animation: tn-sink .38s cubic-bezier(.5, 0, .9, .4) forwards; }
+@keyframes tn-emerge { from { transform: translate(-50%, -100%) scale(.04); opacity: 0; } 30% { opacity: 1; } to { transform: translate(-50%, -100%) scale(1); opacity: 1; } }
+@keyframes tn-sink { from { transform: translate(-50%, -100%) scale(1); opacity: 1; } to { transform: translate(-50%, -100%) scale(.04); opacity: 0; } }
+a.imap-r.is-portal { color: var(--accent); fill: color-mix(in srgb, var(--accent) 45%, transparent); filter: drop-shadow(0 0 9px color-mix(in srgb, var(--accent) 70%, transparent)); }

@@ -42,7 +42,7 @@ export function setupIndiaMap(root) {
     r.addEventListener('keydown', (e) => {
       if (e.key === ' ') {
         e.preventDefault();
-        (window.guideboyNavigate || ((h) => location.assign(h)))(r.getAttribute('href'));
+        location.href = r.getAttribute('href');
       }
     });
   }
@@ -61,6 +61,12 @@ export function setupIndiaMap(root) {
     const current = chips.find((c) => c.getAttribute('aria-current') === 'true')?.dataset.cat;
     regions.forEach((r) => r.classList.toggle('is-spy', r.dataset.id === current && !r.hasAttribute('aria-current')));
   };
+  // Tamil Nadu's character pops out of the state when it is hovered.
+  const tamilNadu = byId.get('tamil-nadu');
+  if (tamilNadu && tamilNadu.tagName.toLowerCase() === 'a') {
+    import('./tn-character.mjs').then((m) => m.setupTamilNaduCharacter(wrap, tamilNadu));
+  }
+
   const rail = $('.rail-in');
   if (rail) new MutationObserver(syncSpy).observe(rail, { subtree: true, attributes: true, attributeFilter: ['aria-current'] });
 
