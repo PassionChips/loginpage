@@ -48,6 +48,13 @@ id | guide=passport-new
 - The outlines come from [India boundaries](https://github.com/datameet/maps) by the DataMeet India community (Survey of India based, CC BY 4.0, credited on the page). `python3 -I tools/build_geo.py DATA_DIR` turns `States/Admin2.shp`/`.dbf` and `Country/india-composite.geojson` from that repository into `static/geo/outlines.svg` (all 28 states and 8 union territories, plus India) and `src/geo.rs`. Never draw or edit outlines by hand.
 - **Only official government portals.** Several state portals did not answer from outside India when this list was made (October 2026); check each link from an Indian connection before launch.
 
+### Tamil Nadu character
+
+On the India map, hovering (or keyboard-focusing) Tamil Nadu makes a small cut-out Tamil Nadu character grow up out of the state, do its hand movement, and sink back into it; every new hover plays it again. It is decoration only: clicking Tamil Nadu goes to its page like any other state, and nothing plays on touch screens (a tap navigates) or with reduced motion. The code is `static/js/directory/tn-character.mjs`, loaded by the map only when the map has a Tamil Nadu link, and the animation downloads only once the pointer reaches the map. Safari replays the animated WebP from a fresh `blob:` copy each time, which is why the CSP allows `blob:` images.
+
+The character is the supplied animation with its background removed (rembg `isnet-general-use` on every frame, then only the largest shape kept, edges tightened and de-tinted, and the left and right frame cuts faded out), at 405×720:
+`static/media/tamil-nadu-character.webm` (VP9 with alpha, 30 fps; Chrome, Edge, Firefox, Android), `tamil-nadu-character.webp` (animated WebP played once, 15 fps, 360×640; Safari and iOS, whose WebM playback drops alpha) and `tamil-nadu-character-poster.webp` (first frame). From a folder of transparent PNG frames: `ffmpeg -framerate 30 -i %03d.png -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 -crf 30 -auto-alt-ref 0 -an tamil-nadu-character.webm` and `ffmpeg -framerate 30 -i %03d.png -vf fps=15,scale=360:640 -c:v libwebp_anim -quality 60 -loop 1 tamil-nadu-character.webp`. If the animation's length changes, update `DURATION` in the script.
+
 ## Add a guide
 
 Every guide is listed in the guides directory (add it to `content/guides/directory.txt`) and lives at `/<lang>/guides/<slug>`. The front page (`/<lang>`) only links to the list.

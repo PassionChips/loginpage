@@ -560,3 +560,31 @@ async fn every_guides_section_shows_its_true_outline() {
     let (status, _, _) = get(app_with(50, 50), "/static/geo/outlines.svg").await;
     assert_eq!(status, StatusCode::OK);
 }
+
+#[tokio::test]
+async fn tamil_nadu_character_pops_out_of_the_map_and_its_animation_is_served() {
+    // Hovering Tamil Nadu on the map plays it; clicking is an ordinary link, like every other state.
+    for uri in ["/en/guides", "/en/guides/kerala", "/ta/guides/tamil-nadu"] {
+        let (_, _, body) = get(app_with(50, 50), uri).await;
+        assert!(body.contains(r#"<a class="imap-r" href=""#) && body.contains(r#"data-id="tamil-nadu""#), "{uri}");
+        assert!(!body.contains("tn-transition"), "{uri}: no click transition");
+    }
+    let (_, _, map) = get(app_with(50, 50), "/static/js/directory/indiamap.mjs").await;
+    assert!(map.contains("./tn-character.mjs"), "the map loads the character");
+    let (_, headers, _) = get(app_with(50, 50), "/en/guides").await;
+    assert!(headers["content-security-policy"].to_str().unwrap().contains("img-src 'self' data: blob:"), "fresh copies of the animated image for replays");
+    let head = |uri: &'static str| async move {
+        let req = Request::builder().method("HEAD").uri(uri).header("x-forwarded-for", "10.0.0.1").body(Body::empty()).unwrap();
+        let res = app_with(50, 50).oneshot(req).await.unwrap();
+        (res.status(), res.headers().get("content-type").map(|v| v.to_str().unwrap().to_string()))
+    };
+    assert_eq!(head("/static/media/tamil-nadu-character.webm").await, (StatusCode::OK, Some("video/webm".into())));
+    assert_eq!(head("/static/media/tamil-nadu-character.webp").await, (StatusCode::OK, Some("image/webp".into())));
+    assert_eq!(head("/static/media/tamil-nadu-character-poster.webp").await, (StatusCode::OK, Some("image/webp".into())));
+    // The character is a small transparent animation, not the full video.
+    let webm = std::fs::read("static/media/tamil-nadu-character.webm").unwrap();
+    assert!(webm.windows(9).any(|w| w == b"AlphaMode") || webm.windows(2).any(|w| w == [0x53, 0xC0]), "WebM carries alpha");
+    assert!(webm.len() < 800_000, "{} bytes", webm.len());
+    assert!(std::fs::metadata("static/media/tamil-nadu-character.webp").unwrap().len() < 900_000);
+    assert!(!std::path::Path::new("static/media/tamil-nadu-transition.mp4").exists(), "the full video is not shipped");
+}

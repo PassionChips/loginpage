@@ -20,7 +20,7 @@ use tower_http::set_header::{SetResponseHeader, SetResponseHeaderLayer};
 
 /// The site has no forms, scripts or cookies, so the CSP can be strict.
 /// Loosen `script-src`/`img-src`/`frame-src` only for the ad provider when ads are added.
-const CSP: &str = "default-src 'self'; img-src 'self' data:; style-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
+const CSP: &str = "default-src 'self'; img-src 'self' data: blob:; style-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
 
 /// Security headers sent with every response, by the server and (through `_headers`) by the static export.
 pub const SECURITY_HEADERS: [(&str, &str); 4] = [
