@@ -176,3 +176,4 @@ gx_map_label = Map of India: choose a state
 gx_pick_state = Choose your state
 gx_find_state = Search states and union territories
 gx_no_page = No guides yet
+gx_tap_again = Tap again to open

@@ -92,7 +92,7 @@ pub const UI_KEYS: &[&str] = &[
     "st_india", "st_tamil-nadu", "st_andhra-pradesh", "st_telangana", "st_karnataka", "st_maharashtra", "st_kerala",
     "gt_jobs", "gt_certificates", "gt_scholarships", "gt_admissions", "gt_welfare", "gt_land", "gt_citizen", "gt_id",
     "gx_states", "gx_topics", "gx_topic", "gx_count_one", "gx_count_many", "gx_see_all", "gx_back_all", "gx_state_sub",
-    "gx_disclaimer", "gx_map_label", "gx_pick_state", "gx_find_state", "gx_no_page",
+    "gx_disclaimer", "gx_map_label", "gx_pick_state", "gx_find_state", "gx_no_page", "gx_tap_again",
 ];
 
 /// Groups in the free tools directory, in display order. Each needs a `cat_<id>` interface string

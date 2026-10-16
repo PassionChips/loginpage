@@ -1351,7 +1351,7 @@ fn india_map(site: &Site, lang: Lang, selected: Option<&str>) -> String {
     format!(
         r##"<div class="geo-hero">
 <nav class="imap-wrap" aria-label="{label}">
-<svg class="imap" viewBox="{x} {y} {w} {h}"><use class="imap-india" href="{GEO_SPRITE}#india" x="{x}" y="{y}" width="{w}" height="{h}" aria-hidden="true"/>{regions}</svg>
+<svg class="imap" viewBox="{x} {y} {w} {h}" data-tap-again="{tap_again}"><use class="imap-india" href="{GEO_SPRITE}#india" x="{x}" y="{y}" width="{w}" height="{h}" aria-hidden="true"/>{regions}</svg>
 <p class="imap-tip" role="tooltip" hidden></p>
 </nav>
 <details class="imap-alt">
@@ -1363,6 +1363,7 @@ fn india_map(site: &Site, lang: Lang, selected: Option<&str>) -> String {
         label = t("gx_map_label"),
         pick = t("gx_pick_state"),
         find = t("gx_find_state"),
+        tap_again = t("gx_tap_again"),
         linked = linked.concat(),
         unlisted = unlisted.concat(),
     )
