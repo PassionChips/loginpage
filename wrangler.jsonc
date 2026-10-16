@@ -9,5 +9,8 @@
     "html_handling": "drop-trailing-slash",
     // Unknown paths get public/404.html with a 404 status.
     "not_found_handling": "404-page"
-  }
+  },
+  // Lets `npx wrangler preview` (the deploy command for non-production branches) publish a preview of the
+  // same static site. Empty on purpose: assets and settings above apply to previews too.
+  "previews": {}
 }

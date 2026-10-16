@@ -146,6 +146,7 @@ In the Cloudflare dashboard (Workers & Pages -> Create -> import the GitHub repo
 | --- | --- |
 | Build command | `bash tools/cloudflare-build.sh` |
 | Deploy command | `npx wrangler deploy` |
+| Non-production branch deploy command | `npx wrangler preview` (uses the `previews` block in `wrangler.jsonc`) |
 | Build variable | `SITE_URL` = the public https address, e.g. `https://guideboy.fyi` (or the `*.workers.dev` address until the domain is set up) |
 
 Cloudflare's build machine has no Rust, so the build script installs it first (the first build takes a few minutes). The export refuses to run without an `https://` SITE_URL, because canonical links, hreflang, the sitemap and robots.txt are built from it. To try the export locally: `EXPORT_ALLOW_LOCAL=1 SITE_URL=http://localhost:8787 cargo run --bin export -- public`, then `npx wrangler dev`.
