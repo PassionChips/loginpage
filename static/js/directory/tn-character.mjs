@@ -1,9 +1,10 @@
 // Tamil Nadu's character on the India map: hovering (or focusing) Tamil Nadu makes the small character
 // grow up out of the state's outline, do its hand movement, and sink back into it. Every new hover plays it
-// again. Only Tamil Nadu has one, and it is decoration only: clicking Tamil Nadu navigates as usual.
+// again. Only Tamil Nadu has one: a mouse click or Enter opens Tamil Nadu as usual, and on touch screens
+// (no hover) the first tap plays it and the second opens the page.
 //
 // The character is a transparent animation: a VP9 WebM with alpha, or an animated WebP on Apple's WebKit,
-// whose WebM playback drops the alpha. Nothing plays with reduced motion, or on touch (a tap navigates).
+// whose WebM playback drops the alpha. Nothing plays with reduced motion; taps then open the page at once.
 const MEDIA = '/static/media/tamil-nadu-character';
 const DURATION = 2133; // ms, the length of the hand movement
 const SINK = 380; // ms, matches the tn-sink animation in site.css
@@ -112,5 +113,34 @@ export function setupTamilNaduCharacter(wrap, region) {
   wrap.addEventListener('pointerenter', (e) => fine(e) && !reduceMotion() && build());
   region.addEventListener('pointerenter', (e) => fine(e) && play());
   region.addEventListener('focus', play);
+
+  // Touch screens have no hover: the first tap on Tamil Nadu plays the character and says "tap again to
+  // open"; a second tap while it is out, or soon after, opens the page as usual.
+  const tip = wrap.querySelector('.imap-tip');
+  const tapAgain = wrap.querySelector('.imap')?.dataset.tapAgain || '';
+  let lastPointer = 'mouse';
+  let armedUntil = 0;
+  let hintTimer = null;
+  region.addEventListener('pointerdown', (e) => (lastPointer = e.pointerType));
+  region.addEventListener('touchstart', () => build(), { passive: true });
+  region.addEventListener('click', (e) => {
+    if (lastPointer !== 'touch' || reduceMotion() || Date.now() < armedUntil) return;
+    e.preventDefault();
+    armedUntil = Date.now() + DURATION + 3000;
+    play();
+    // The map hides its tooltip when the finger lifts, so show the hint just after that.
+    setTimeout(() => {
+      if (!tip || !tapAgain) return;
+      const box = wrap.getBoundingClientRect();
+      const tn = region.getBoundingClientRect();
+      tip.textContent = `${region.dataset.name} · ${tapAgain}`;
+      tip.classList.remove('is-off');
+      tip.style.setProperty('--x', `${tn.left + tn.width / 2 - box.left}px`);
+      tip.style.setProperty('--y', `${tn.bottom - box.top + 44}px`);
+      tip.hidden = false;
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(() => (tip.hidden = true), armedUntil - Date.now());
+    }, 0);
+  });
   return { play };
 }
