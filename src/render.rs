@@ -173,6 +173,7 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
 {head_links}
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/site.css?v={v}">
+<script src="/static/js/tn-transition.js?v={v}"></script>
 {script}
 <script src="/static/js/lang.js?v={v}" defer></script>
 </head>

@@ -809,3 +809,18 @@ a.imap-r:focus-visible { stroke-width: 2.2; }
 .gkicker .av { width: 3rem; height: 3rem; }
 .geo-credit { margin-top: -2.5rem; font-size: .8125rem; }
 .geo-credit a { color: inherit; }
+
+/* Tamil Nadu page transition (static/js/tn-transition.js): the small cut-out character pops up from the
+   bottom of the screen over the dimmed page, does its hand movement, then the Tamil Nadu page loads. */
+.tn-overlay { position: fixed; inset: 0; z-index: 1000; overflow: hidden; cursor: pointer; background: rgba(9, 9, 11, .62); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: tn-in .25s ease-out both; }
+.tn-char { position: absolute; bottom: 0; left: 50%; display: block; height: min(54vh, 26rem); width: auto; aspect-ratio: 9 / 16; object-fit: contain; transform: translate(-50%, 105%); filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .55)); }
+.tn-overlay.is-on .tn-char { animation: tn-rise .55s cubic-bezier(.2, 1.35, .45, 1) forwards; }
+.tn-glow { position: absolute; left: 50%; bottom: -12vh; width: min(70vw, 34rem); aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 22%, transparent), transparent); opacity: 0; transition: opacity .5s ease-out; pointer-events: none; }
+.tn-overlay.is-on .tn-glow { opacity: 1; }
+@keyframes tn-rise { from { transform: translate(-50%, 105%); } to { transform: translate(-50%, 0); } }
+html.tn-playing { overflow: hidden; }
+@keyframes tn-in { from { opacity: 0; } }
+/* Arriving on the Tamil Nadu page: start in the overlay's colour and fade into the page. */
+html.tn-reveal body::after { content: ""; position: fixed; inset: 0; z-index: 1000; background: #0b0b0d; pointer-events: none; animation: tn-out .55s .05s ease-out forwards; }
+@keyframes tn-out { to { opacity: 0; visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .tn-overlay, .tn-overlay.is-on .tn-char { animation: none; } .tn-char { transform: translateX(-50%); } }

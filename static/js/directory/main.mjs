@@ -11,6 +11,8 @@ import { setupRail } from './rail.mjs';
 import { createToast } from './toast.mjs';
 
 const VIEW_KEY = 'guideboy:view';
+// Page changes go through the site's navigation function (it plays the Tamil Nadu transition when that applies).
+const go = (href) => (window.guideboyNavigate || ((h) => location.assign(h)))(href);
 
 function start() {
   const input = $('#lq');
@@ -110,7 +112,7 @@ function start() {
           input.value = '';
           state.badges.clear();
           state.savedOnly = false;
-          location.href = c.href;
+          go(c.href);
         });
         return b;
       })
@@ -292,7 +294,7 @@ function start() {
   const palette = createPalette($('#dx-palette'), {
     tools,
     categories,
-    onCategory: (id) => (location.href = categories.find((c) => c.id === id).href),
+    onCategory: (id) => go(categories.find((c) => c.id === id).href),
     onTool: (tool) => openDetails(tool),
   });
   $('[data-palette]').addEventListener('click', () => palette.open());

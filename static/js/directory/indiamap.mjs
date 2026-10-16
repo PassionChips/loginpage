@@ -42,7 +42,7 @@ export function setupIndiaMap(root) {
     r.addEventListener('keydown', (e) => {
       if (e.key === ' ') {
         e.preventDefault();
-        location.href = r.getAttribute('href');
+        (window.guideboyNavigate || ((h) => location.assign(h)))(r.getAttribute('href'));
       }
     });
   }

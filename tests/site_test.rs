@@ -560,3 +560,26 @@ async fn every_guides_section_shows_its_true_outline() {
     let (status, _, _) = get(app_with(50, 50), "/static/geo/outlines.svg").await;
     assert_eq!(status, StatusCode::OK);
 }
+
+#[tokio::test]
+async fn tamil_nadu_transition_is_on_every_page_and_its_video_is_served() {
+    // One script on every page decides; the pages themselves are unchanged.
+    for uri in ["/en", "/en/guides", "/en/guides/kerala", "/ta/guides/tamil-nadu", "/en/links", "/en/guides/passport-new"] {
+        let (_, _, body) = get(app_with(50, 50), uri).await;
+        assert!(body.contains(r#"<script src="/static/js/tn-transition.js?v="#), "{uri}");
+    }
+    let head = |uri: &'static str| async move {
+        let req = Request::builder().method("HEAD").uri(uri).header("x-forwarded-for", "10.0.0.1").body(Body::empty()).unwrap();
+        let res = app_with(50, 50).oneshot(req).await.unwrap();
+        (res.status(), res.headers().get("content-type").map(|v| v.to_str().unwrap().to_string()))
+    };
+    assert_eq!(head("/static/media/tamil-nadu-character.webm").await, (StatusCode::OK, Some("video/webm".into())));
+    assert_eq!(head("/static/media/tamil-nadu-character.webp").await, (StatusCode::OK, Some("image/webp".into())));
+    assert_eq!(head("/static/media/tamil-nadu-character-poster.webp").await, (StatusCode::OK, Some("image/webp".into())));
+    // The character is a small transparent animation, not the full video.
+    let webm = std::fs::read("static/media/tamil-nadu-character.webm").unwrap();
+    assert!(webm.windows(9).any(|w| w == b"AlphaMode") || webm.windows(2).any(|w| w == [0x53, 0xC0]), "WebM carries alpha");
+    assert!(webm.len() < 800_000, "{} bytes", webm.len());
+    assert!(std::fs::metadata("static/media/tamil-nadu-character.webp").unwrap().len() < 900_000);
+    assert!(!std::path::Path::new("static/media/tamil-nadu-transition.mp4").exists(), "the full video is not shipped");
+}
