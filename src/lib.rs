@@ -1,6 +1,7 @@
 pub mod config;
 pub mod content;
 pub mod export;
+pub mod geo;
 pub mod middleware;
 pub mod render;
 pub mod routes;

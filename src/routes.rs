@@ -56,7 +56,7 @@ async fn index(State(state): Shared, Path(lang): Path<String>) -> Response {
 
 async fn guides(State(state): Shared, Path(lang): Path<String>) -> Response {
     match Lang::from_code(&lang) {
-        Some(lang) => Html(render::guides_page(&state.config, &state.site, lang)).into_response(),
+        Some(lang) => Html(render::guides_page(&state.config, &state.site, lang, None)).into_response(),
         None => not_found_response(&state),
     }
 }
@@ -77,7 +77,11 @@ async fn links_category(State(state): Shared, Path((lang, category)): Path<(Stri
     }
 }
 
+/// A guide, or a state's page of the guides directory (state ids are never guide slugs; see `Site::load`).
 async fn guide(State(state): Shared, Path((lang, slug)): Path<(String, String)>) -> Response {
+    if let (Some(lang), true) = (Lang::from_code(&lang), state.site.state_groups().iter().any(|g| g.id == slug)) {
+        return Html(render::guides_page(&state.config, &state.site, lang, Some(&slug))).into_response();
+    }
     let found = Lang::from_code(&lang).and_then(|l| state.site.guide_or_fallback(l, &slug).map(|(g, translated)| (l, g, translated)));
     match found {
         Some((lang, g, translated)) => Html(render::guide_page(&state.config, &state.site, lang, g, translated)).into_response(),
@@ -118,6 +122,9 @@ pub fn sitemap_xml(config: &Config, site: &Site) -> String {
     for lang in Lang::all() {
         url(&format!("/{}", lang.code()), None);
         url(&format!("/{}/guides", lang.code()), None);
+        for g in site.state_groups() {
+            url(&format!("/{}/guides/{}", lang.code(), g.id), None);
+        }
         url(&format!("/{}/links", lang.code()), None);
         for g in site.link_groups() {
             url(&format!("/{}/links/{}", lang.code(), g.id), None);

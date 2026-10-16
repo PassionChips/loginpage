@@ -30,6 +30,7 @@ function start() {
     name: el.dataset.name,
     desc: el.dataset.desc,
     badge: el.dataset.badge,
+    badgeName: el.dataset.badgename,
     cat: el.dataset.cat,
     catName: el.dataset.catname,
     host: el.dataset.host,
@@ -124,7 +125,7 @@ function start() {
       tags.push(b);
     };
     if (state.query.trim()) tag(`“${state.query.trim()}”`, () => ((input.value = state.query = ''), apply()));
-    for (const b of state.badges) tag({ free: T.badge_free, tier: T.badge_tier, oss: T.badge_oss }[b], () => (state.badges.delete(b), syncFilterChips(), apply()));
+    for (const b of state.badges) tag($(`.dx-chip[data-badge="${b}"]`).firstChild.textContent.trim(), () => (state.badges.delete(b), syncFilterChips(), apply()));
     if (state.savedOnly) tag(T.dx_saved, () => ((state.savedOnly = false), syncFilterChips(), apply()));
     const box = $('.dx-active');
     box.hidden = tags.length === 0;
@@ -311,6 +312,15 @@ function start() {
     }
   });
 
+  // ---- card lighting: the spotlight and lit rim follow the pointer ----
+  listsRoot.addEventListener('pointermove', (e) => {
+    const card = e.target.closest('.tcard');
+    if (!card) return;
+    const box = card.getBoundingClientRect();
+    card.style.setProperty('--mx', `${e.clientX - box.left}px`);
+    card.style.setProperty('--my', `${e.clientY - box.top}px`);
+  });
+
   // ---- reveal on scroll ----
   if ('IntersectionObserver' in window) {
     const reveal = new IntersectionObserver(
@@ -325,6 +335,10 @@ function start() {
     );
     groups.forEach((g) => reveal.observe(g));
   } else groups.forEach((g) => g.classList.add('in'));
+
+  // ---- the map of India on the guides pages ----
+  const map = $('.geo-hero');
+  if (map) import('./indiamap.mjs').then((m) => m.setupIndiaMap(map));
 
   applyView();
   tools.forEach((t) => syncTool(t.url));

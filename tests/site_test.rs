@@ -85,18 +85,31 @@ async fn rate_limit_blocks_a_burst_from_one_ip() {
 }
 
 #[tokio::test]
-async fn guide_list_has_live_search_that_works_without_script() {
+async fn guide_list_is_a_directory_of_states_and_topics_that_works_without_script() {
     let (status, _, body) = get(app_with(50, 50), "/en/guides").await;
     assert_eq!(status, StatusCode::OK);
-    assert!(body.contains(r#"type="search""#), "search box");
-    assert!(body.contains("/static/js/home.js"), "interactive script");
-    // Every guide is in the HTML itself, so the list works with scripts off.
-    assert!(body.contains("data-text=") && body.contains("/en/guides/aadhaar-address-update"));
-    // Guides span several categories, so category chips are offered (revealed by the script).
-    assert!(body.contains(r#"class="chips""#) && body.contains(r#"data-cat="Identity documents""#));
-    let (status, _, js) = get(app_with(50, 50), "/static/js/home.js").await;
+    assert!(body.contains(r#"type="search""#) && body.contains("/static/js/links.js"), "same search and script as free tools");
+    // Every entry is in the HTML itself, so the list works with scripts off.
+    assert!(body.contains("data-text=") && body.contains(r#"<a class="tmain" href="/en/guides/aadhaar-address-update">"#), "own guides open in the same tab");
+    assert!(body.contains(r#"<a class="tmain" href="https://www.tnpsc.gov.in" target="_blank" rel="nofollow noopener noreferrer">"#), "official portals open in a new tab");
+    // One rail chip and one section per state, each leading to the state's own page.
+    for id in ["india", "tamil-nadu", "andhra-pradesh", "telangana", "karnataka", "maharashtra", "kerala"] {
+        assert!(body.contains(&format!(r#"<a href="/en/guides/{id}" class="railchip" data-cat="{id}">"#)), "rail chip {id}");
+        assert!(body.contains(&format!(r#"<section class="lgroup reveal" id="{id}" data-cat="{id}">"#)), "section {id}");
+    }
+    // Topics are the filters, and only topics that have entries are offered.
+    assert!(body.contains(r#"class="dx-chip" data-badge="jobs" aria-pressed="false">Jobs <b>"#));
+    assert!(!body.contains(r#"data-badge="free""#), "no pricing filters on guides");
+    assert!(body.contains(r#""show_oss":false"#));
+
+    let (status, _, tn) = get(app_with(50, 50), "/en/guides/tamil-nadu").await;
     assert_eq!(status, StatusCode::OK);
-    assert!(js.contains("IntersectionObserver"));
+    assert!(tn.contains("<h1>Tamil Nadu</h1>") && tn.contains(r#"<a href="/en/guides">← All guides</a>"#));
+    assert!(tn.contains(r#"<a href="/en/guides/tamil-nadu" class="railchip" data-cat="tamil-nadu" aria-current="true">"#));
+    assert!(tn.contains(r#"<section class="lgroup reveal" id="jobs" data-cat="jobs">"#) && tn.contains("<h2>Jobs</h2>"), "grouped by topic");
+    assert!(!tn.contains("aadhaar-address-update"), "only this state's entries");
+    let (_, _, ta) = get(app_with(50, 50), "/ta/guides/kerala").await;
+    assert!(ta.contains("<h1>கேரளா</h1>"));
 }
 
 #[tokio::test]
@@ -214,9 +227,9 @@ async fn directory_is_reachable_from_navigation_home_and_sitemap() {
     assert!(!home.contains(r#"<form class="finder""#), "the guide finder has its own page, not the front page");
     let (status, _, list) = get(app_with(50, 50), "/hi/guides").await;
     assert_eq!(status, StatusCode::OK);
-    assert!(list.contains(r#"<section class="hero" id="guides">"#) && list.contains(r#"<form class="finder""#), "guide list page");
+    assert!(list.contains(r#"<section class="lhero has-photo has-map" id="top">"#) && list.contains(r#"<nav class="rail""#), "guide list page");
     let (_, _, sitemap) = get(app_with(50, 50), "/sitemap.xml").await;
-    assert!(sitemap.contains("/hi/guides</loc>"), "guide list in the sitemap");
+    assert!(sitemap.contains("/hi/guides</loc>") && sitemap.contains("/hi/guides/kerala</loc>"), "guide list and state pages in the sitemap");
     let (_, _, sitemap) = get(app_with(50, 50), "/sitemap.xml").await;
     assert!(sitemap.contains("<loc>http://localhost:3000/ta/links</loc>"));
     let (_, _, ur) = get(app_with(50, 50), "/ur/links").await;
@@ -512,4 +525,38 @@ fn static_export_has_every_page_headers_and_no_broken_internal_links() {
     assert!(foreign.join("keep.txt").exists());
     std::fs::remove_dir_all(&out).unwrap();
     std::fs::remove_dir_all(&foreign).unwrap();
+}
+
+#[tokio::test]
+async fn every_guides_section_shows_its_true_outline() {
+    // The sprite and the server's table come from one run of tools/build_geo.py: India, a small India, and
+    // the 28 states and 8 union territories.
+    let sprite = std::fs::read_to_string("static/geo/outlines.svg").unwrap();
+    assert_eq!(guideboy::geo::OUTLINES.len(), 38);
+    for (id, name, [_, _, w, h]) in guideboy::geo::OUTLINES {
+        assert!(!name.is_empty() && !name.contains('&'), "{id} has an official name");
+        assert!(sprite.contains(&format!(r#"<symbol id="{id}""#)), "{id} is in the sprite");
+        assert!(*w > 0.0 && *h > 0.0, "{id} has a size");
+    }
+    for id in guideboy::content::GUIDE_STATES {
+        assert!(guideboy::geo::OUTLINES.iter().any(|(r, _, _)| *r == id), "{id} has an outline");
+    }
+    let (_, _, kerala) = get(app_with(50, 50), "/en/guides/kerala").await;
+    assert!(kerala.contains(r#"<a class="imap-r" href="/en/guides/kerala" data-id="kerala" data-name="Kerala" aria-label="Kerala" aria-current="page">"#), "Kerala marked on the map of India");
+    assert!(kerala.contains(r#"class="loc"><svg class="geo""#), "cards say where they apply");
+    let (_, _, main) = get(app_with(50, 50), "/en/guides").await;
+    assert!(main.contains("outlines.svg#india-sm") && !main.contains(r#"aria-current="page""#), "All India shows the India outline");
+    // The map has every state and union territory; only those with a page link anywhere.
+    let map = main.split(r#"<svg class="imap""#).nth(1).unwrap().split("</svg>").next().unwrap();
+    assert_eq!(map.matches(r#"class="imap-r"#).count(), 36, "28 states and 8 union territories");
+    let links: Vec<&str> = map.split(r#"<a class="imap-r" href=""#).skip(1).map(|s| s.split('"').next().unwrap()).collect();
+    assert_eq!(links.len(), 6);
+    for href in links {
+        let (status, _, _) = get(app_with(50, 50), href).await;
+        assert_eq!(status, StatusCode::OK, "{href} is a real page");
+    }
+    assert!(map.contains(r#"data-name="Ladakh" data-note="No guides yet""#), "regions without a page say so");
+    assert!(main.contains("DataMeet India community"), "map data is credited");
+    let (status, _, _) = get(app_with(50, 50), "/static/geo/outlines.svg").await;
+    assert_eq!(status, StatusCode::OK);
 }

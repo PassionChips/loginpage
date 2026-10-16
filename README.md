@@ -30,9 +30,27 @@ Settings come from environment variables:
 - To add a language: add a row to `LANGS` in `src/content.rs` and a `content/ui/<code>.txt` file.
 - **The interface text and the Hindi guides were machine-written. Have a native speaker proofread each language before launch**, especially anything about fees, documents or deadlines.
 
+## Guides directory (states)
+
+`/<lang>/guides` is laid out exactly like the free tools directory (same markup, script and styles): a rail of sections (All India, then one per state), each section previewing its first 8 entries, with search, topic filters, bookmarks, details and compare. Each state also has its own page, `/<lang>/guides/<state>`, where its entries are grouped by topic. The data is one file, `content/guides/directory.txt`:
+
+```
+[tamil-nadu]
+jobs | TNPSC | https://www.tnpsc.gov.in | Group 1, Group 2/2A, Group 4 and other notified posts.
+[india]
+id | guide=passport-new
+```
+
+- Sections are listed in `GUIDE_STATES` and topics (`jobs`, `certificates`, `scholarships`, `admissions`, `welfare`, `land`, `citizen`, `id`) in `GUIDE_TOPICS`, both in `src/content.rs`. Their names are translated in `content/ui/<lang>.txt` (`st_*`, `gt_*`); the page text uses `gx_*`. To add a state: add its id to `GUIDE_STATES`, an `st_<id>` line to every language file, and a `[<id>]` section to the file.
+- An entry is either an official portal (`topic | Name | https url | description`, opens in a new tab) or one of this site's guides (`topic | guide=<slug>`, shown with the guide's own title and summary in the reader's language).
+- The server refuses to start on an unknown state or topic, a non-https link, a URL listed twice, a missing guide, an empty state, or a guide whose slug is a state id.
+- Cards show a service icon (each of this site's guides has its own, see `service_icon` in `src/render.rs`; portals show their topic's icon) and where the entry applies: the true outline of India or of the state. A state's page also marks the state on the map of India.
+- The outlines come from [India boundaries](https://github.com/datameet/maps) by the DataMeet India community (Survey of India based, CC BY 4.0, credited on the page). `python3 -I tools/build_geo.py DATA_DIR` turns `States/Admin2.shp`/`.dbf` and `Country/india-composite.geojson` from that repository into `static/geo/outlines.svg` (all 28 states and 8 union territories, plus India) and `src/geo.rs`. Never draw or edit outlines by hand.
+- **Only official government portals.** Several state portals did not answer from outside India when this list was made (October 2026); check each link from an Indian connection before launch.
+
 ## Add a guide
 
-Guides are listed, searchable and filterable by category at `/<lang>/guides`; each one lives at `/<lang>/guides/<slug>`. The front page (`/<lang>`) only links to the list.
+Every guide is listed in the guides directory (add it to `content/guides/directory.txt`) and lives at `/<lang>/guides/<slug>`. The front page (`/<lang>`) only links to the list.
 
 Create `content/guides/en/<slug>.md`, then add translations as the same `<slug>.md` under the other language folders:
 
@@ -128,6 +146,7 @@ In the Cloudflare dashboard (Workers & Pages -> Create -> import the GitHub repo
 | --- | --- |
 | Build command | `bash tools/cloudflare-build.sh` |
 | Deploy command | `npx wrangler deploy` |
+| Non-production branch deploy command | `npx wrangler preview` (uses the `previews` block in `wrangler.jsonc`) |
 | Build variable | `SITE_URL` = the public https address, e.g. `https://guideboy.fyi` (or the `*.workers.dev` address until the domain is set up) |
 
 Cloudflare's build machine has no Rust, so the build script installs it first (the first build takes a few minutes). The export refuses to run without an `https://` SITE_URL, because canonical links, hreflang, the sitemap and robots.txt are built from it. To try the export locally: `EXPORT_ALLOW_LOCAL=1 SITE_URL=http://localhost:8787 cargo run --bin export -- public`, then `npx wrangler dev`.

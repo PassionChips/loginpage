@@ -40,15 +40,15 @@ export function renderTray(tray, tools, T, onRemove) {
 }
 
 const badgePill = (tool, T) =>
-  h('span', { class: `badge b-${tool.badge}` }, { free: T.badge_free, tier: T.badge_tier, oss: T.badge_oss }[tool.badge]);
+  h('span', { class: `badge ${T.show_oss ? `b-${tool.badge}` : 'b-topic'}` }, tool.badgeName);
 
 /** A table with one column per tool and one row per fact the directory actually records. */
 export function renderTable(wrap, tools, T, onRemove) {
   const rows = [
     [T.dx_category, (t) => t.catName],
-    [T.dx_pricing, (t) => badgePill(t, T)],
-    [T.badge_oss, (t) => (t.badge === 'oss' ? T.dx_yes : T.dx_no)],
-    [T.dx_website, (t) => h('a', { href: t.url, target: '_blank', rel: 'nofollow noopener noreferrer' }, t.host, ' ', cloneIcon('a.tact .ico'))],
+    [T.badge_row, (t) => badgePill(t, T)],
+    ...(T.show_oss ? [[T.badge_oss, (t) => (t.badge === 'oss' ? T.dx_yes : T.dx_no)]] : []),
+    [T.dx_website, (t) => h('a', { href: t.url, ...(t.url.startsWith('/') ? {} : { target: '_blank', rel: 'nofollow noopener noreferrer' }) }, t.host, ' ', cloneIcon('a.tact .ico'))],
     [T.dx_description, (t) => h('span', { lang: 'en' }, t.desc)],
   ];
   const head = h(
