@@ -1,37 +1,55 @@
-// Tamil Nadu's character on the India map: hovering (or focusing) Tamil Nadu makes the small character
-// grow up out of the state's outline, do its hand movement, and sink back into it. Every new hover plays it
-// again. Only Tamil Nadu has one: a mouse click or Enter opens Tamil Nadu as usual, and on touch screens
-// (no hover) the first tap plays it and the second opens the page.
+// State characters on the India map: hovering (or focusing) a state that has one makes its small character
+// grow up out of the state's outline, hold its pose or play its movement, and sink back into it. Every new
+// hover plays it again. A mouse click or Enter opens the state as usual; on touch screens (no hover) the first
+// tap plays it and the second opens the page. Nothing plays with reduced motion; taps then open at once.
 //
-// The character is a transparent animation: a VP9 WebM with alpha, or an animated WebP on Apple's WebKit,
-// whose WebM playback drops the alpha. Nothing plays with reduced motion; taps then open the page at once.
-const MEDIA = '/static/media/tamil-nadu-character';
-const DURATION = 2133; // ms, the length of the hand movement
-const SINK = 380; // ms, matches the tn-sink animation in site.css
+// A character is either a still image (a transparent WebP) or a transparent animation: a VP9 WebM with
+// alpha, or an animated WebP on Apple's WebKit, whose WebM playback drops the alpha.
 
-export function setupTamilNaduCharacter(wrap, region) {
+/** The states that have a character, by the map's region id. `duration` is how long it stays out (ms). */
+export const CHARACTERS = {
+  'tamil-nadu': { animation: '/static/media/tamil-nadu-character', duration: 2133 },
+  kerala: { image: '/static/media/kerala-character.webp', duration: 1600 },
+};
+
+const SINK = 380; // ms, matches the char-sink animation in site.css
+
+// Only one character is out at a time: neighbouring states (Tamil Nadu and Kerala) would overlap. Bringing
+// one out sends the one already out back into its state first.
+let active = null;
+
+export function setupStateCharacter(wrap, region, character) {
   const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const { animation, image, duration } = character;
   const probe = document.createElement('video');
-  const useWebp = /Apple/.test(navigator.vendor || '') || !(probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"'));
+  const useWebp = Boolean(animation) && (/Apple/.test(navigator.vendor || '') || !(probe.canPlayType && probe.canPlayType('video/webm; codecs="vp9"')));
 
   let pop = null;
   let media = null;
   let webpBlob = null;
   let webpUrl = null;
   let busy = false;
+  let sinkNow = null; // ends the current showing early
+  const me = { dismiss: () => sinkNow && sinkNow() };
 
-  // Built (and its animation downloaded) the first time the pointer reaches the map, not on page load.
+  // Built (and its file downloaded) the first time the pointer reaches the map, not on page load.
   function build() {
     if (pop) return;
     pop = document.createElement('div');
-    pop.className = 'tn-pop';
+    pop.className = 'char-pop';
+    pop.dataset.state = region.dataset.id;
     pop.hidden = true;
     pop.setAttribute('aria-hidden', 'true');
-    if (useWebp) {
+    if (image) {
+      media = document.createElement('img');
+      media.alt = '';
+      media.decoding = 'async';
+      media.src = image;
+    } else if (useWebp) {
       media = document.createElement('img');
       media.alt = '';
       // An animated image only restarts as a fresh copy, so keep the file to make one per hover.
-      fetch(MEDIA + '.webp')
+      fetch(animation + '.webp')
         .then((r) => (r.ok ? r.blob() : Promise.reject(r.status)))
         .then((b) => (webpBlob = b))
         .catch(() => {});
@@ -43,24 +61,26 @@ export function setupTamilNaduCharacter(wrap, region) {
       media.setAttribute('muted', '');
       media.setAttribute('playsinline', '');
       media.preload = 'auto';
-      media.poster = MEDIA + '-poster.webp';
-      media.src = MEDIA + '.webm';
+      media.poster = animation + '-poster.webp';
+      media.src = animation + '.webm';
     }
-    media.className = 'tn-pop-media';
+    media.className = 'char-pop-media';
     pop.append(media);
     wrap.append(pop);
   }
 
-  // Stand the character on Tamil Nadu: its feet at the state's middle, wherever the map is drawn now.
+  // Stand the character on its state: its feet at the state's middle, wherever the map is drawn now.
   function place() {
     const box = wrap.getBoundingClientRect();
-    const tn = region.getBoundingClientRect();
-    pop.style.left = `${tn.left + tn.width / 2 - box.left}px`;
-    pop.style.top = `${tn.top + tn.height * 0.6 - box.top}px`;
+    const st = region.getBoundingClientRect();
+    pop.style.left = `${st.left + st.width / 2 - box.left}px`;
+    pop.style.top = `${st.top + st.height * 0.6 - box.top}px`;
   }
 
   function play() {
     if (busy || reduceMotion()) return;
+    if (active && active !== me) active.dismiss();
+    active = me;
     build();
     busy = true;
     place();
@@ -74,28 +94,35 @@ export function setupTamilNaduCharacter(wrap, region) {
     const sink = () => {
       if (done) return;
       done = true;
+      sinkNow = null;
       clearTimeout(guard);
+      if (media.pause) media.pause();
       pop.classList.replace('is-out', 'is-in');
+      region.classList.remove('is-portal');
       setTimeout(() => {
         pop.hidden = true;
         pop.classList.remove('is-in');
-        region.classList.remove('is-portal');
-        if (media.pause) media.pause();
         busy = false;
+        if (active === me) active = null;
       }, SINK);
     };
+    sinkNow = sink;
     // Whatever the media does, the character never stays out.
-    const guard = setTimeout(sink, DURATION + 1500);
+    const guard = setTimeout(sink, duration + 1500);
 
+    if (image) {
+      setTimeout(sink, duration);
+      return;
+    }
     if (useWebp) {
       if (webpBlob) {
         if (webpUrl) URL.revokeObjectURL(webpUrl);
         webpUrl = URL.createObjectURL(webpBlob);
         media.src = webpUrl;
       } else {
-        media.src = MEDIA + '.webp'; // first hover, before the copy has arrived: never shown yet, so it starts at the beginning
+        media.src = animation + '.webp'; // first hover, before the copy has arrived: never shown yet, so it starts at the beginning
       }
-      setTimeout(sink, DURATION);
+      setTimeout(sink, duration);
       return;
     }
     media.addEventListener('ended', sink, { once: true });
@@ -114,7 +141,7 @@ export function setupTamilNaduCharacter(wrap, region) {
   region.addEventListener('pointerenter', (e) => fine(e) && play());
   region.addEventListener('focus', play);
 
-  // Touch screens have no hover: the first tap on Tamil Nadu plays the character and says "tap again to
+  // Touch screens have no hover: the first tap on the state plays the character and says "tap again to
   // open"; a second tap while it is out, or soon after, opens the page as usual.
   const tip = wrap.querySelector('.imap-tip');
   const tapAgain = wrap.querySelector('.imap')?.dataset.tapAgain || '';
@@ -126,17 +153,17 @@ export function setupTamilNaduCharacter(wrap, region) {
   region.addEventListener('click', (e) => {
     if (lastPointer !== 'touch' || reduceMotion() || Date.now() < armedUntil) return;
     e.preventDefault();
-    armedUntil = Date.now() + DURATION + 3000;
+    armedUntil = Date.now() + duration + 3000;
     play();
     // The map hides its tooltip when the finger lifts, so show the hint just after that.
     setTimeout(() => {
       if (!tip || !tapAgain) return;
       const box = wrap.getBoundingClientRect();
-      const tn = region.getBoundingClientRect();
+      const st = region.getBoundingClientRect();
       tip.textContent = `${region.dataset.name} · ${tapAgain}`;
       tip.classList.remove('is-off');
-      tip.style.setProperty('--x', `${tn.left + tn.width / 2 - box.left}px`);
-      tip.style.setProperty('--y', `${tn.bottom - box.top + 44}px`);
+      tip.style.setProperty('--x', `${st.left + st.width / 2 - box.left}px`);
+      tip.style.setProperty('--y', `${st.bottom - box.top + 44}px`);
       tip.hidden = false;
       clearTimeout(hintTimer);
       hintTimer = setTimeout(() => (tip.hidden = true), armedUntil - Date.now());

@@ -570,7 +570,9 @@ async fn tamil_nadu_character_pops_out_of_the_map_and_its_animation_is_served() 
         assert!(!body.contains("tn-transition"), "{uri}: no click transition");
     }
     let (_, _, map) = get(app_with(50, 50), "/static/js/directory/indiamap.mjs").await;
-    assert!(map.contains("./tn-character.mjs"), "the map loads the character");
+    assert!(map.contains("./state-character.mjs"), "the map loads the characters");
+    let (_, _, characters) = get(app_with(50, 50), "/static/js/directory/state-character.mjs").await;
+    assert!(characters.contains("'tamil-nadu': { animation:") && characters.contains("kerala: { image: '/static/media/kerala-character.webp'"), "Tamil Nadu and Kerala have characters");
     let (_, headers, _) = get(app_with(50, 50), "/en/guides").await;
     assert!(headers["content-security-policy"].to_str().unwrap().contains("img-src 'self' data: blob:"), "fresh copies of the animated image for replays");
     let head = |uri: &'static str| async move {
@@ -581,6 +583,7 @@ async fn tamil_nadu_character_pops_out_of_the_map_and_its_animation_is_served() 
     assert_eq!(head("/static/media/tamil-nadu-character.webm").await, (StatusCode::OK, Some("video/webm".into())));
     assert_eq!(head("/static/media/tamil-nadu-character.webp").await, (StatusCode::OK, Some("image/webp".into())));
     assert_eq!(head("/static/media/tamil-nadu-character-poster.webp").await, (StatusCode::OK, Some("image/webp".into())));
+    assert_eq!(head("/static/media/kerala-character.webp").await, (StatusCode::OK, Some("image/webp".into())));
     // The character is a small transparent animation, not the full video.
     let webm = std::fs::read("static/media/tamil-nadu-character.webm").unwrap();
     assert!(webm.windows(9).any(|w| w == b"AlphaMode") || webm.windows(2).any(|w| w == [0x53, 0xC0]), "WebM carries alpha");

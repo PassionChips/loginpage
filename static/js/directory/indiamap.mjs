@@ -61,11 +61,13 @@ export function setupIndiaMap(root) {
     const current = chips.find((c) => c.getAttribute('aria-current') === 'true')?.dataset.cat;
     regions.forEach((r) => r.classList.toggle('is-spy', r.dataset.id === current && !r.hasAttribute('aria-current')));
   };
-  // Tamil Nadu's character pops out of the state when it is hovered.
-  const tamilNadu = byId.get('tamil-nadu');
-  if (tamilNadu && tamilNadu.tagName.toLowerCase() === 'a') {
-    import('./tn-character.mjs').then((m) => m.setupTamilNaduCharacter(wrap, tamilNadu));
-  }
+  // States with a character (Tamil Nadu, Kerala) pop it out of the map when hovered.
+  import('./state-character.mjs').then((m) => {
+    for (const [id, character] of Object.entries(m.CHARACTERS)) {
+      const region = byId.get(id);
+      if (region && region.tagName.toLowerCase() === 'a') m.setupStateCharacter(wrap, region, character);
+    }
+  });
 
   const rail = $('.rail-in');
   if (rail) new MutationObserver(syncSpy).observe(rail, { subtree: true, attributes: true, attributeFilter: ['aria-current'] });
