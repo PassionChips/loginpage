@@ -47,17 +47,20 @@ welfare | guide=ap-ntr-bharosa-pension
 # citizen | PGRS (Meekosam) | https://pgrs.ap.gov.in | Public grievances to the government and status tracking.
 
 [telangana]
-jobs | TGPSC | https://www.tgpsc.gov.in | Group examinations and other notified state government posts.
-jobs | TG Police Recruitment Board | https://www.tgprb.in | Police constable, sub-inspector and other notified recruitment.
-jobs | TG DSC (teacher recruitment) | https://tgdsc.aptonline.in | District Selection Committee teacher recruitment.
-jobs | TG TET | https://tgtet.aptonline.in | Telangana Teacher Eligibility Test.
-certificates | Telangana MeeSeva | https://ts.meeseva.telangana.gov.in | Income, caste, residence and other notified certificates, and application status.
-citizen | MeeSeva services list | https://www.telangana.gov.in/services/meeseva-services/ | Revenue, police, registration, utility and other services offered through MeeSeva.
-scholarships | Telangana ePASS | https://telanganaepass.cgg.gov.in | State scholarships and fee reimbursement.
-admissions | TG EAPCET | https://eapcet.tgche.ac.in | Engineering, agriculture and pharmacy entrance test.
-welfare | Telangana Government | https://www.telangana.gov.in | Pensions, farmer assistance, housing and other eligible benefits.
-land | Bhu Bharati | https://bhubharati.telangana.gov.in | Land records, Record of Rights and related revenue services.
-citizen | GHMC | https://www.ghmc.gov.in | Greater Hyderabad municipal services: property tax, certificates and complaints.
+# Only TG Police recruitment, TG DSC, TG TET and MeeSeva are listed for now. Remove the "# " in front of an
+# entry to list it again.
+jobs | guide=tg-police-recruitment
+jobs | TGPRB: what's new | /guides/telangana/tgprb | Every Telangana police recruitment with its notifications, supplementary notifications, vacancy breakup, selection lists and cut-offs.
+jobs | guide=tg-dsc-teacher-recruitment
+jobs | guide=tg-tet
+jobs | TG DSC & TET: what's new | /guides/telangana/tgdsc | Every document on Telangana's DSC and TET sites: notifications, bulletins, press notes, vacancies and schedules.
+certificates | guide=tg-meeseva-certificates
+# jobs | TGPSC | https://www.tgpsc.gov.in | Group examinations and other notified state government posts.
+# scholarships | Telangana ePASS | https://telanganaepass.cgg.gov.in | State scholarships and fee reimbursement.
+# admissions | TG EAPCET | https://eapcet.tgche.ac.in | Engineering, agriculture and pharmacy entrance test.
+# welfare | Telangana Government | https://www.telangana.gov.in | Pensions, farmer assistance, housing and other eligible benefits.
+# land | Bhu Bharati | https://bhubharati.telangana.gov.in | Land records, Record of Rights and related revenue services.
+# citizen | GHMC | https://www.ghmc.gov.in | Greater Hyderabad municipal services: property tax, certificates and complaints.
 
 [karnataka]
 jobs | KPSC | https://kpsc.kar.nic.in | Gazetted probationers and other notified state government posts.

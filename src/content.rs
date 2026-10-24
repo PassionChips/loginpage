@@ -93,7 +93,7 @@ pub const UI_KEYS: &[&str] = &[
     "gt_jobs", "gt_certificates", "gt_scholarships", "gt_admissions", "gt_welfare", "gt_land", "gt_citizen", "gt_id",
     "gx_states", "gx_topics", "gx_topic", "gx_count_one", "gx_count_many", "gx_see_all", "gx_back_all", "gx_state_sub",
     "gx_disclaimer", "gx_map_label", "gx_pick_state", "gx_find_state", "gx_no_page", "gx_tap_again",
-    "bu_title", "trb_sub", "bu_none", "bu_all", "bu_latest", "bu_open", "bu_docs", "bu_next", "bu_date", "bu_kind", "bu_exam", "bu_notif", "bu_seen", "bu_note", "bu_more", "tk_result", "tk_key", "tk_selection", "tk_hallticket", "tk_verification", "tk_certificate", "tk_press", "tk_notification", "tk_update", "tn_result", "tn_key", "tn_selection", "tn_hallticket", "tn_verification", "tn_certificate", "tn_press", "tn_notification", "tn_update", "te_tntet", "te_sgt", "te_pg", "te_bt", "te_ap", "te_brte", "te_special", "bu_target", "bu_login", "bu_open_login", "bu_need_roll", "bu_need_dob", "mrb_sub", "apdsc_sub", "bu_changed", "bu_post",
+    "bu_title", "trb_sub", "bu_none", "bu_all", "bu_latest", "bu_open", "bu_docs", "bu_next", "bu_date", "bu_kind", "bu_exam", "bu_notif", "bu_seen", "bu_note", "bu_more", "tk_result", "tk_key", "tk_selection", "tk_hallticket", "tk_verification", "tk_certificate", "tk_press", "tk_notification", "tk_update", "tn_result", "tn_key", "tn_selection", "tn_hallticket", "tn_verification", "tn_certificate", "tn_press", "tn_notification", "tn_update", "te_tntet", "te_sgt", "te_pg", "te_bt", "te_ap", "te_brte", "te_special", "bu_target", "bu_login", "bu_open_login", "bu_need_roll", "bu_need_dob", "mrb_sub", "apdsc_sub", "tgprb_sub", "tgdsc_sub", "bu_changed", "bu_post",
     "task_title", "task_sub", "task_popular", "task_cats", "task_steps", "task_docs", "task_start", "task_recent", "task_progress", "task_suggest", "task_states",
     "jm_mode", "jm_guided", "jm_full", "jm_stage", "jm_situation", "jm_check", "jm_prepare", "jm_process", "jm_finish", "jm_back", "jm_next", "jm_ready", "jm_done", "jm_tick", "jm_reset", "jm_finish_text", "jm_independent", "jm_more", "jm_term",
     "theme", "theme_auto", "theme_light", "theme_dark", "theme_ocean", "jm_more_btn", "jm_less_btn",
@@ -115,7 +115,7 @@ pub const GUIDE_TOPICS: [&str; 8] = ["jobs", "certificates", "scholarships", "ad
 
 /// Pages of this site (other than guides) that a guides directory entry may point to, as `topic | Name |
 /// /path | description`. The path is shown in the reader's language (`/en/guides/...`).
-pub const INTERNAL_PAGES: &[&str] = &["/guides/tamil-nadu/trb", "/guides/tamil-nadu/mrb", "/guides/andhra-pradesh/apdsc"];
+pub const INTERNAL_PAGES: &[&str] = &["/guides/tamil-nadu/trb", "/guides/tamil-nadu/mrb", "/guides/andhra-pradesh/apdsc", "/guides/telangana/tgprb", "/guides/telangana/tgdsc"];
 
 /// A Tamil Nadu recruitment board whose updates this site follows: `content/<id>/updates.txt`, written by
 /// `tools/fetch_<id>.py`, shown at `/<lang>/guides/<state>/<id>`. `guide` is this site's how-to-apply guide for
@@ -129,10 +129,12 @@ pub struct Board {
     pub guide: &'static str,
     pub sub_key: &'static str,
 }
-pub const BOARDS: [Board; 3] = [
+pub const BOARDS: [Board; 5] = [
     Board { id: "trb", state: "tamil-nadu", name: "TRB", guide: "trb-assistant-professor", sub_key: "trb_sub" },
     Board { id: "mrb", state: "tamil-nadu", name: "MRB", guide: "mrb-recruitment", sub_key: "mrb_sub" },
     Board { id: "apdsc", state: "andhra-pradesh", name: "AP DSC", guide: "ap-dsc-teacher-recruitment", sub_key: "apdsc_sub" },
+    Board { id: "tgprb", state: "telangana", name: "TGPRB", guide: "tg-police-recruitment", sub_key: "tgprb_sub" },
+    Board { id: "tgdsc", state: "telangana", name: "TG DSC & TET", guide: "tg-dsc-teacher-recruitment", sub_key: "tgdsc_sub" },
 ];
 
 pub fn board(id: &str) -> Option<&'static Board> {

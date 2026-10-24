@@ -1,0 +1,82 @@
+# TGPRB (Telangana) recruitments, read from https://www.tgprb.in by tools/fetch_tgprb.py: one entry per
+# recruitment card. Facts and official links only. Written by the script on a schedule: do not edit by hand.
+
+[sct-pc-civil-and-or-equivalent]
+title: SCT PC Civil and / or Equivalent
+kind: notification
+page: https://doc.tgprb.in/PC+(Civil+et+al)+2026+Notification+dated+29-07-2026.pdf
+first_seen: 2026-10-24
+doc: Notification | https://doc.tgprb.in/PC+(Civil+et+al)+2026+Notification+dated+29-07-2026.pdf
+doc: Supplementary Notification | https://doc.tgprb.in/Supplementary+Notification+2026++dated+15-08-2026.pdf
+doc: Second Supplementary Notification | https://www.tgprb.in/SI_PC_2026/Second%20Supplementary%20Notification%202026%20%20dated10%20Sep%202026.pdf
+doc: Category wise breakup of vacancies | https://www.tgprb.in/SI_PC_2026/PC%20Rank%20Vertical%20Rosters%202026.pdf
+
+[sct-si-civil-and-or-equivalent]
+title: SCT SI Civil and / or Equivalent
+kind: notification
+page: https://doc.tgprb.in/SI+(Civil+et+al)+2026+Notification+dated+29-07-2026.pdf
+first_seen: 2026-10-24
+doc: Notification | https://doc.tgprb.in/SI+(Civil+et+al)+2026+Notification+dated+29-07-2026.pdf
+doc: Supplementary Notification | https://doc.tgprb.in/Supplementary+Notification+2026++dated+15-08-2026.pdf
+doc: Category wise breakup of vacancies | https://www.tgprb.in/SI_PC_2026/SI%20Rank%20Vertical%20Rosters%202026.pdf
+
+[sct-pc-mechanic-driver]
+title: SCT PC Mechanic / Driver
+kind: notification
+page: https://doc.tgprb.in/PC+Driver+%26+Mechanic+Notification+2026+dated+29-07-2026.pdf
+first_seen: 2026-10-24
+doc: Notification | https://doc.tgprb.in/PC+Driver+%26+Mechanic+Notification+2026+dated+29-07-2026.pdf
+doc: Supplementary Notification | https://doc.tgprb.in/Supplementary+Notification+2026++dated+15-08-2026.pdf
+doc: Second Supplementary Notification | https://www.tgprb.in/SI_PC_2026/Second%20Supplementary%20Notification%202026%20%20dated10%20Sep%202026.pdf
+doc: Category wise breakup of vacancies | https://www.tgprb.in/SI_PC_2026/Driver%20Mechanic%20Vertical%20Rosters%202026.pdf
+
+[sct-asi-fpb]
+title: SCT ASI FPB
+kind: notification
+page: https://doc.tgprb.in/ASI+(FPB)+2026+Notification+dated+29-07-2026.pdf
+first_seen: 2026-10-24
+doc: Notification | https://doc.tgprb.in/ASI+(FPB)+2026+Notification+dated+29-07-2026.pdf
+doc: Supplementary Notification | https://doc.tgprb.in/Supplementary+Notification+2026++dated+15-08-2026.pdf
+doc: Category wise breakup of vacancies | https://www.tgprb.in/SI_PC_2026/ASI%20FPB%20Vertical%20Rosters%202026.pdf
+
+[app-recruitment-2025]
+title: APP Recruitment 2025
+kind: selection
+page: https://www.tgprb.in/APP_PDF/APP_Notification_2025_dtd_15-08-2025.pdf
+first_seen: 2026-10-24
+doc: Notification | https://www.tgprb.in/APP_PDF/APP_Notification_2025_dtd_15-08-2025.pdf
+doc: APP 2025 Selected Candidates | https://www.tgprb.in/APP_PDF/APP_2025_Selected_Candidates.pdf
+doc: APP 2025 Selection CutOffs | https://www.tgprb.in/APP_PDF/APP_2025_Selection_CutOffs.pdf
+doc: login | https://appr.tgprb.in/nav/login.aspx
+
+[fsl-technical-posts-recruitment-2025]
+title: FSL (Technical Posts) Recruitment 2025
+kind: selection
+page: https://www.tgprb.in/FSL_PDF/FSL%20Notification.pdf
+first_seen: 2026-10-24
+doc: Notification | https://www.tgprb.in/FSL_PDF/FSL%20Notification.pdf
+doc: List of Selected Candidates | https://www.tgprb.in/FSL_PDF/FSL_2025_Selected_Candidates.pdf
+doc: Selection Cut-Offs | https://www.tgprb.in/FSL_PDF/FSL_2025_Selection_CutOffs.pdf
+
+[driver-shramik-recruitment-2025-in-tgsrtc]
+title: Driver & Shramik Recruitment 2025 in TGSRTC
+kind: selection
+page: https://www.tgprb.in/DRVR_PDF/Driver_Shramik_Notification_2025_dtd_17-09-2025.pdf
+first_seen: 2026-10-24
+doc: Notification | https://www.tgprb.in/DRVR_PDF/Driver_Shramik_Notification_2025_dtd_17-09-2025.pdf
+doc: Download Filled Attestation Form | https://ds.tgprb.in/nav/Login.aspx
+doc: Drivers — List of Selected Candidates | https://www.tgprb.in/DRVR_PDF/Drivers_2025_Selected_Candidates.pdf
+doc: Shramiks — List of Selected Candidates | https://www.tgprb.in/DRVR_PDF/Shramiks_2025_Selected_Candidates.pdf
+doc: Drivers — Selection Cut-Offs | https://www.tgprb.in/DRVR_PDF/Drivers_2025_Selection_CutOffs.pdf
+doc: Shramiks — Selection Cut-Offs | https://www.tgprb.in/DRVR_PDF/Shramiks_2025_Selection_CutOffs.pdf
+
+[supervisor-trainees-recruitment-2025-in-tgsrtc]
+title: Supervisor Trainees Recruitment 2025 in TGSRTC
+kind: selection
+page: https://www.tgprb.in/STRTC_PDF/TST%20&%20%20MST%20Notification.pdf
+first_seen: 2026-10-24
+doc: Notification | https://www.tgprb.in/STRTC_PDF/TST%20&%20%20MST%20Notification.pdf
+doc: TST — List of Selected Candidates | https://www.tgprb.in/STRTC_PDF/TST_2025_Selected_Candidates.pdf
+doc: MST — List of Selected Candidates | https://www.tgprb.in/STRTC_PDF/MST_2025_Selected_Candidates.pdf
+doc: TST — Selection Cut-Offs | https://www.tgprb.in/STRTC_PDF/TST_2025_Selection_CutOffs.pdf
+doc: MST — Selection Cut-Offs | https://www.tgprb.in/STRTC_PDF/MST_2025_Selection_CutOffs.pdf

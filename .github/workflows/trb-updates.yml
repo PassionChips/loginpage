@@ -1,8 +1,9 @@
 # Keeps the boards' updates current: every 12 hours, reads the "What's New" list of the Teachers Recruitment
 # Board (trb.tn.gov.in) with tools/fetch_trb.py, the Notifications page of the Medical Services Recruitment Board
 # (mrb.tn.gov.in) with tools/fetch_mrb.py, and the document lists of Andhra Pradesh's teacher recruitment site
-# (tet2dsc.apcfss.in) with tools/fetch_apdsc.py and, only when something changed, commits content/trb, content/mrb
-# and content/apdsc updates.txt to main. Cloudflare then rebuilds and publishes the site as for any other commit.
+# (tet2dsc.apcfss.in) with tools/fetch_apdsc.py, Telangana's police recruitment board (www.tgprb.in) with
+# tools/fetch_tgprb.py and its DSC and TET sites with tools/fetch_tgdsc.py and, only when something changed,
+# commits each board's content/<board>/updates.txt to main. Cloudflare then rebuilds and publishes the site as for any other commit.
 #
 # If a board's site is down or its page changed so that nothing can be read, its script fails and leaves its
 # file alone; the other board's list is still committed. The failed run shows up in the Actions tab.
@@ -49,9 +50,19 @@ jobs:
         continue-on-error: true
         run: python3 -I tools/fetch_apdsc.py
 
+      - name: Read TGPRB's recruitments
+        id: tgprb
+        continue-on-error: true
+        run: python3 -I tools/fetch_tgprb.py
+
+      - name: Read TG DSC's and TG TET's documents
+        id: tgdsc
+        continue-on-error: true
+        run: python3 -I tools/fetch_tgdsc.py
+
       - name: Commit if it changed
         run: |
-          files="content/trb/updates.txt content/mrb/updates.txt content/apdsc/updates.txt"
+          files="content/trb/updates.txt content/mrb/updates.txt content/apdsc/updates.txt content/tgprb/updates.txt content/tgdsc/updates.txt"
           if git diff --quiet -- $files && [ -z "$(git ls-files --others --exclude-standard -- $files)" ]; then
             echo "No new board updates."
           else
@@ -63,7 +74,7 @@ jobs:
           fi
 
       - name: Fail if a board could not be read
-        if: steps.trb.outcome == 'failure' || steps.mrb.outcome == 'failure' || steps.apdsc.outcome == 'failure'
+        if: steps.trb.outcome == 'failure' || steps.mrb.outcome == 'failure' || steps.apdsc.outcome == 'failure' || steps.tgprb.outcome == 'failure' || steps.tgdsc.outcome == 'failure'
         run: |
-          echo "TRB: ${{ steps.trb.outcome }}, MRB: ${{ steps.mrb.outcome }}, AP DSC: ${{ steps.apdsc.outcome }}"
+          echo "TRB: ${{ steps.trb.outcome }}, MRB: ${{ steps.mrb.outcome }}, AP DSC: ${{ steps.apdsc.outcome }}, TGPRB: ${{ steps.tgprb.outcome }}, TG DSC/TET: ${{ steps.tgdsc.outcome }}"
           exit 1

@@ -226,6 +226,8 @@ bu_need_roll = Your roll number or application number
 bu_need_dob = Your date of birth
 mrb_sub = Every recruitment on the Notifications page of the Medical Services Recruitment Board (MRB), Tamil Nadu, each on its own page with all of MRB's documents for it. Checked automatically twice a day.
 apdsc_sub = Every document on Andhra Pradesh's teacher recruitment site (tet2dsc.apcfss.in): DSC and TET notifications, Government Orders, schedules and syllabus, grouped by recruitment, each with its official links. Checked automatically twice a day.
+tgprb_sub = Every recruitment on the Telangana State Level Police Recruitment Board's site (www.tgprb.in): notifications, supplementary notifications, vacancy breakup, selection lists and cut-offs, each with its official links. Checked automatically twice a day.
+tgdsc_sub = Every document on Telangana's teacher recruitment (tgdsc.aptonline.in) and teacher eligibility test (tgtet.aptonline.in) sites: notifications, information bulletins, press notes, vacancies and schedules, each with its official links. Checked automatically twice a day.
 bu_changed = Last change seen here
 bu_post = Post
 

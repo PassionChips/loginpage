@@ -1,0 +1,23 @@
+# TG DSC and TG TET (Telangana) documents, read from tgdsc.aptonline.in and tgtet.aptonline.in by
+# tools/fetch_tgdsc.py. Facts and official links only. Written by the script on a schedule: do not edit by hand.
+
+[tgtet]
+title: TG TET: current notification and documents
+kind: notification
+page: https://tgtet.aptonline.in/Documents/NotificationTGTET-In-Serviceteachers2026-II.pdf
+first_seen: 2026-10-24
+doc: Notification (NotificationTGTET-In-Serviceteachers2026-II) | https://tgtet.aptonline.in/Documents/NotificationTGTET-In-Serviceteachers2026-II.pdf
+doc: Information Bulletin (InformationBulletinTGTET_In-ServiceTeachers2026-II) | https://tgtet.aptonline.in/Documents/InformationBulletinTGTET_In-ServiceTeachers2026-II.pdf
+doc: Press Note (Press_Note_Notification-Special_TGTET_Inservice_Teachers-2026-II) | https://tgtet.aptonline.in/Documents/Press_Note_Notification-Special_TGTET_Inservice_Teachers-2026-II.pdf
+doc: GOs (PWD-F.No.p-13013-75-2023-Policy-DD-III_01082025) | https://tgtet.aptonline.in/Documents/PWD-F.No.p-13013-75-2023-Policy-DD-III_01082025.pdf
+
+[tgdsc]
+title: TG DSC: teacher recruitment documents
+kind: notification
+page: https://tgdsc.aptonline.in/tgdsc/docs/Information%20Bulletin%20of%20TS%20DSC-2024.pdf
+first_seen: 2026-10-24
+doc: Information Bulletin (Information Bulletin of TS DSC-2024) | https://tgdsc.aptonline.in/tgdsc/docs/Information%20Bulletin%20of%20TS%20DSC-2024.pdf
+doc: District, Subject Community-wise Vacancy (Final-DSC-2024-District Wise DR Vacancy) | https://tgdsc.aptonline.in/tgdsc/docs/Final-DSC-2024-District%20Wise%20DR%20Vacancy.pdf
+doc: Information Bulletin (Information Bulletin of TS DSC-2024) | https://tgdsc.aptonline.in/tgdsc/Download/Information%20Bulletin%20of%20TS%20DSC-2024
+doc: District, Subject Community-wise Vacancy (Final-DSC-2024-District Wise DR Vacancy) | https://tgdsc.aptonline.in/tgdsc/Download/Final-DSC-2024-District%20Wise%20DR%20Vacancy
+doc: Examination Schedule (Examinations Schedule of TG DSC 2024) | https://tgdsc.aptonline.in/tgdsc/Download/Examinations%20Schedule%20of%20TG%20DSC%202024

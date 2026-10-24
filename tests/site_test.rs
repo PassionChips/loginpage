@@ -725,3 +725,35 @@ async fn andhra_pradesh_lists_five_guides_and_ap_dsc_updates_live_under_it() {
     let (status, _, _) = get(app_with(50, 50), "/en/guides/tamil-nadu/trb").await;
     assert_eq!(status, StatusCode::OK, "TRB keeps its address");
 }
+
+#[tokio::test]
+async fn telangana_lists_four_guides_and_two_update_boards() {
+    let (_, _, tg) = get(app_with(50, 50), "/en/guides/telangana").await;
+    for slug in ["tg-police-recruitment", "tg-dsc-teacher-recruitment", "tg-tet", "tg-meeseva-certificates"] {
+        assert!(tg.contains(&format!(r#"<a class="tmain" href="/en/guides/{slug}">"#)), "{slug} card");
+    }
+    for board in ["tgprb", "tgdsc"] {
+        assert!(tg.contains(&format!(r#"<a class="tmain" href="/en/guides/telangana/{board}">"#)), "{board} updates card");
+    }
+    assert!(!tg.contains("tgpsc.gov.in") && !tg.contains("ghmc.gov.in"), "hidden entries stay hidden");
+
+    let site = Site::load(&Config::from_env().content_dir).unwrap();
+    for (board, guide, latest) in [("tgprb", "tg-police-recruitment", "Latest from TGPRB"), ("tgdsc", "tg-tet", "Latest from TG DSC &amp; TET")] {
+        let items = site.updates(board);
+        assert!(!items.is_empty(), "{board} items");
+        let (status, _, list) = get(app_with(50, 50), &format!("/en/guides/telangana/{board}")).await;
+        assert_eq!(status, StatusCode::OK, "{board} list");
+        assert!(list.contains(r#"data-region="telangana""#), "{board} in Telangana's colour");
+        let u = &items[0];
+        let (status, _, page) = get(app_with(50, 50), &format!("/en/guides/telangana/{board}/{}", u.id)).await;
+        assert_eq!(status, StatusCode::OK);
+        for (_, link) in &u.docs {
+            assert!(page.contains(&link.replace('&', "&amp;")), "{board} document {link}");
+        }
+        assert!(!page.contains("Tamil Nadu") && !page.contains("Andhra Pradesh"), "no other state's wording");
+        let (_, _, g) = get(app_with(50, 50), &format!("/en/guides/{guide}")).await;
+        assert!(g.contains(latest), "{guide} shows its board's latest items");
+    }
+    let (status, _, _) = get(app_with(50, 50), "/en/guides/andhra-pradesh/tgprb").await;
+    assert_eq!(status, StatusCode::NOT_FOUND, "a board lives only under its own state");
+}
