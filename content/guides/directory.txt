@@ -16,28 +16,35 @@ citizen | guide=rti-online
 citizen | guide=cpgrams-grievance
 
 [tamil-nadu]
-jobs | TNPSC | https://www.tnpsc.gov.in | Group 1, Group 2/2A, Group 4 and other notified state government posts.
-jobs | TNUSRB | https://www.tnusrb.tn.gov.in | Police constable, sub-inspector and other notified uniformed services recruitment.
-jobs | Teachers Recruitment Board (TRB) | https://www.trb.tn.gov.in | Teacher recruitment and teacher eligibility examinations.
-jobs | Medical Services Recruitment Board (MRB) | https://www.mrb.tn.gov.in | Recruitment for doctors, nurses and other health department posts.
-certificates | TN e-Sevai | https://www.tnesevai.tn.gov.in | Community, income, nativity, residence and other notified certificates.
-scholarships | UMIS scholarships | https://umis.tn.gov.in | State scholarships and fee assistance for college students.
-admissions | TNEA | https://www.tneaonline.org | Tamil Nadu Engineering Admissions: registration, rank list and counselling.
-welfare | Tamil Nadu Government | https://www.tn.gov.in | Women's assistance, student assistance, pensions and other notified benefits.
-land | TN e-Services (land records) | https://eservices.tn.gov.in | Patta, Chitta, land records and related applications.
-citizen | TNeGA | https://tnega.tn.gov.in | Online government services, application tracking and service guidance.
+# Only TRB, MRB and TNEA are listed for now: the other portals below do not open reliably yet.
+# Remove the "# " in front of an entry to list it again once its site works.
+# jobs | TNPSC | https://www.tnpsc.gov.in | Group 1, Group 2/2A, Group 4 and other notified state government posts.
+# jobs | TNUSRB | https://www.tnusrb.tn.gov.in | Police constable, sub-inspector and other notified uniformed services recruitment.
+jobs | guide=trb-assistant-professor
+jobs | TRB: what's new | /guides/tamil-nadu/trb | Every new TRB notification, result, answer key and selection list, each on its own page with TRB's official notice.
+jobs | guide=mrb-recruitment
+jobs | MRB: what's new | /guides/tamil-nadu/mrb | Every MRB recruitment with all its documents: notifications, admit cards, answer keys, certificate verification and selection lists.
+# certificates | TN e-Sevai | https://www.tnesevai.tn.gov.in | Community, income, nativity, residence and other notified certificates.
+# scholarships | UMIS scholarships | https://umis.tn.gov.in | State scholarships and fee assistance for college students.
+admissions | guide=tnea-engineering-admission
+# welfare | Tamil Nadu Government | https://www.tn.gov.in | Women's assistance, student assistance, pensions and other notified benefits.
+# land | TN e-Services (land records) | https://eservices.tn.gov.in | Patta, Chitta, land records and related applications.
+# citizen | TNeGA | https://tnega.tn.gov.in | Online government services, application tracking and service guidance.
 
 [andhra-pradesh]
-jobs | APPSC | https://psc.ap.gov.in | Group 1, Group 2 and other notified state government posts.
-jobs | AP Police Recruitment Board (SLPRB) | https://slprb.ap.gov.in | Police constable, sub-inspector and other notified recruitment.
-jobs | AP DSC (teacher recruitment) | https://apdsc.apcfss.in | District Selection Committee teacher recruitment and related notices.
-certificates | AP Seva | https://vswsonline.ap.gov.in | Income, caste, residence, family member and other notified certificates.
-citizen | AP MeeSeva | https://ap.meeseva.gov.in | MeeSeva applications, certificate services and application status.
-admissions | AP EAPCET (APSCHE) | https://cets.apsche.ap.gov.in | Engineering, agriculture and pharmacy entrance test and admissions.
-scholarships | Jnanabhumi | https://jnanabhumi.ap.gov.in | Post-matric scholarships and fee reimbursement.
-welfare | Social security pensions | https://sspensions.ap.gov.in | Social security pensions and related welfare benefits.
-land | Meebhoomi | https://meebhoomi.ap.gov.in | Land records (Adangal, 1-B) and property-related services.
-citizen | PGRS (Meekosam) | https://pgrs.ap.gov.in | Public grievances to the government and status tracking.
+# Only APSCHE (EAPCET), AP Seva, Jnanabhumi, AP DSC and the pensions are listed for now. Remove the "# " in
+# front of an entry to list it again.
+# jobs | APPSC | https://psc.ap.gov.in | Group 1, Group 2 and other notified state government posts.
+# jobs | AP Police Recruitment Board (SLPRB) | https://slprb.ap.gov.in | Police constable, sub-inspector and other notified recruitment.
+jobs | guide=ap-dsc-teacher-recruitment
+jobs | AP DSC: what's new | /guides/andhra-pradesh/apdsc | Every DSC and TET notification, Government Order, schedule and syllabus from the official site, with its documents.
+certificates | guide=ap-seva-certificates
+# citizen | AP MeeSeva | https://ap.meeseva.gov.in | MeeSeva applications, certificate services and application status.
+admissions | guide=ap-eapcet
+scholarships | guide=ap-jnanabhumi-scholarship
+welfare | guide=ap-ntr-bharosa-pension
+# land | Meebhoomi | https://meebhoomi.ap.gov.in | Land records (Adangal, 1-B) and property-related services.
+# citizen | PGRS (Meekosam) | https://pgrs.ap.gov.in | Public grievances to the government and status tracking.
 
 [telangana]
 jobs | TGPSC | https://www.tgpsc.gov.in | Group examinations and other notified state government posts.

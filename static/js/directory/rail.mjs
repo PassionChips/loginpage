@@ -15,6 +15,17 @@ export function setupRail(nav, { chips, groups, isFiltered, spy: useSpy }) {
     prev.hidden = pos <= 2;
     next.hidden = max <= 2 || pos >= max - 2;
   };
+  // Scrolls only the rail sideways to show a chip (centred, or just into view). scrollIntoView would also
+  // scroll the page to the rail, which on the guides page sits below the search and the popular tasks.
+  const reveal = (chip, center, smooth) => {
+    const t = track.getBoundingClientRect();
+    const c = chip.getBoundingClientRect();
+    let delta = 0;
+    if (center) delta = c.left - t.left - (t.width - c.width) / 2;
+    else if (c.left < t.left) delta = c.left - t.left;
+    else if (c.right > t.right) delta = c.right - t.right;
+    if (Math.abs(delta) > 1) track.scrollBy({ left: delta, behavior: smooth ? behavior() : 'auto' });
+  };
   const page = (direction) => track.scrollBy({ left: direction * (rtl ? -1 : 1) * track.clientWidth * 0.7, behavior: behavior() });
   prev.addEventListener('click', () => page(-1));
   next.addEventListener('click', () => page(1));
@@ -22,10 +33,10 @@ export function setupRail(nav, { chips, groups, isFiltered, spy: useSpy }) {
   addEventListener('resize', updateButtons);
   updateButtons();
 
-  const setCurrent = (id, reveal = true) => {
+  const setCurrent = (id, show = true) => {
     chips.forEach((c) => c.setAttribute('aria-current', String(c.dataset.cat === id)));
     const chip = chips.find((c) => c.dataset.cat === id);
-    if (chip && reveal) chip.scrollIntoView({ inline: 'center', block: 'nearest', behavior: behavior() });
+    if (chip && show) reveal(chip, true, true);
   };
 
   chips.forEach((chip, i) => {
@@ -40,14 +51,14 @@ export function setupRail(nav, { chips, groups, isFiltered, spy: useSpy }) {
       if (target) {
         e.preventDefault();
         target.focus();
-        target.scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: behavior() });
+        reveal(target, false, true);
       }
     });
   });
 
   // Keep the current page's chip in view.
   const here = chips.find((c) => c.getAttribute('aria-current') === 'true');
-  if (here) here.scrollIntoView({ inline: 'center', block: 'nearest' });
+  if (here) reveal(here, true, false);
 
   if (useSpy && 'IntersectionObserver' in window) {
     const spy = new IntersectionObserver(

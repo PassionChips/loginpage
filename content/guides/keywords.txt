@@ -1,0 +1,23 @@
+# Search keywords: other ways people look for the same thing. One group per line, phrases separated by "|".
+# An entry or guide whose text contains every word of one phrase (word starts) becomes findable by all the
+# others, on the guides directory and in the front page search. Typos are handled by the search itself.
+# Hindi first, then other Indian languages where people commonly search in them. Keep phrases short.
+
+income certificate | income proof | आय प्रमाण पत्र | आय प्रमाणपत्र | aay praman patra | வருமான சான்றிதழ் | ఆదాయ ధృవీకరణ పత్రం | ಆದಾಯ ಪ್ರಮಾಣ ಪತ್ರ | വരുമാന സർട്ടിഫിക്കറ്റ്
+caste certificate | community certificate | जाति प्रमाण पत्र | jati praman patra | சாதி சான்றிதழ் | ஜாதி சான்றிதழ் | కుల ధృవీకరణ పత్రం | ಜಾತಿ ಪ್ರಮಾಣ ಪತ್ರ | ജാതി സർട്ടിഫിക്കറ്റ്
+nativity certificate | residence certificate | domicile certificate | निवास प्रमाण पत्र | mool niwas | இருப்பிடச் சான்றிதழ் | నివాస ధృవీకరణ పత్రం
+ration card | food security card | rice card | राशन कार्ड | ration | குடும்ப அட்டை | రేషన్ కార్డు | ಪಡಿತರ ಚೀಟಿ | റേഷൻ കാർഡ്
+ayushman | ayushman card | ayushman bharat | pm-jay | pmjay | आयुष्मान कार्ड | आयुष्मान भारत | health card
+pan | pan card | e-pan | पैन कार्ड | पैन | पेन कार्ड
+passport | पासपोर्ट | पासपोर्ट नवीनीकरण | passport renewal | पासपोर्ट रिन्यू
+driving licence | driving license | learner licence | learner license | learning licence | dl | ll | ड्राइविंग लाइसेंस | लर्निंग लाइसेंस | ஓட்டுநர் உரிமம்
+aadhaar | aadhar | adhar | आधार | आधार कार्ड | आधार पता | ஆதார்
+right to information | rti | सूचना का अधिकार | आरटीआई
+grievance | complaint | cpgrams | शिकायत | लोक शिकायत
+scholarship | scholarships | fee reimbursement | छात्रवृत्ति | स्कॉलरशिप | உதவித்தொகை
+jobs | recruitment | government job | sarkari naukri | नौकरी | सरकारी नौकरी | भर्ती | வேலைவாய்ப்பு
+police | पुलिस भर्ती | constable
+teacher | tet | शिक्षक | शिक्षक भर्ती
+land records | patta | chitta | 7/12 | satbara | rtc | pahani | adangal | bhoomi | भूमि रिकॉर्ड | खसरा खतौनी | जमीन | பட்டா
+pension | pensions | पेंशन | वृद्धावस्था पेंशन | ஓய்வூதியம்
+engineering admission | entrance exam | counselling | cet | इंजीनियरिंग प्रवेश | प्रवेश परीक्षा

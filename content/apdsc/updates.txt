@@ -1,0 +1,61 @@
+# AP DSC / TET (Andhra Pradesh) documents, read from https://tet2dsc.apcfss.in by tools/fetch_apdsc.py: one
+# entry per programme. Facts and official links only. Written by the script on a schedule: do not edit by hand.
+
+[dsc-2026]
+title: DSC-2026 (APTRT-2026) teacher recruitment
+kind: notification
+page: https://tet2dsc.apcfss.in/DSC2026/notifications/DSC-2026%20General%20notification%20(1).pdf
+first_seen: 2026-10-24
+doc: DSC 2026 Syllabus | https://tet2dsc.apcfss.in/DSC2026/DSC_2026%20Suggestive%20Syllabus.pdf
+doc: DSC 2026 Special Education Syllabus | https://tet2dsc.apcfss.in/DSC2026/Special%20Education%20DSC%20-%202026.pdf
+doc: G.O.MS.No. 28 | https://tet2dsc.apcfss.in/DSC2026/Gos/2026SE_MS28_E.pdf
+doc: G.O.MS.No. 29 | https://tet2dsc.apcfss.in/DSC2026/Gos/2026SE_MS29_E.pdf
+doc: G.O.MS.No. 30 | https://tet2dsc.apcfss.in/DSC2026/Gos/2026SE_MS30_E.pdf
+doc: General Notification | https://tet2dsc.apcfss.in/DSC2026/notifications/DSC-2026%20General%20notification%20(1).pdf
+doc: Socities Notification | https://tet2dsc.apcfss.in/DSC2026/notifications/DSC-2026%20Socities%20Notification.pdf
+doc: Special Education Notifcation | https://tet2dsc.apcfss.in/DSC2026/notifications/DSC-2026%20Special%20Education%20Notifcation.pdf
+doc: Press Note | https://tet2dsc.apcfss.in/DSC2026/DSC-2026%20Press%20Note%20English.pdf
+doc: Special Education DSC - 2026 | https://tet2dsc.apcfss.in/DSC-PDF/Syllabus-2026/Special%20Education%20DSC%20-%202026.pdf
+
+[special-tet-2026]
+title: Special TET 2026 for in-service teachers
+kind: notification
+page: https://tet2dsc.apcfss.in/SplTetAug2026/Spl%20TET%20Notification%20final.pdf
+first_seen: 2026-10-24
+doc: Special TET Govt Memo | https://tet2dsc.apcfss.in/SplTetAug2026/GOS/SPL%20TET%20Govt%20Memo.pdf
+doc: Permission To Conduct Special TET | https://tet2dsc.apcfss.in/SplTetAug2026/GOS/Govt%20permission%20memo%20Special%20TET.pdf
+doc: Special TET Notification -2026 | https://tet2dsc.apcfss.in/SplTetAug2026/Spl%20TET%20Notification%20final.pdf
+doc: Special TET information Bulletien-2026 | https://tet2dsc.apcfss.in/SplTetAug2026/Spl%20TET%20information%20bulletin.pdf
+doc: Special TET Tentative Schedule | https://tet2dsc.apcfss.in/SplTetAug2026/Spl%20TET%20Schedule.pdf
+doc: Special TET Exam Schedule | https://tet2dsc.apcfss.in/SplTetAug2026/AP%20SPL%20TET%20FOR%20INSERVICE%20TEACHERS-2026_EXAM%20SCHEDULE.pdf
+doc: Special TET Press Note | https://tet2dsc.apcfss.in/SplTetAug2026/AP%20SPL%20TET%20PRESS%20NOTE.pdf
+doc: Special TET FAQ's | https://tet2dsc.apcfss.in/SplTetAug2026/In-service%20TET%20FAQs%20Approved%20Copy.pdf
+
+[aptet-2026]
+title: APTET 2026 (Teacher Eligibility Test)
+kind: notification
+page: https://tet2dsc.apcfss.in/TET-PDF/APTET-2026%20Notification.pdf
+first_seen: 2026-10-24
+doc: GO.2025SE_MS36_E | https://tet2dsc.apcfss.in/TET-PDF/GOS/GO%2036%20TET1%202026.pdf
+doc: APTET Press Note G.O 36 | https://tet2dsc.apcfss.in/TET-PDF/PressNote/APTET-%20JUNE%202026%20PRSS%20NOTE%20-1.pdf
+doc: APTET Press Note -2026 | https://tet2dsc.apcfss.in/TET-PDF/PressNote/Latest%20PressNote.pdf
+doc: APTET Notification -2026 | https://tet2dsc.apcfss.in/TET-PDF/APTET-2026%20Notification.pdf
+doc: APTET Tentative Schedule | https://tet2dsc.apcfss.in/TET-PDF/APTET-%20JUNE%202026%20TENTATIVE%20SCHEDULE.pdf
+doc: APTET EXAM SCHEDULE | https://tet2dsc.apcfss.in/TET-PDF/PressNote/AP%20TET-2026_EXAM%20SCHEDULE.pdf
+doc: Special Education DSC - 2026 | https://tet2dsc.apcfss.in/DSC-PDF/Syllabus-2026/Special%20Education%20DSC%20-%202026.pdf
+doc: APTET 2026 Syllabus | https://tet2dsc.apcfss.in/TET-PDF/APTET%202026%20Syllabus%201.pdf
+doc: APTET information Bulletien-2026 | https://tet2dsc.apcfss.in/TET-PDF/APTET%20Information%20Bulliten.pdf
+doc: APTET 2026 FAQS | https://tet2dsc.apcfss.in/TET-PDF/APTET%202026%20FAQS.pdf
+doc: APTET FAQS FOR INSERVICE TEACHERS | https://tet2dsc.apcfss.in/TET-PDF/FAQ%20Inservice.pdf
+
+[aptet-2025]
+title: APTET 2025 (Teacher Eligibility Test)
+kind: notification
+page: https://tet2dsc.apcfss.in/TET-PDF/PressNote/APTET%20Notification%20-2025%20final.pdf
+first_seen: 2026-10-24
+doc: APTET Press Note | https://tet2dsc.apcfss.in/TET-PDF/PressNote/Press%20note%20on%20APTET.pdf
+doc: APTET Notification -2025 | https://tet2dsc.apcfss.in/TET-PDF/PressNote/APTET%20Notification%20-2025%20final.pdf
+doc: APTET Tentative Schedule | https://tet2dsc.apcfss.in/TET-PDF/PressNote/APTET%20TENTATIVE%20SCHEDULE.pdf
+doc: APTET 2025 Syllabus | https://tet2dsc.apcfss.in/TET-PDF/PressNote/TET%20%20OCTOBER%202025%20SYLLABUS%20BOOK%20FINAL.pdf
+doc: APTET information Bulletien-2025 | https://tet2dsc.apcfss.in/TET-PDF/PressNote/APTET%20information%20Bulletien-2025%20final.pdf
+doc: APTET 2025 FAQS | https://tet2dsc.apcfss.in/TET-PDF/APTET%202025%20FAQS.pdf

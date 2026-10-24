@@ -1,0 +1,535 @@
+# MRB (Tamil Nadu) Notifications, read from https://www.mrb.tn.gov.in by tools/fetch_mrb.py: one entry per
+# recruitment. Facts and official links only. Written by the script on a schedule: do not edit by hand.
+
+[2-mrb-2026]
+title: Therapeutic Assistant (Male & Female) - Notification No. 2/MRB/2026
+kind: verification
+post: Therapeutic Assistant (Male & Female)
+notification: 2/MRB/2026
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TherapeuticAssistantMaleFemaleNotification.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Therapeutic Assistant (Male & Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofTherapeuticAssistantMaleFemale.pdf
+doc: Weightage Marks of Eligible for the post of Therapeutic Assistant Based on their online application (Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/WeightageMarksofEligibleforthepostofTherapeuticAssistantBasedontheironlineapplicationFemale.pdf
+doc: Weightage Marks of Eligible for the post of Therapeutic Assistant based on their online application (Male) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/WeightageMarksofEligibleforthepostofTherapeuticAssistantbasedontheironlineapplicationMale.pdf
+doc: Online Registration portal link for the post of Therapeutic Assistant (Male & Female) | https://tnmrbtaw26.onlineregistrationform.org/MRBTAW/
+doc: Notification for the post of Therapeutic Assistant (Male & Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TherapeuticAssistantMaleFemaleNotification.pdf
+doc: Corrigendum to the Notification for Therapeutic Assistant (Male & Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CorrigendumtotheNotificationforTherapeuticAssistantMaleFemale.pdf
+
+[1-mrb-2026]
+title: Nursing Assistant Grade II - Notification No. 1/MRB/2026
+kind: verification
+post: Nursing Assistant Grade II
+notification: 1/MRB/2026
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforthepostofNursingAssistantGradeII.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Nursing Assistant Grade II Additional list II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateverificationNursingAssistantGrIIAdditionallistII.pdf
+doc: Certificate Verification Schedule for the post of Nursing Assistant Grade II Additional list | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateverificationNursingAssistantGrIIAdditionallist.pdf
+doc: Certificate Verification Schedule for the post of Nursing Assistant Grade II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateverificationNursingAssistantGr.pdf
+doc: Notification for the post of Nursing Assistant Grade II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforthepostofNursingAssistantGradeII.pdf
+doc: Online Registration portal link for the post of Nursing Assistant Grade II | https://tnmrbnaw26.onlineregistrationform.org/MRBNAW/
+
+[23-mrb-2025]
+title: Special Qualifying Examination for person appointed temporarily as Assistant Surgeon - Notification No. 23/MRB/2025
+kind: key
+post: Special Qualifying Examination for person appointed temporarily as Assistant Surgeon
+notification: 23/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforSpecialQualifyingExaminationforpersonappointedtemporarilyasAssistantSurgeon.pdf
+first_seen: 2026-10-24
+doc: Important Notice Release of Tentative Answer key with response and Objection Tracker for Tamil Paper and Subject Paper Special Qualifying Examination for persons appointed temporarily as Assistant Surgeon | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforObjectionTracker.pdf
+doc: Release of Tentative Answer Key with response and Objection Tracker for Tamil Paper and Subject Paper Special Qualifying Examination for persons appointed temporarily as Assistant Surgeon | https://sqetangoexot26.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Click here to download the Admit card for the post of Special Qualifying Examination for person appointed temporarily as Assistant Surgeon | https://tnmrbsqeas25.onlineregistrationform.org/MRBSQE/
+doc: Important Notice - schedule for CBT - Special Qualifying Examination for person appointed temporarily as Assistant Surgeon | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/SQEExamdatenotice.pdf
+doc: Notification for Special Qualifying Examination for person appointed temporarily as Assistant Surgeon | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforSpecialQualifyingExaminationforpersonappointedtemporarilyasAssistantSurgeon.pdf
+
+[22-mrb-2025]
+title: Assistant Surgeon (General) with Speciality Qualification - Notification No. 22 /MRB/2025
+kind: verification
+post: Assistant Surgeon (General) with Speciality Qualification
+notification: 22 /MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforthepostofAssistantSurgeonGeneralwithSpecialityQualification.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Assistant Surgeon (General) with Speciality Qualification | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASGSQCV.pdf
+doc: Important Notice Release of Tentative Answer key with response and Objection Tracker for Tamil Paper and Subject Paper Assistant Surgeon General with Speciality Qualification | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ImportantNoticeReleaseofTentativeAnswerkeywithresponseandObjectionTrackerforTamilPaperandSubjectPaperAssistantSurgeonGeneralwithSpecialityQualification.pdf
+doc: Release of Tentative Answer Key with response and Objection Tracker for Tamil Paper and Subject Paper Assistant Surgeon General with Speciality Qualification | https://tangoassqandasg25ot.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Corrigendum to the Notification for Assistant Surgeon (General) with Speciality Qualification | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASGSexamCorrigendumExamCentre.pdf
+doc: Click here to download the Admit card for the post of Assistant Surgeon (General) with Speciality Qualification | https://tnmrbassq25.onlineregistrationform.org/MRBASSQ/
+doc: Important Notice - schedule for CBT - Assistant Surgeon (General) with Speciality Qualification | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Noticespecialitycomp.pdf
+doc: Notification for the post of Assistant Surgeon (General) with Speciality Qualification | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforthepostofAssistantSurgeonGeneralwithSpecialityQualification.pdf
+
+[21-mrb-2025]
+title: Dental Mechanic - Notification No. 21 /MRB/2025
+kind: verification
+post: Dental Mechanic
+notification: 21 /MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforthepostDentalMechanic.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Dental Mechanic Additional List | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofDentalMechanicAdditionalList.pdf
+doc: Certificate Verification Schedule for the post of Dental Mechanic | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerficationScheduleforthepostofDentalMechanic.pdf
+doc: Online Registration portal link for the post of Dental Mechanic in Tamil Nadu Medical Subordinate service | https://tnmrbdmw25.onlineregistrationform.org/MRBDMW/
+doc: Notification for the post of Dental Mechanic | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationforthepostDentalMechanic.pdf
+
+[20-mrb-2025]
+title: Radiographer - Notification No. 20 /MRB/2025
+kind: verification
+post: Radiographer
+notification: 20 /MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Radiographer_Notification.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Radiographer Additional list - III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofRadiographer3.pdf
+doc: Certificate Verification Schedule for the post of Radiographer Additional List-II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofRadiographerAdditionalList2.pdf
+doc: Certificate Verification Schedule for the post of Radiographer Additional List | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofRadiographerAdditionalList.pdf
+doc: Certificate Verification Schedule for the post of Radiographer | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofRadiographer.pdf
+doc: Weightage Marks of Eligible Candidates for the post of Radiographer Based on their online Application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/WeightagemarksofeligibleCandidatesforthepostofRadiographerBasedontheironlineApplication.pdf
+doc: Online Registration portal link for the post of Radiographer in Tamil Nadu Medical Subordinate service | https://tnmrbrgw25.onlineregistrationform.org/MRBRGW/
+doc: Notification for the post of Radiographer | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Radiographer_Notification.pdf
+
+[1-mrb-2019]
+title: SNCU Nurse - Notification No. 1/MRB/2019
+kind: verification
+post: SNCU Nurse
+notification: 1/MRB/2019
+page: https://www.mrb.tn.gov.in/content.php?menu_id=MTkw&dept_id=ODAw&lang=MQ==
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of SNCU Nurse | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/SNCUCERTIFICATEVERIFICATION2025.pdf
+
+[2-mrb-2023]
+title: Ophthalmic Assistant - Notification No. 2/MRB/2023
+kind: result
+post: Ophthalmic Assistant
+notification: 2/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/OphthalmicAssistantnotification.pdf
+first_seen: 2026-10-24
+doc: Weightage marks of eligible candidates for the post of Ophthalmic Assistant based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/meritlistELIGIBLEWITHAPPNOpdf.pdf
+doc: LIST OF CANDIDATES WHO DO NOT POSSESS THE PRESCRIBED QUALIFICATION AS PER NOTIFICAITON DATED:17.02.2023 | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/INELIGIBLE2197pdf.pdf
+doc: Certificate Verification Schedule for the post of Ophthalmic Assistant Additional list | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofOphthalmicAssistantAdditionallist.pdf
+doc: Corrigendum to the Notification for Ophthalmic Assistant | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_final_pdf_fc.pdf
+doc: Certificate Verification Schedule for the post Ophthalmic Assistant | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostOphthalmicAssistant.pdf
+doc: Notification for the post of Ophthalmic Assistant | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/OphthalmicAssistantnotification.pdf
+
+[19-mrb-2025]
+title: Field Assistant - Notification No. 19/MRB/2025
+kind: verification
+post: Field Assistant
+notification: 19/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationFieldAssistant.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Field Assistant Phase -II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofFieldAssistantPhaseII.pdf
+doc: Weightage marks of eligible candidates for the post of Field Assistant based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/591ELIGIBLECANDHOSTFORMRBpdf.pdf
+doc: Certificate Verification Schedule for the Post of Field Assistant | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthePostofFieldAssistant.pdf
+doc: Online Registration portal link for the post of Field Assistant in Tamil Nadu Public Health Subordinate Service | https://tnmrbfaw25.onlineregistrationform.org/MRBFAW/
+doc: Notification for the post of Field Assistant | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/NotificationFieldAssistant.pdf
+
+[10-mrb-2023]
+title: Auxiliary Nurse Midwife / Village Health Nurse. - Notification No. 10/MRB/2023
+kind: verification
+post: Auxiliary Nurse Midwife / Village Health Nurse.
+notification: 10/MRB/2023
+page: https://www.mrb.tn.gov.in/uploads/tami_800/content_pdf/VHN_Notification_2023.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Village Health Nurse Phase III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofVillageHealthNursePhaseIII.pdf
+doc: Corrigendum V for the post of Village Health Nurse | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CorrigendumVforthepostofVillageHealthNurse.pdf
+doc: Certificate Verification Schedule for the post of Village Health Nurse Additional List-II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/VHNadditionallistII.pdf
+doc: Certificate Verification Schedule for the Post of Village Health Nurse Phase II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CVScheduledforVHN1393PhaseII.pdf
+doc: Corrigendum IV for the post of Village Health Nurse | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CorrigendumIVforthepostofVillageHealthNurse.pdf
+doc: LIST OF CANDIDATES WHO DO NOT POSSESS THE PRESCRIBED QUALIFICATION AS PER NOTIFICAITON ANM / VHN | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LISTOFCANDIDATESWHODONOTPOSSESSTHEPRESCRIBEDQUALIFICATIONASPERNOTIFICAITONDATED11102023.pdf
+doc: Certificate Verification Schedule for the post of Village Health Nurse Additional Lis | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CVAdditionalList.pdf
+doc: Merit List for the post of Village Health Nurse | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/7646finalEligible28012026compressed.pdf
+doc: Certificate Verification Schedule for the post of Village Health Nurse | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofVillageHealthNurse.pdf
+doc: Online Registration Portal Link for the post of Auxiliary Nurse Midwife / Village Health Nurse | https://tnmrbvhnw25.onlineregistrationform.org/MRBVHN/
+doc: Corrigendum III for the post of Village Health Nurse | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CorrigendumIIIforthepostofVillageHealthNurse.pdf
+doc: Corrigendum II for the post of Auxiliary Nurse Midwife / Village Health Nurse | https://www.mrb.tn.gov.in/uploads/tami_800/content_pdf/Corrigendem_II_VHN.pdf
+doc: Corrigendum to the Notification for Auxiliary Nurse Midwife / Village Health Nurse. | https://www.mrb.tn.gov.in/uploads/tami_800/content_pdf/Corrigendem_VHN.pdf
+doc: Notification for Auxiliary Nurse Midwife / Village Health Nurse. | https://www.mrb.tn.gov.in/uploads/tami_800/content_pdf/VHN_Notification_2023.pdf
+
+[18-mrb-2025]
+title: Audiometrician - Notification No. 18/MRB/2025
+kind: update
+post: Audiometrician
+notification: 18/MRB/2025
+page: https://www.mrb.tn.gov.in/uploads/tami_800/content_pdf/Audiometrician_Notification_031225.pdf
+first_seen: 2026-10-24
+doc: Corrigendum to the post of Audiometrician | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/newcorrigendugmaudiometrician.pdf
+doc: LIST OF CANDIDATES WHO DO NOT POSSESS THE PRESCRIBED QUALIFICATION AS PER NOTIFICAITON AUDIOMETRICIAN | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/INELIGIBLECANDAUIDOMETRICIAN.pdf
+doc: Certificate Verification Schedule for the post of Audiometrician Additional List | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CVPHASEII03022026.pdf
+doc: Weightage marks of eligible candidates for the post of Audiometrician based on their online applicatio | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/215ELIGCANDHOSTFORMRB.pdf
+doc: Certificate Verification Schedule for the post of Audiometrician | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofAudiometrician.pdf
+doc: Online Registration Portal Link for the post of Audiometrician in Tamil Nadu Medical Subordinate Service. | https://tnmrbamw25.onlineregistrationform.org/MRBAMW/
+doc: Notification for the post of Audiometrician | https://www.mrb.tn.gov.in/uploads/tami_800/content_pdf/Audiometrician_Notification_031225.pdf
+
+[17-mrb-2025]
+title: Assistant Surgeon (General) - Notification No. 17/MRB/2025
+kind: verification
+post: Assistant Surgeon (General)
+notification: 17/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASGNotification2025.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Assistant Surgeon (General) Additional List | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofAssistantSurgeonGeneralAdditionalList.pdf
+doc: Certificate Verification Schedule for the post of Assistant Surgeon (General | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofAssistantSurgeonGeneral.pdf
+doc: Important Notice Release of Tentative Answer Key with response and Objection Tracker for Tamil Paper and Subject Paper Assistant Surgeon (General) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ImportantNoticeReleaseofTentativeAnswerKeywithresponseandObjectionTrackerforTamilPaperandSubjectPaperAssistantSurgeonGeneral.pdf
+doc: Release of Tentative Answer key with response and Objection Tracker for Tamil Paper and Subject Paper Assistant Surgeon (General) | https://tangoassqandasg25ot.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Corrigendum to the Notification for Assistant Surgeon (General) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASGexamCorrigendumExamCentre.pdf
+doc: Click here to download the Admit card for the post of Assistant Surgeon (General) | https://tnmrbasg25.onlineregistrationform.org/MRBASG/
+doc: Important Notice - schedule for CBT - Assistant Surgeon (General) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASGexamdate.pdf
+doc: Notification for the post of Assistant Surgeon (General) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASGNotification2025.pdf
+
+[16-mrb-2025]
+title: Health Inspector Grade II - Notification No. 16/MRB/2025
+kind: verification
+post: Health Inspector Grade II
+notification: 16/MRB/2025
+page: https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notification_Health_Inspector_Grade_II.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Health Inspector Grade II Phase - II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CVSCHEDULEDPHASEIIpdf.pdf
+doc: Certificate Verification Schedule for the post of Health Inspector Grade -II Additional List | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofHealthInspectorGradeIIAdditionalList.pdf
+doc: Certificate Verification Schedule for the post of Health Inspector Grade II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CertificateVerificationScheduleforthepostofHealthInspectorGradeII.pdf
+doc: Release of Tentative Answer Key with Response and Objection Tracker for the post of Health Inspector Grade-II | https://tangoamrbhi07ecd.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: IMPORTANT NOTICE (Release of Tentative Answer Key with Response and Objection Tracker for Tamil Paper and Subject Paper)- Health Inspector-Grade-II.pdf | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/IMPORTANTNOTICEReleaseofTentativeAnswerKeywithResponseandObjectionTrackerforTamilPaperandSubjectPaperHealthInspectorGradeII.pdf
+doc: Corrigendum to the Notification for Health Inspector Grade II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_exam_centre_HI_GR_II.pdf
+doc: Click here to download the Admit Card for the Post of Health Inspector Grade - II | https://tnmrbhi25.onlineregistrationform.org/MRBHI/
+doc: Important Notice for the Post of Health Inspector Grade - II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Important_Notice_Health_Inspector_Grade_II.pdf
+doc: Corrigendum to the Notification for Health Inspector Grade-II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CORRIGENDUM_HI_GR_II.pdf
+doc: Notification for the post of Health_Inspector_Grade_II | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notification_Health_Inspector_Grade_II.pdf
+
+[15-mrb-2025]
+title: Dental Hygienist - Notification No. 15/MRB/2025
+kind: verification
+post: Dental Hygienist
+notification: 15/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Dental_Hygienist_Notification_131025.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Dental Hygienist | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Dental_Hygienist_CV_Schedule_181125.pdf
+doc: Recruitment of Dental Hygienist 2025 Online Application Registration | https://tnmrbdhw25.onlineregistrationform.org/MRBDHW/
+doc: Notification for Dental Hygienist | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Dental_Hygienist_Notification_131025.pdf
+
+[14-mrb-2025]
+title: Assistant Medical Officer (Siddha) - Notification No. 14/MRB/2025
+kind: update
+post: Assistant Medical Officer (Siddha)
+notification: 14/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/siddha_notification.pdf
+first_seen: 2026-10-24
+doc: CV Schedule for the post of Assistant Medical Officer Siddha | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CVScheduleforthepostofAssistantMedicalOfficerSiddha.pdf
+doc: Click here to download the Admit Card for the Post of Assistant Medical Officer (Siddha) | https://tnmrbamos25.onlineregistrationform.org/MRBAMOS/
+doc: Corrigendum to the Notification for Assistant Medical Officer (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Corrigendum_siddha_281025.pdf
+doc: Important Notice for the Post of Assistant Medical Officer (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Important_Notice_Siddha_161025.pdf
+doc: Notification for the post of Assistant Medical Officer (Siddha) in Tamil Nadu Medical Service | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/siddha_notification.pdf
+
+[13-mrb-2025]
+title: Assistant Medical Officer (Ayurveda) - Notification No. 13/MRB/2025
+kind: notification
+post: Assistant Medical Officer (Ayurveda)
+notification: 13/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Ayurveda_Notification_290825.pdf
+first_seen: 2026-10-24
+doc: Corrigendum to the Notification for Assistant Medical Officer (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Corrigendum_Exam_Centre_Ayurveda_061025.pdf
+doc: Click here to download the Admit Card for the Post of Assistant Medical Officer (Ayurveda) | https://tnmrbamoa25.onlineregistrationform.org/MRBAMOA/
+doc: Important Notice for the Post of Assistant Medical Officer (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/imp_notice_Ayurveda_170925.pdf
+doc: Notification for the post of Assistant Medical Officer (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Ayurveda_Notification_290825.pdf
+
+[12-mrb-2025]
+title: Assistant Medical Officer (Homeopathy) - Notification No. 12/MRB/2025
+kind: notification
+post: Assistant Medical Officer (Homeopathy)
+notification: 12/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/homoeopathy_notification_080825.pdf
+first_seen: 2026-10-24
+doc: Notification for the post of Assistant Medical Officer (Homeopathy) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/homoeopathy_notification_080825.pdf
+doc: Online Registration Portal Link for the post of Assistant Medical Officer (Homeopathy) in Tamil Nadu Medical Service | https://tnmrbamoh25.onlineregistrationform.org/MRBAMOH/
+
+[11-mrb-2025]
+title: Laboratory Technician Grade II - Notification No. 11/MRB/2025
+kind: notification
+post: Laboratory Technician Grade II
+notification: 11/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_G2_MSS_10072025.pdf
+first_seen: 2026-10-24
+doc: Online Registration Portal Link for the post of Laboratory Technician Grade II in Tamil Nadu Medical Subordinate Services | https://tnmrbltg2msw25.onlineregistrationform.org/MRBTNMSS/
+doc: Notification for the post of Laboratory Technician Grade II in Tamil Nadu Medical Subordinate Services | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_G2_MSS_10072025.pdf
+
+[10-mrb-2025]
+title: Laboratory Technician Grade II - Notification No. 10/MRB/2025
+kind: verification
+post: Laboratory Technician Grade II
+notification: 10/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_Grade_II_TNFSSS_090725.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Laboratory Technician Grade II in TNFSSS (Additional List) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_LT_Grade2_TNFSSS_AL_040925.pdf
+doc: Certificate Verification Schedule for the post of Laboratory Technician Grade II in TNFSSS | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_LT_Grade2_TNFSSS_030925.pdf
+doc: Corrigendum to the Notification for the post of Laboratory Technician Grade II in TNFSSS | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_LT_Grade2_030925.pdf
+doc: Online Registration Portal Link for the post of Laboratory Technician Grade II in Tamil Nadu Food Safety Subordinate Services | https://tnmrbltg2fw25.onlineregistrationform.org/MRBLTG2FW/
+doc: Notification for the post of Laboratory Technician Grade II in Tamil Nadu Food Safety Subordinate Services | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_Grade_II_TNFSSS_090725.pdf
+
+[09-mrb-2025]
+title: Skilled Assistant Grade - II (Fitter Grade - II) - Notification No. 09/MRB/2025
+kind: verification
+post: Skilled Assistant Grade - II (Fitter Grade - II)
+notification: 09/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notification_Skilled_Assistant_GradeII_Fitter_GradeII.pdf
+first_seen: 2026-10-24
+doc: Schedule for Certificate Verification for the post of SKILLED ASSISTANT GRADE-II (FITTER GRADE - II) PHASE-II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_SAG2_FG2_010925.pdf
+doc: Schedule for Certificate Verification for the post of SKILLED ASSISTANT GRADE-II (FITTER GRADE - II) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CERTIFICATE_VERIFICATION_SCHEDULE.pdf
+doc: Corrigendum to the Notification for the post of SKILLED ASSISTANT GRADE-II (FITTER GRADE - II) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CORRIGENDUM.pdf
+doc: Notification for Skilled Assistant Grade - II (Fitter Grade - II) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notification_Skilled_Assistant_GradeII_Fitter_GradeII.pdf
+
+[08-mrb-2025]
+title: Skilled Assistant Grade - II (Welder Grade - II) - ST Shortfall Vacancy - Notification No. 08/MRB/2025
+kind: verification
+post: Skilled Assistant Grade - II (Welder Grade - II) - ST Shortfall Vacancy
+notification: 08/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notification_Skilled_Assistant_GradeII_Welder_GradeII_Shortfall_ST.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Skilled Assistant Grade II - (Welder Grade - II) -m ST Shortfall Vacancy | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/skilled_assistant_welder_cv_schedule_final.pdf
+doc: Online Registration Link for the Post of Skilled Assistant Grade - II (Welder Grade - II) | https://tnmrbsaw25.onlineregistrationform.org/MRBSAW/
+doc: Notification for Skilled Assistant Grade - II (Welder Grade - II) - ST Shortfall Vacancy | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notification_Skilled_Assistant_GradeII_Welder_GradeII_Shortfall_ST.pdf
+
+[07-mrb-2025]
+title: Prosthetic Craftsman - Notification No. 07/MRB/2025
+kind: verification
+post: Prosthetic Craftsman
+notification: 07/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Prosthetic_Craftsman_Notification.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Prosthetic Craftsman - List 2 | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Prosthetic_craftsman_CV_Shedule_PHSII_120625.pdf
+doc: Corrigendum to the Notification for Prosthetic Craftsman | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Corrigendum_FC.pdf
+doc: Certificate Verification Schedule for the post of Prosthetic Craftsman | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Prosthetic_craftsman_CV.pdf
+doc: Corrigendum to the Notification for Prosthetic Craftsman | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_PC_280425.pdf
+doc: Online Registration Portal for the post of Prosthetic Craftsman | https://tnmrbpcw25.onlineregistrationform.org/MRBPCW/
+doc: Notification for Prosthetic Craftsman | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Prosthetic_Craftsman_Notification.pdf
+
+[06-mrb-2025]
+title: Senior Analyst - Notification No. 06/MRB/2025
+kind: verification
+post: Senior Analyst
+notification: 06/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/senior_analyst_notification_2025.pdf
+first_seen: 2026-10-24
+doc: Schedule for Certificate Verification of Senior Analyst -List III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Senior_Analyst_CV_Schedule_3_38_73.pdf
+doc: Schedule for Certificate Verification of Senior Analyst -List III (Additional List ) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/SA_Phase_3_additional_list_7475.pdf
+doc: Important Notice (Release of Tentative Answer Key with Response and Objection Tracker for Tamil Paper and Subject Paper) - Senior Analyst | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/senior_analyst_notice_260625.pdf
+doc: Click here to download the Admit Card for the Post of Senior Analyst | https://tnmrbsa25.onlineregistrationform.org/MRBSA/
+doc: Important Notice - Schedule for CBT - Senior Analyst | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notice_Senior_Analyst_2025.pdf
+doc: Notification for Senior Analyst | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/senior_analyst_notification_2025.pdf
+
+[05-mrb-2025]
+title: Assistant Surgeon (Dental) - Notification No. 05/MRB/2025
+kind: verification
+post: Assistant Surgeon (Dental)
+notification: 05/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AS_Dental_Notification.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Assistant Surgeon (Dental) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_ASD_300725_new.pdf
+doc: Important Notice - Assistant Surgeon (Dental) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notice_ASD_Stay.pdf
+doc: Corrigendum to the Notification for Assistant Surgeon (Dental) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Corrigendum_ASD_Vacancy_070525.pdf
+doc: Release of Tentative Answer Key with Response and Objection Tracker for the post of Assistant Surgeon (Dental) | https://t2ng0ass78ntd3nt2lwqt.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Important Notice (Release of Tentative Answer Key with Response and Objection Tracker for Tamil Paper and Subject Paper) - Assistant Surgeon (Dental) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Notice_Objection_Tracker_ASD.pdf
+doc: Click here to download the Admit Card for the Post of Assistant Surgeon (Dental) | https://tnmrbasd25.onlineregistrationform.org/MRBASD/
+doc: Important Notice - Notification for Assistant Surgeon (Dental) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ASD_notification.pdf
+doc: Notification for Assistant Surgeon (Dental) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AS_Dental_Notification.pdf
+
+[04-mrb-2025]
+title: Pharmacist - Notification No. 04/MRB/2025
+kind: notification
+post: Pharmacist
+notification: 04/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Pharmacist_Notification_2025.pdf
+first_seen: 2026-10-24
+doc: Notification for Pharmacist | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Pharmacist_Notification_2025.pdf
+
+[03-mrb-2025]
+title: Assistant Medical Officer (Unani) - Notification No. 03/MRB/2025
+kind: verification
+post: Assistant Medical Officer (Unani)
+notification: 03/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_UNANI_NOTIFICATION_130325.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Assistant Medical Officer (Unani) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/certificate_verification_AMO_Unani.pdf
+doc: Important Notice - Assistant Medical Officer (Unani) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/assistant_medical_officer_unani.pdf
+doc: Important Notice - Release of Tentative Answer Key with Response and Objection Tracker for Tamil Paper and Subject Paper - Assistant Medical Officer (Unani) | https://t2ng0amo3t1pl96qa4bg.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Corrigendum to the Notification for Assistant Medical Officer (Unani) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_Medical_Officer_Unani.pdf
+doc: Notification for Assistant Medical Officer (Unani) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_UNANI_NOTIFICATION_130325.pdf
+
+[02-mrb-2025]
+title: Assistant Medical Officer (Ayurveda) - Notification No. 02/MRB/2025
+kind: verification
+post: Assistant Medical Officer (Ayurveda)
+notification: 02/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_AYURVEDA_NOTIFICATION_120225.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Assistant Medical Officer (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_ayurveda_CV_schedule.pdf
+doc: Important Notice - Assistant Medical Officer (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/assistant_medical_officer_ayurveda.pdf
+doc: Important Notice - Release of Tentative Answer Key with Response and Objection Tracker for Tamil Paper and Subject Paper - Assistant Medical Officer (Ayurveda) | https://t2ng0amo3t1pl96qa4bg.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Notification for Assistant Medical Officer (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_AYURVEDA_NOTIFICATION_120225.pdf
+
+[01-mrb-2025]
+title: Assistant Medical Officer (Siddha) - Notification No. 01/MRB/2025
+kind: notification
+post: Assistant Medical Officer (Siddha)
+notification: 01/MRB/2025
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_SIDDHA_NOTIFICATION_130325.pdf
+first_seen: 2026-10-24
+doc: Corrigendum to the Notification for Assistant Medical Officer (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Siddha_corrigendum_090525.pdf
+doc: Certificate Verification Schedule for the post of Assistant Medical Officer (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/certificate_verification_AMO_Siddha.pdf
+doc: Important Notice - Assistant Medical Officer (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/assistant_medical_officer_sidda.pdf
+doc: Important Notice - Release of Tentative Answer Key with Response and Objection Tracker for Tamil Paper and Subject Paper - Assistant Medical Officer (Siddha) | https://t2ng0amo3t1pl96qa4bg.onlineregistrationform.org/ObjectionTrackerPortalWeb/loginPage.jsp
+doc: Notification for Assistant Medical Officer (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AMO_SIDDHA_NOTIFICATION_130325.pdf
+
+[02-mrb-2024]
+title: Physiotherapist Grade-II - Notification No. 02/MRB/2024
+kind: notification
+post: Physiotherapist Grade-II
+notification: 02/MRB/2024
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Physiotherapist_Gr_II_181024.pdf
+first_seen: 2026-10-24
+doc: Corrigendum to the Notification for Physiotherapist Grade-II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_physiotherapist_II_180325.pdf
+doc: Certificate Verification Schedule for the post of Physiotherapist Grade - II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Physiotherapist_Gr_II_81_CV.pdf
+doc: Click here to download the Admit Card for the post of Physiotherapist Grade II, it's available from 24.01.2025 till 02.02.2025 (FN) | https://tnmrbphy24.onlineregistrationform.org/MRB/
+doc: Important Notice - Schedule for CBT - Physiotherapist Grade II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Important_Notice_PT_G2.pdf
+doc: Online Registration Date is Extend upto 20.11.2024 for the post of Physiotherapist Grade II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/extension_corrigendum_24.pdf
+doc: Notification for Physiotherapist Grade-II | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Physiotherapist_Gr_II_181024.pdf
+
+[01-mrb-2024]
+title: Assistant Surgeon (General) - Notification No. 01/MRB/2024
+kind: verification
+post: Assistant Surgeon (General)
+notification: 01/MRB/2024
+page: https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AS_Notification_150324.pdf
+first_seen: 2026-10-24
+doc: Schedule for Certificate Verification of Assistant Surgeon (General) List - 3 | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_schedule_ASG_2024_phase_III.pdf
+doc: Certificate Verification Schedule for the post of Assistant Surgeon (General) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_schedule_ASG_2024_060225.pdf
+doc: Corrigendum to the Notification for Assistant Surgeon (General) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_ASG_060225.pdf
+doc: Important Notice | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Important_Notice_AS_080125.pdf
+doc: Click here to download the Admit Card for the post of Assistant Surgeon (General), it's available from 29.12.2024 (AF) till 05.01.2025 (FN) Important Notice | https://tnmrbasg24.onlineregistrationform.org/MRBASG/
+doc: Important Notice - schedule for CBT - Assistant Surgeon (General) | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Important_Notice_Schedule_CBT_ASG.pdf
+doc: Corrigendum to the Notification for Assistant Surgeon (General) | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/corrigendum_AS_140524.pdf
+doc: Notification for the post of Assistant Surgeon (General) | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AS_Notification_150324.pdf
+
+[14-mrb-2023]
+title: EEG Technician - Notification No. 14/MRB/2023
+kind: result
+post: EEG Technician
+notification: 14/MRB/2023
+page: https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/EEG_TECHNICIAN_Notification_2023.pdf
+first_seen: 2026-10-24
+doc: Weightage marks of eligible candidates for the post of EEG Technician based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/weightage_EEG.pdf
+doc: List of candidates who does not possess the prescribed qualification and does not belong communal category as per para 2 of the Notification for the post of EEG Technician based on their educational qualification certificates uploaded in the online_application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/not_possessing_qualification_EEG.pdf
+doc: Schedule For Certificate Verification of EEG Technician | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_EEG.pdf
+doc: Notification for the post of EEG Technician | https://mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/EEG_TECHNICIAN_Notification_2023.pdf
+
+[13-mrb-2023]
+title: Pharmacist (Unani) - Notification No. 13/MRB/2023
+kind: verification
+post: Pharmacist (Unani)
+notification: 13/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/UNANI_Notification_2023.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Pharmacist (Unani)- List 2 | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CVSchedule.pdf
+doc: Weightage marks of eligible candidates for the post of Pharmacist (Unani) based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/weightage_Pharmacist_Unani.pdf
+doc: List of candidates who does not possess the prescribed qualification and does not belong communal category as per para 2 of the Notification for the post of Pharmacist (Unani) based on their educational qualification certificates uploaded in the online_application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/not_possessing_qualification_Pharmacist_Unani.pdf
+doc: Schedule For Certificate Verification of Pharmacist (Unani) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_Pharmacist_Unani_2023.pdf
+doc: Notification for the post of Pharmacist (Unani) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/UNANI_Notification_2023.pdf
+
+[12-mrb-2023]
+title: Pharmacist (Ayurveda) - Notification No. 12/MRB/2023
+kind: result
+post: Pharmacist (Ayurveda)
+notification: 12/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Ayurveda_Notification_2023.pdf
+first_seen: 2026-10-24
+doc: Weightage marks of eligible candidates for the post of Pharmacist (Ayurveda) based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/weightage_Pharmacist_AV.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of Pharmacist (Ayurveda) based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/not_possessing_qualification_Pharmacist_AV.pdf
+doc: Schedule for Certificate Verification of Pharmacist (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_Pharmacist_AV_2023.pdf
+doc: Notification for Pharmacist (Ayurveda) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Ayurveda_Notification_2023.pdf
+
+[11-mrb-2023]
+title: Pharmacist (Siddha) - Notification No. 11/MRB/2023
+kind: result
+post: Pharmacist (Siddha)
+notification: 11/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Siddha_Notification_2023.pdf
+first_seen: 2026-10-24
+doc: Weightage marks of eligible candidates for the post of Pharmacist (Siddha) based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/weightage_Pharmacist_Siddha.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of Pharmacist (Siddha) based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/notpossessingqualificationPharmacistSiddha.pdf
+doc: Schedule for Certificate Verification of Pharmacist (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_Schedule_Pharmacist_Siddha_2023.pdf
+doc: Notification for Pharmacist (Siddha) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Siddha_Notification_2023.pdf
+
+[09-mrb-2023]
+title: Laboratory Technician Grade - III (Special drive to fill up Backlog vacancies under ST Communal Category) - Notification No. 09/MRB/2023
+kind: verification
+post: Laboratory Technician Grade - III (Special drive to fill up Backlog vacancies under ST Communal Category)
+notification: 09/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_III_ST_Special_Drive_Detailed_Notification_01082023.pdf
+first_seen: 2026-10-24
+doc: Certificate Verification Schedule for the post of Laboratory Technician Grade - III (Special drive to fill up the Backlog Vacancies under ST Communal Category) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_III_CV_schedule_020725.pdf
+doc: Notification for Laboratory Technician Grade - III (Special drive to fill up Backlog vacancies under ST Communal Category) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_III_ST_Special_Drive_Detailed_Notification_01082023.pdf
+
+[08-mrb-2023]
+title: ECG Technician - Notification No. 08/MRB/2023
+kind: verification
+post: ECG Technician
+notification: 08/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/notification_ECG_2023.pdf
+first_seen: 2026-10-24
+doc: Final Notice of Certificate Verification to the absentee candidates for the post of ECG Technician | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_schedule_ECG2023_absentees.pdf
+doc: Weightage marks of eligible candidates for the post of ECG TECHNICIAN based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Eligible_List_ECG_Technician.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of ECG TECHNICIAN based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/ineligible_list_ECG.pdf
+doc: Corrigendum to the Notification for ECG Technician | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Corrigendum_post_ECG_Technician.pdf
+doc: Schedule for Certificate Verification of ECG TECHNICIAN | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_schedule_ECG_2023.pdf
+doc: Notification for ECG Technician | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/notification_ECG_2023.pdf
+
+[07-mrb-2023]
+title: Technician Grade-I - Notification No. 07/MRB/2023
+kind: result
+post: Technician Grade-I
+notification: 07/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/notification_Tech_Grade_I.pdf
+first_seen: 2026-10-24
+doc: Weightage marks of eligible candidates for the post of Technician Grade - I based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Weightage_marks_eligible_candidates_post_Technician_Grade_I.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of Technician Grade - I based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Ineligible_List_Technician_Grade_I.pdf
+doc: Schedule for Certificate Verification of Technician Grade - I | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/CV_SCHEDULE_Technician_Grade_I.pdf
+doc: Notification for Technician Grade-I | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/notification_Tech_Grade_I.pdf
+
+[05-mrb-2023]
+title: Therapeutic Assistant (Male) & Therapeutic Assistant (Female) - Notification No. 05/MRB/2023
+kind: result
+post: Therapeutic Assistant (Male) & Therapeutic Assistant (Female)
+notification: 05/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Detailed_Notification_Therapeutic_Assistant_200623.pdf
+first_seen: 2026-10-24
+doc: Weightage marks of eligible candidates for the post of Therapeutic Assistant (Female) based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAF_WM.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of Therapeutic Assistant (Female) based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAF_LIST_DOESNT_POSSES_QUALFN.pdf
+doc: List of candidate who did not upload document properly in the online application for the post of Therapeutic Assistant (Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAF_2023_Document_not_uploaded_properly.pdf
+doc: Schedule for Certificate Verification of Therapeutic Assistant (Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAF_CV_SCHEDULE.pdf
+doc: Weightage marks of eligible candidates for the post of Therapeutic Assistant (Male) based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAM_2023_WEIGHTAGE_MARKS.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of Therapeutic Assistant (Male) based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAM_2023_LIST_OF_CANDIDATES_DOESNT_POSSESS_PRESCRIBED_QUALIFICATION.pdf
+doc: Schedule for Certificate Verification of Therapeutic Assistant (Male) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/TAM_2023_CV_SCHEDULE.pdf
+doc: Notification for Therapeutic Assistant (Male) & Therapeutic Assistant (Female) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Detailed_Notification_Therapeutic_Assistant_200623.pdf
+
+[04-mrb-2023]
+title: Occupational Therapist - Notification No. 04/MRB/2023
+kind: update
+post: Occupational Therapist
+notification: 04/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Detailed_Notification_Occupational_Therapist.pdf
+first_seen: 2026-10-24
+doc: List of candidates who does not possess the prescribed qualification for the post of Occupational Therapist based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Annexure_II_Occupational_Therapist_Ineligible_candidates.pdf
+doc: Schedule for Certificate Verification of Occupational Therapist | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Annexure_III_CVSchedule_Occupational_Therapist.pdf
+doc: Weightage Marks of Eligible candidates for the post of Occupational Therapist based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Annexure_I_Occupational_Therapist_Weightage_marks_eligible_candidates.pdf
+doc: Notification for Occupational Therapist | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/Detailed_Notification_Occupational_Therapist.pdf
+
+[03-mrb-2023]
+title: Laboratory Technician Grade - III - Notification No. 03/MRB/2023
+kind: verification
+post: Laboratory Technician Grade - III
+notification: 03/MRB/2023
+page: https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LaboratoryTechnicianGradeIIIDetailedNotification.pdf
+first_seen: 2026-10-24
+doc: Schedule for Certificate Verification of Laboratory Technician Grade - III - List 3 | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_GRADE_III_CV_SCHEDULE_3.pdf
+doc: Addendum to the Notification for Laboratory Technician Grade - III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_III_Addendum_30112023.pdf
+doc: Important Notice (To upload Covid Duty Certificate) | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_III_Important_Notice_30112023.pdf
+doc: Final Notice of Certificate Verification to the absentee candidates for the post of Laboratory Technician Grade - III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LTGRADEIIICVSCHEDULEABSENTEE07102023pdf.pdf
+doc: Schedule for Certificate Verification of Laboratory Technician Grade - III - List 2 | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LTGRADEIIICVCHEDULE.pdf
+doc: Weightage marks of eligible candidates for the post of Laboratory Technician Grade - III based on their online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_GRADE_III_WM.pdf
+doc: List of candidates who does not possess the prescribed qualification for the post of Laboratory Technician Grade - III based on their educational qualification certificates uploaded in the online application | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/AnnexureIIIneligiblepdf.pdf
+doc: List of candidates who did not upload document properly in the online application for the post of Laboratory Technician Grade - III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_GRADE_III_NOT_UPLOADED_DOCUMENT_PROPERLY.pdf
+doc: Schedule for Certificate Verification of Laboratory Technician Grade - III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LT_GRADE_III_CV_SCHEDULE.pdf
+doc: Notification for Laboratory Technician Grade - III | https://www.mrb.tn.gov.in/departments_cms/uploads/tami_800/content_pdf/LaboratoryTechnicianGradeIIIDetailedNotification.pdf

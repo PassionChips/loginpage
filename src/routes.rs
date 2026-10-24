@@ -26,6 +26,8 @@ pub fn router() -> Router<Arc<AppState>> {
         .route("/{lang}/links/{category}", get(links_category))
         .route("/{lang}/guides", get(guides))
         .route("/{lang}/guides/{slug}", get(guide))
+        .route("/{lang}/guides/{state}/{board}", get(board_updates))
+        .route("/{lang}/guides/{state}/{board}/{id}", get(board_update))
         .fallback(not_found)
 }
 
@@ -89,6 +91,26 @@ async fn guide(State(state): Shared, Path((lang, slug)): Path<(String, String)>)
     }
 }
 
+/// A board's pages live only under its own state (`/en/guides/tamil-nadu/trb`, not `/en/guides/kerala/trb`).
+fn board_in(region: &str, board: &str) -> Option<&'static crate::content::Board> {
+    crate::content::board(board).filter(|b| b.state == region)
+}
+
+async fn board_updates(State(state): Shared, Path((lang, region, board)): Path<(String, String, String)>) -> Response {
+    match (Lang::from_code(&lang), board_in(&region, &board)) {
+        (Some(lang), Some(b)) => Html(render::board_updates_page(&state.config, &state.site, lang, b)).into_response(),
+        _ => not_found_response(&state),
+    }
+}
+
+async fn board_update(State(state): Shared, Path((lang, region, board, id)): Path<(String, String, String, String)>) -> Response {
+    let found = Lang::from_code(&lang).zip(board_in(&region, &board)).and_then(|(l, b)| state.site.update(b.id, &id).map(|u| (l, b, u)));
+    match found {
+        Some((lang, b, u)) => Html(render::board_update_page(&state.config, &state.site, lang, b, u)).into_response(),
+        None => not_found_response(&state),
+    }
+}
+
 async fn static_page(State(state): Shared, Path(slug): Path<String>) -> Response {
     match state.site.page(&slug) {
         Some(p) => Html(render::static_page(&state.config, &state.site, p)).into_response(),
@@ -122,6 +144,9 @@ pub fn sitemap_xml(config: &Config, site: &Site) -> String {
     for lang in Lang::all() {
         url(&format!("/{}", lang.code()), None);
         url(&format!("/{}/guides", lang.code()), None);
+        for b in render::boards() {
+            url(&format!("/{}/guides/{}/{}", lang.code(), b.state, b.id), site.updates(b.id).first().map(|u| u.when()));
+        }
         for g in site.state_groups() {
             url(&format!("/{}/guides/{}", lang.code(), g.id), None);
         }
@@ -131,6 +156,12 @@ pub fn sitemap_xml(config: &Config, site: &Site) -> String {
         }
         for g in site.guides(lang) {
             url(&format!("/{}/guides/{}", lang.code(), g.slug), Some(&g.updated));
+        }
+    }
+    // Each board update is in English, so only its English page is listed.
+    for b in render::boards() {
+        for u in site.updates(b.id) {
+            url(&format!("/en/guides/{}/{}/{}", b.state, b.id, u.id), Some(u.when()));
         }
     }
     for p in site.pages() {

@@ -9,6 +9,8 @@ import { renderDetails } from './details.mjs';
 import { createPalette } from './palette.mjs';
 import { setupRail } from './rail.mjs';
 import { createToast } from './toast.mjs';
+import { setupTasks } from './tasks.mjs';
+import { setupLights } from '../lights.mjs';
 
 const VIEW_KEY = 'guideboy:view';
 
@@ -156,7 +158,7 @@ function start() {
   });
 
   // ---- filters, sort, view ----
-  const filterChips = $$('.dx-chip');
+  const filterChips = $$('.dx-filters .dx-chip');
   function syncFilterChips() {
     filterChips.forEach((c) => {
       const on = c.hasAttribute('data-saved-filter') ? state.savedOnly : state.badges.has(c.dataset.badge);
@@ -200,6 +202,7 @@ function start() {
 
   // ---- categories ----
   setupRail($('.rail'), { chips, groups, isFiltered, spy: preview });
+  setupTasks();
 
   // ---- bookmarks and comparison ----
   function syncTool(url) {
@@ -312,14 +315,8 @@ function start() {
     }
   });
 
-  // ---- card lighting: the spotlight and lit rim follow the pointer ----
-  listsRoot.addEventListener('pointermove', (e) => {
-    const card = e.target.closest('.tcard');
-    if (!card) return;
-    const box = card.getBoundingClientRect();
-    card.style.setProperty('--mx', `${e.clientX - box.left}px`);
-    card.style.setProperty('--my', `${e.clientY - box.top}px`);
-  });
+  // ---- card lighting: the spotlight and lit rim follow the pointer (directory and task cards) ----
+  setupLights(document.querySelector('main') || document);
 
   // ---- reveal on scroll ----
   if ('IntersectionObserver' in window) {

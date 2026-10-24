@@ -91,11 +91,11 @@ async fn guide_list_is_a_directory_of_states_and_topics_that_works_without_scrip
     assert!(body.contains(r#"type="search""#) && body.contains("/static/js/links.js"), "same search and script as free tools");
     // Every entry is in the HTML itself, so the list works with scripts off.
     assert!(body.contains("data-text=") && body.contains(r#"<a class="tmain" href="/en/guides/aadhaar-address-update">"#), "own guides open in the same tab");
-    assert!(body.contains(r#"<a class="tmain" href="https://www.tnpsc.gov.in" target="_blank" rel="nofollow noopener noreferrer">"#), "official portals open in a new tab");
+    assert!(body.contains(r#"<a class="tmain" href="https://www.keralapsc.gov.in" target="_blank" rel="nofollow noopener noreferrer">"#), "official portals open in a new tab");
     // One rail chip and one section per state, each leading to the state's own page.
     for id in ["india", "tamil-nadu", "andhra-pradesh", "telangana", "karnataka", "maharashtra", "kerala"] {
         assert!(body.contains(&format!(r#"<a href="/en/guides/{id}" class="railchip" data-cat="{id}">"#)), "rail chip {id}");
-        assert!(body.contains(&format!(r#"<section class="lgroup reveal" id="{id}" data-cat="{id}">"#)), "section {id}");
+        assert!(body.contains(&format!(r#"<section class="lgroup reveal" id="{id}" data-cat="{id}" data-region="{id}">"#)), "section {id}, in its state's colour");
     }
     // Topics are the filters, and only topics that have entries are offered.
     assert!(body.contains(r#"class="dx-chip" data-badge="jobs" aria-pressed="false">Jobs <b>"#));
@@ -296,7 +296,9 @@ async fn directory_cards_carry_real_data_and_working_controls() {
         assert!(body.contains(id), "missing {id}");
     }
     assert!(body.contains(r#"<option value="az">"#), "A–Z sort");
-    assert_eq!(body.matches("<option value=").count(), 4, "only the sorts the data supports: curated, A–Z, Z–A, GitHub stars");
+    let sort = &body[body.find(r#"<select id="dx-sort">"#).unwrap()..];
+    let sort = &sort[..sort.find("</select>").unwrap()];
+    assert_eq!(sort.matches("<option value=").count(), 4, "only the sorts the data supports: curated, A–Z, Z–A, GitHub stars");
 }
 
 #[tokio::test]
@@ -590,4 +592,136 @@ async fn tamil_nadu_character_pops_out_of_the_map_and_its_animation_is_served() 
     assert!(webm.len() < 800_000, "{} bytes", webm.len());
     assert!(std::fs::metadata("static/media/tamil-nadu-character.webp").unwrap().len() < 900_000);
     assert!(!std::path::Path::new("static/media/tamil-nadu-transition.mp4").exists(), "the full video is not shipped");
+}
+
+#[tokio::test]
+async fn trb_updates_have_a_list_and_a_page_each_linked_from_tamil_nadu() {
+    let site = Site::load(&Config::from_env().content_dir).unwrap();
+    let updates = site.updates("trb");
+    assert!(!updates.is_empty(), "content/trb/updates.txt has updates");
+    assert!(updates.windows(2).all(|w| w[0].when() >= w[1].when()), "newest first");
+
+    // Tamil Nadu > Jobs leads to the list, in the reader's language and in the same tab.
+    let (_, _, tn) = get(app_with(50, 50), "/ta/guides/tamil-nadu").await;
+    assert!(tn.contains(r#"<a class="tmain" href="/ta/guides/tamil-nadu/trb">"#), "TRB updates card");
+    // The TRB guide shows the latest updates.
+    let (_, _, guide) = get(app_with(50, 50), "/en/guides/trb-assistant-professor").await;
+    assert!(guide.contains(r#"<section class="trb-latest">"#) && guide.contains(r#"href="/en/guides/tamil-nadu/trb""#));
+
+    let (status, _, list) = get(app_with(50, 50), "/en/guides/tamil-nadu/trb").await;
+    assert_eq!(status, StatusCode::OK);
+    for u in updates {
+        assert!(list.contains(&format!(r#"href="/en/guides/tamil-nadu/trb/{}""#, u.id)), "{} is listed", u.id);
+    }
+
+    // Each update: its facts, our own next step, and TRB's official links only.
+    let u = &updates[0];
+    let (status, _, page) = get(app_with(50, 50), &format!("/en/guides/tamil-nadu/trb/{}", u.id)).await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(page.contains(&format!(r#"<time datetime="{0}">{0}</time>"#, u.when())), "TRB's date");
+    assert!(page.contains(&format!(r#"<a class="button" href="{}""#, u.page.replace('&', "&amp;"))), "official notice");
+    assert!(u.page.contains("trb.tn.gov.in") && u.docs.iter().all(|(_, l)| l.contains("trb.tn.gov.in")), "only TRB's own links");
+    let (_, _, hi) = get(app_with(50, 50), &format!("/hi/guides/tamil-nadu/trb/{}", u.id)).await;
+    assert!(hi.contains(&format!(r#"<link rel="canonical" href="http://localhost:3000/en/guides/tamil-nadu/trb/{}">"#, u.id)), "English is the original");
+    let (status, _, _) = get(app_with(50, 50), "/en/guides/tamil-nadu/trb/no-such-update").await;
+    assert_eq!(status, StatusCode::NOT_FOUND);
+}
+
+#[tokio::test]
+async fn mrb_and_tnea_open_a_guide_first_and_mrb_has_its_updates() {
+    // Tamil Nadu's MRB and TNEA cards open this site's how-to-apply guides; each guide links to the official site.
+    let (_, _, tn) = get(app_with(50, 50), "/en/guides/tamil-nadu").await;
+    for slug in ["mrb-recruitment", "tnea-engineering-admission"] {
+        assert!(tn.contains(&format!(r#"<a class="tmain" href="/en/guides/{slug}">"#)), "{slug} card");
+    }
+    assert!(tn.contains(r#"<a class="tmain" href="/en/guides/tamil-nadu/mrb">"#), "MRB updates card");
+    let (_, _, tnea) = get(app_with(50, 50), "/en/guides/tnea-engineering-admission").await;
+    assert!(tnea.contains(r#"href="https://www.tneaonline.org""#), "official TNEA site");
+
+    // MRB: one page per recruitment, newest first, with MRB's documents.
+    let site = Site::load(&Config::from_env().content_dir).unwrap();
+    let mrb = site.updates("mrb");
+    assert!(mrb.len() >= 10, "MRB recruitments");
+    let (_, _, guide) = get(app_with(50, 50), "/en/guides/mrb-recruitment").await;
+    assert!(guide.contains(r#"<section class="trb-latest"><h2>Latest from MRB</h2>"#), "latest MRB updates on the guide");
+    let (status, _, list) = get(app_with(50, 50), "/en/guides/tamil-nadu/mrb").await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(list.contains("<h1>MRB: what&#39;s new</h1>"), "the list names MRB");
+    let u = &mrb[0];
+    assert!(list.contains(&format!(r#"href="/en/guides/tamil-nadu/mrb/{}""#, u.id)));
+    let (status, _, page) = get(app_with(50, 50), &format!("/en/guides/tamil-nadu/mrb/{}", u.id)).await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(page.contains("Open MRB&#39;s official notice") && page.contains("Documents from MRB"), "texts name MRB, not TRB");
+    assert!(!page.contains("TRB"), "no TRB wording on MRB pages");
+    for (_, link) in &u.docs {
+        assert!(page.contains(&link.replace('&', "&amp;")), "document {link}");
+    }
+    let (status, _, _) = get(app_with(50, 50), "/en/guides/tamil-nadu/xyz").await;
+    assert_eq!(status, StatusCode::NOT_FOUND, "unknown board");
+}
+
+#[tokio::test]
+async fn guides_page_leads_with_tasks_and_guides_offer_a_guided_mode() {
+    // The guides page asks what the visitor needs, then shows this site's guides as task cards with their
+    // step and document counts, category tabs, and the state directory below.
+    let (_, _, page) = get(app_with(50, 50), "/en/guides").await;
+    assert!(page.contains("<h1>What do you need help getting done?</h1>"));
+    assert!(page.contains(r#"<section class="tasks""#) && page.contains(r#"<ul class="task-grid">"#));
+    assert!(page.contains(r#"data-task-cat="driving-and-vehicles""#), "a tab per guide category");
+    let ll = page.split(r#"data-slug="learners-licence""#).nth(1).expect("learner's licence task card");
+    let ll = &ll[..ll.find("</li>").unwrap()];
+    assert!(ll.contains(r#"href="/en/guides/learners-licence""#) && ll.contains("7 steps") && ll.contains("14 documents"), "{ll}");
+    assert!(page.find(r#"<section class="tasks""#) < page.find(r#"<nav class="rail""#), "tasks come before the states");
+    let (_, _, ta) = get(app_with(50, 50), "/ta/guides").await;
+    assert!(ta.contains("உங்களுக்கு எந்த வேலையில் உதவி வேண்டும்?"), "translated headline");
+    let (_, _, state) = get(app_with(50, 50), "/en/guides/tamil-nadu").await;
+    assert!(!state.contains(r#"<section class="tasks""#), "only on the main guides page");
+
+    // A guide keeps its full article (for no-script visitors and search engines) and adds the mode switch
+    // and the journey's data, with the glossary for English text only.
+    let (_, _, guide) = get(app_with(50, 50), "/en/guides/learners-licence").await;
+    assert!(guide.contains(r#"<div class="gmode" role="group" aria-label="Reading mode" hidden>"#));
+    assert!(guide.contains(r#"<h2 id="situation">Which part do you need?</h2>"#) && guide.contains(r##"<a href="#problems">"##));
+    let data = guide.split(r#"<script type="application/json" id="journey-text">"#).nth(1).unwrap();
+    let data = &data[..data.find("</script>").unwrap()];
+    assert!(data.contains(r#""slug":"learners-licence""#) && data.contains(r#""RTO","#), "{data}");
+    assert!(data.contains("sarathi.parivahan.gov.in"), "the official site for the last stage");
+    let (_, _, hi) = get(app_with(50, 50), "/hi/guides/passport-new").await;
+    assert!(hi.contains(r#""glossary":[]"#), "no English glossary on a Hindi guide");
+}
+
+#[tokio::test]
+async fn andhra_pradesh_lists_five_guides_and_ap_dsc_updates_live_under_it() {
+    // Only the five chosen services are listed, each opening this site's guide; the others are hidden.
+    let (_, _, ap) = get(app_with(50, 50), "/en/guides/andhra-pradesh").await;
+    for slug in ["ap-eapcet", "ap-seva-certificates", "ap-jnanabhumi-scholarship", "ap-dsc-teacher-recruitment", "ap-ntr-bharosa-pension"] {
+        assert!(ap.contains(&format!(r#"<a class="tmain" href="/en/guides/{slug}">"#)), "{slug} card");
+    }
+    assert!(ap.contains(r#"<a class="tmain" href="/en/guides/andhra-pradesh/apdsc">"#), "AP DSC updates card");
+    assert!(!ap.contains("psc.ap.gov.in") && !ap.contains("meebhoomi"), "hidden entries stay hidden");
+
+    // AP DSC updates: under Andhra Pradesh, in its colours, with the site's documents.
+    let site = Site::load(&Config::from_env().content_dir).unwrap();
+    let items = site.updates("apdsc");
+    assert!(!items.is_empty(), "AP DSC programmes");
+    let (status, _, list) = get(app_with(50, 50), "/en/guides/andhra-pradesh/apdsc").await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(list.contains(r#"data-region="andhra-pradesh""#) && list.contains(r#"href="/en/guides/andhra-pradesh""#), "an Andhra Pradesh page");
+    let u = &items[0];
+    let (status, _, page) = get(app_with(50, 50), &format!("/en/guides/andhra-pradesh/apdsc/{}", u.id)).await;
+    assert_eq!(status, StatusCode::OK);
+    for (_, link) in &u.docs {
+        assert!(page.contains(&link.replace('&', "&amp;")), "document {link}");
+    }
+    assert!(!page.contains("TRB") && !page.contains("Tamil Nadu"), "no Tamil Nadu wording on AP DSC pages");
+    let (_, _, guide) = get(app_with(50, 50), "/en/guides/ap-dsc-teacher-recruitment").await;
+    assert!(guide.contains("Latest from AP DSC"), "latest AP DSC documents on the guide");
+
+    // A board lives only under its own state.
+    let (status, _, _) = get(app_with(50, 50), "/en/guides/tamil-nadu/apdsc").await;
+    assert_eq!(status, StatusCode::NOT_FOUND);
+    let (status, _, _) = get(app_with(50, 50), "/en/guides/andhra-pradesh/trb").await;
+    assert_eq!(status, StatusCode::NOT_FOUND);
+    let (status, _, _) = get(app_with(50, 50), "/en/guides/tamil-nadu/trb").await;
+    assert_eq!(status, StatusCode::OK, "TRB keeps its address");
 }

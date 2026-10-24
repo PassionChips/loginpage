@@ -1,4 +1,12 @@
 // Guide toolbar: copy link and print. Both need script, so the buttons start hidden and appear here.
+// The guided journey (Guided / Full guide modes) loads as a module; without it the full guide shows.
+// Until it has built the guided view, the article is held back so it does not flash first (not for
+// visitors who chose the full guide); any failure shows the article.
+try {
+  if (localStorage.getItem('guideboy:mode') !== '"full"') document.documentElement.dataset.gpending = '';
+} catch {}
+import('/static/js/guide/journey.mjs').catch(() => delete document.documentElement.dataset.gpending);
+setTimeout(() => delete document.documentElement.dataset.gpending, 4000);
 document.addEventListener('DOMContentLoaded', () => {
   // The toolbar is sticky. Publish its height so section jumps land below it, and mark it once it is pinned.
   const wrap = document.querySelector('.gwrap');

@@ -1,0 +1,52 @@
+# TRB (Tamil Nadu) "What's New", read from https://www.trb.tn.gov.in by tools/fetch_trb.py.
+# Facts and official links only. Written by the script on a schedule: do not edit by hand.
+
+[u-20261015-e5ed52]
+date: 2026-10-15
+title: TAMILNADU TEACHER ELIGIBILITY TEST FOR WORKING TEACHERS - 01/2026 dated 13.02.2026 - CLICK HERE TO VIEW THE TNTET CERTIFICATES (TAMIL NADU)
+kind: certificate
+exam: tntet
+page: https://trb.tn.gov.in/results/result/1
+target: TNTET for Working Teachers 2026 - Result - Paper I and Paper II (Tamil Nadu)
+login: roll,dob
+first_seen: 2026-10-24
+
+[mn-1049]
+date: 2026-10-15
+title: DIRECT RECRUITMENT FOR THE POST OF SGT - 2024 - Provisional Selection for Not Joined / Joined & Resigned Post from the Candidates in Reserve List
+kind: selection
+exam: sgt
+notification: 01/2024
+page: https://www.trb.tn.gov.in/more_notification_details.php?id=MN-1049&language=LG-1
+first_seen: 2026-10-24
+doc: PressNews | https://trb.tn.gov.in/admin/pdf/8873926524SGTPress%20release15102026.pdf
+doc: SGT 16022026 | https://trb.tn.gov.in/admin/pdf/6151012843SGT_16022026.pdf
+
+[mn-1047]
+date: 2026-10-12
+title: Tamil Nadu Teacher Eligibility Test For Working Teachers - 2026 - Examination Results and Final Key
+kind: result
+exam: tntet
+notification: 01/2026-01A/2026
+page: https://www.trb.tn.gov.in/more_notification_details.php?id=MN-1047&language=LG-1
+first_seen: 2026-10-24
+doc: TNTET 2026 PRESS NEWS (1231026) | https://trb.tn.gov.in/admin/pdf/728438150TNTET%202026%20PRESS%20NEWS%20(1231026).pdf
+
+[mn-1044]
+date: 2026-07-15
+title: TEACHER ELIGIBILITY TEST FOR WORKING TEACHERS TNTET (2026) - Release of Tentative Key with Objection Tracker
+kind: key
+exam: tntet
+notification: 01/2026
+page: https://www.trb.tn.gov.in/more_notification_details.php?id=MN-1044&language=LG-1
+first_seen: 2026-10-24
+doc: Press News | https://trb.tn.gov.in/admin/pdf/6939875199PRESSNEWSTNTET2026.pdf
+
+[u-20260707-6dd7cd]
+date: 2026-07-07
+title: TAMILNADU TEACHER ELIGIBILITY TEST FOR WORKING TEACHERS - Press News
+kind: press
+exam: tntet
+page: https://www.trb.tn.gov.in/admin/pdf/2643662506TET%20Press%20News.pdf
+first_seen: 2026-10-24
+doc: TAMILNADU TEACHER ELIGIBILITY TEST FOR WORKING TEACHERS - Press News | https://www.trb.tn.gov.in/admin/pdf/2643662506TET%20Press%20News.pdf

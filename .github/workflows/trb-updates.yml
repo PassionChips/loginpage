@@ -1,0 +1,69 @@
+# Keeps the boards' updates current: every 12 hours, reads the "What's New" list of the Teachers Recruitment
+# Board (trb.tn.gov.in) with tools/fetch_trb.py, the Notifications page of the Medical Services Recruitment Board
+# (mrb.tn.gov.in) with tools/fetch_mrb.py, and the document lists of Andhra Pradesh's teacher recruitment site
+# (tet2dsc.apcfss.in) with tools/fetch_apdsc.py and, only when something changed, commits content/trb, content/mrb
+# and content/apdsc updates.txt to main. Cloudflare then rebuilds and publishes the site as for any other commit.
+#
+# If a board's site is down or its page changed so that nothing can be read, its script fails and leaves its
+# file alone; the other board's list is still committed. The failed run shows up in the Actions tab.
+# To stop the updates, disable this workflow in GitHub (Actions > Board updates > Disable workflow).
+name: Board updates
+
+on:
+  schedule:
+    - cron: "17 */12 * * *" # every 12 hours: 00:17 and 12:17 UTC (05:47 and 17:47 IST)
+  workflow_dispatch: # also runnable by hand from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: trb-updates
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Read TRB's What's New
+        id: trb
+        continue-on-error: true
+        run: python3 -I tools/fetch_trb.py
+
+      - name: Read MRB's Notifications
+        id: mrb
+        continue-on-error: true
+        run: python3 -I tools/fetch_mrb.py
+
+      - name: Read AP DSC's documents
+        id: apdsc
+        continue-on-error: true
+        run: python3 -I tools/fetch_apdsc.py
+
+      - name: Commit if it changed
+        run: |
+          files="content/trb/updates.txt content/mrb/updates.txt content/apdsc/updates.txt"
+          if git diff --quiet -- $files && [ -z "$(git ls-files --others --exclude-standard -- $files)" ]; then
+            echo "No new board updates."
+          else
+            git config user.name "guideboy-bot"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -- $files
+            git commit -m "Board updates: $(date -u +%Y-%m-%d) [automatic]"
+            git push origin HEAD:main
+          fi
+
+      - name: Fail if a board could not be read
+        if: steps.trb.outcome == 'failure' || steps.mrb.outcome == 'failure' || steps.apdsc.outcome == 'failure'
+        run: |
+          echo "TRB: ${{ steps.trb.outcome }}, MRB: ${{ steps.mrb.outcome }}, AP DSC: ${{ steps.apdsc.outcome }}"
+          exit 1

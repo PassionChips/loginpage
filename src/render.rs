@@ -1,5 +1,5 @@
 use crate::config::Config;
-use crate::content::{Badge, GUIDE_TOPICS, Guide, Lang, Page, Site, StateGroup, StateLink};
+use crate::content::{BOARDS, Badge, Board, BoardUpdate, GUIDE_TOPICS, Guide, Lang, Page, Site, StateGroup, StateLink, board};
 
 pub fn escape(s: &str) -> String {
     let mut out = String::with_capacity(s.len());
@@ -158,6 +158,12 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
         );
     }
 
+    // ThemePicker: shown by static/js/theme.js; without script the system's light or dark applies.
+    let theme = format!(
+        r#"<label class="themepick" hidden><span class="sr">{label}</span><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg><select aria-label="{label}">{options}</select></label>"#,
+        label = t("theme"),
+        options = ["auto", "light", "dark", "ocean"].iter().map(|k| format!(r#"<option value="{k}">{}</option>"#, t(&format!("theme_{k}")))).collect::<String>(),
+    );
     let v = asset_version(&cfg.static_dir);
     let script = meta.script.map(|src| format!(r#"<script src="{src}?v={v}"></script>"#)).unwrap_or_default();
     let dir = if meta.lang.is_rtl() { "rtl" } else { "ltr" };
@@ -173,6 +179,7 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
 {head_links}
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/static/css/site.css?v={v}">
+<script src="/static/js/theme.js?v={v}"></script>
 {script}
 <script src="/static/js/lang.js?v={v}" defer></script>
 </head>
@@ -184,7 +191,7 @@ fn layout(cfg: &Config, site: &Site, meta: &Meta, body: &str, main_class: &str) 
 <a href="{home}/guides">{guides}</a>
 <a href="{home}/links">{links_nav}</a>
 </nav>
-{menu}
+<div class="bartools">{theme}{menu}</div>
 </header>
 <div class="notice" role="note"><span>{disclaimer}</span></div>
 <main id="main" class="{main_class}">
@@ -477,7 +484,7 @@ pub fn guide_page(cfg: &Config, site: &Site, lang: Lang, g: &Guide, translated: 
     let body = format!(
         r#"<div class="gsentinel" aria-hidden="true"></div>
 <div class="gwrap">{toolbar}</div>
-<div class="gcol">
+<div class="gcol"{region}>
 {note}<article>
 {kicker}<h1{attrs}>{title}</h1>
 <p class="lede"{attrs}>{summary}</p>
@@ -486,13 +493,26 @@ pub fn guide_page(cfg: &Config, site: &Site, lang: Lang, g: &Guide, translated: 
 <p><a class="button" href="{url}" rel="noopener noreferrer">{open_official} ↗</a></p>
 <p class="meta">{updated}: <time datetime="{date}">{date}</time></p>
 </div>
-<div class="prose"{attrs}>
+<div class="gmode" role="group" aria-label="{mode}" hidden><button type="button" data-mode="guided" aria-pressed="true">{guided}</button><button type="button" data-mode="full" aria-pressed="false">{full}</button></div>
+<div class="journey" hidden></div>
+{feed}<div class="prose"{attrs}>
 {content}
 </div>
-<p class="meta"><a href="mailto:{email}?subject={subject}">{report}</a></p>
+<p class="meta greport"><a href="mailto:{email}?subject={subject}">{report}</a></p>
 </article>
-</div>"#,
+</div>
+<script type="application/json" id="journey-text">{journey}</script>"#,
+        mode = t("jm_mode"),
+        guided = t("jm_guided"),
+        full = t("jm_full"),
+        journey = journey_json(site, lang, g, translated),
         toolbar = guide_toolbar(site, lang, g),
+        region = site
+            .state_groups()
+            .iter()
+            .find(|sg| sg.links.iter().any(|l| l.guide.as_deref() == Some(g.slug.as_str())))
+            .map(|sg| format!(r#" data-region="{}""#, sg.id))
+            .unwrap_or_default(),
         kicker = guide_kicker(site, lang, &g.slug),
         title = escape(&g.title),
         summary = escape(&g.summary),
@@ -503,6 +523,7 @@ pub fn guide_page(cfg: &Config, site: &Site, lang: Lang, g: &Guide, translated: 
         updated = t("updated"),
         date = escape(&g.updated),
         content = g.body_html,
+        feed = g.feed.as_deref().and_then(board).map(|b| board_latest(site, lang, b)).unwrap_or_default(),
         email = escape(&cfg.contact_email),
         subject = escape(&format!("Correction: {}", g.slug)),
         report = t("report_error"),
@@ -546,6 +567,27 @@ pub fn guide_page(cfg: &Config, site: &Site, lang: Lang, g: &Guide, translated: 
         noindex: false,
     };
     layout(cfg, site, &meta, &body, "wide")
+}
+
+/// What the guided journey script needs: its labels, the guide, and (for English text) the glossary.
+fn journey_json(site: &Site, lang: Lang, g: &Guide, translated: bool) -> String {
+    let keys = [
+        "jm_stage", "jm_situation", "jm_check", "jm_prepare", "jm_process", "jm_finish", "jm_back", "jm_next", "jm_ready", "jm_done", "jm_tick",
+        "jm_reset", "jm_finish_text", "jm_independent", "jm_more", "jm_term", "jm_more_btn", "jm_less_btn", "open_official", "official_source", "report_error",
+    ];
+    let labels: Vec<String> = keys.iter().map(|k| format!("{}:{}", json_string(k), json_string(site.t(lang, k)))).collect();
+    // The glossary explains English terms, so only an English text gets it.
+    let english = !translated || lang == Lang::EN;
+    let glossary: Vec<String> = if english { site.glossary().iter().map(|(term, text)| format!("[{},{}]", json_string(term), json_string(text))).collect() } else { Vec::new() };
+    format!(
+        r#"{{"t":{{{}}},"slug":{},"title":{},"official":{},"url":{},"glossary":[{}]}}"#,
+        labels.join(","),
+        json_string(&g.slug),
+        json_string(&g.title),
+        json_string(&g.official_name),
+        json_string(&g.official_url),
+        glossary.join(",")
+    )
 }
 
 pub fn static_page(cfg: &Config, site: &Site, p: &Page) -> String {
@@ -793,6 +835,12 @@ struct Directory<'a> {
     disclaimer: String,
     /// Extra attribution under the disclaimer (already HTML), e.g. for map data.
     credit: String,
+    /// Shown between the hero and the section rail (already HTML), e.g. the guides page's popular tasks.
+    tasks: String,
+    /// Guides directory: the state whose page this is (every card takes its colour), or None.
+    region: Option<&'a str>,
+    /// Guides directory main page: each section is a state and takes that state's colour.
+    region_sections: bool,
     text_json: String,
 }
 
@@ -883,9 +931,10 @@ fn directory_body(site: &Site, lang: Lang, d: &Directory) -> String {
             None => (format!("<h2>{}</h2>", escape(s.name)), String::new()),
         };
         sections.push_str(&format!(
-            "<section class=\"lgroup reveal\" id=\"{id}\" data-cat=\"{id}\">\n<header>{ico}{heading}<span class=\"gcount\" data-total=\"{n}\">{n}</span></header>\n<ul class=\"lcards\">\n{cards}</ul>\n{see_all}</section>\n",
+            "<section class=\"lgroup reveal\" id=\"{id}\" data-cat=\"{id}\"{region}>\n<header>{ico}{heading}<span class=\"gcount\" data-total=\"{n}\">{n}</span></header>\n<ul class=\"lcards\">\n{cards}</ul>\n{see_all}</section>\n",
             id = s.id,
             ico = s.icon,
+            region = if d.region_sections { format!(" data-region=\"{}\"", s.id) } else { String::new() },
         ));
     }
     let filters: String = d
@@ -924,12 +973,12 @@ fn directory_body(site: &Site, lang: Lang, d: &Directory) -> String {
 {aside}</div>
 {photo_credit}
 </section>
-<nav class="rail" aria-label="{rail_label}">
+{tasks}<nav class="rail" aria-label="{rail_label}">
 <button type="button" class="rail-btn prev" aria-label="{scroll_prev}" hidden>{prev_icon}</button>
 <div class="rail-in">{rail}</div>
 <button type="button" class="rail-btn next" aria-label="{scroll_next}" hidden>{next_icon}</button>
 </nav>
-<div class="lgroups" data-page="{page_kind}">
+<div class="lgroups" data-page="{page_kind}"{region}>
 {sections}</div>
 <div class="lempty empty" hidden>
 <p>{none}</p>
@@ -964,6 +1013,8 @@ fn directory_body(site: &Site, lang: Lang, d: &Directory) -> String {
         crumbs = d.crumbs,
         aside = d.aside,
         credit = d.credit,
+        tasks = d.tasks,
+        region = d.region.map(|r| format!(r#" data-region="{r}""#)).unwrap_or_default(),
         page_kind = if d.index { "index" } else { "category" },
         extra_sort = d.extra_sort,
         sub = escape(&d.sub),
@@ -1093,6 +1144,9 @@ pub fn links_page(cfg: &Config, site: &Site, lang: Lang, only: Option<&str>) -> 
             see_all_key: "dx_see_all",
             disclaimer: t("links_disclaimer"),
             credit: String::new(),
+            tasks: String::new(),
+            region: None,
+            region_sections: false,
             text_json: script_text(site, lang, site.t(lang, "dx_pricing"), true),
         },
     );
@@ -1182,7 +1236,7 @@ pub fn guides_page(cfg: &Config, site: &Site, lang: Lang, only: Option<&str>) ->
             state_name(s).to_string(),
             site.t(lang, "gx_state_sub").replace("{state}", state_name(s)),
         ),
-        None => (String::new(), t("find_title"), t("find_sub")),
+        None => (String::new(), t("task_title"), t("task_sub")),
     };
     let photo_id = only.filter(|s| site.background(s).is_some()).unwrap_or("guides");
     let body = directory_body(
@@ -1209,6 +1263,9 @@ pub fn guides_page(cfg: &Config, site: &Site, lang: Lang, only: Option<&str>) ->
             see_all_key: "gx_see_all",
             disclaimer: t("gx_disclaimer"),
             credit: format!(r#"<p class="ldisc geo-credit" lang="en">{GEO_CREDIT}</p>"#),
+            tasks: if only.is_none() { task_section(site, lang) } else { String::new() },
+            region: only,
+            region_sections: only.is_none(),
             text_json: script_text(site, lang, site.t(lang, "gx_topic"), false),
         },
     );
@@ -1238,6 +1295,69 @@ pub fn guides_page(cfg: &Config, site: &Site, lang: Lang, only: Option<&str>) ->
     layout(cfg, site, &meta, &body, "wide")
 }
 
+/// PopularTasks + CategoryNavigation on the guides page: every guide of this site as a task card (in
+/// directory order, India-wide first) with its step and document counts, and category tabs that filter
+/// them (script only; without script every card shows). Above them, "Continue where you left off" is
+/// filled by the script from this browser's guide progress.
+fn task_section(site: &Site, lang: Lang) -> String {
+    let t = |key: &str| escape(site.t(lang, key));
+    let mut cats: Vec<(String, String, usize)> = Vec::new(); // (key from the English guide, label, count)
+    let mut cards = String::new();
+    for g in site.state_groups() {
+        for l in g.links.iter().filter(|l| l.guide.is_some()) {
+            let slug = l.guide.as_deref().unwrap_or_default();
+            let (Some((guide, translated)), Some(en)) = (site.guide_or_fallback(lang, slug), site.guide(Lang::EN, slug)) else { continue };
+            let key = slug_of(&en.category);
+            match cats.iter_mut().find(|c| c.0 == key) {
+                Some(c) => c.2 += 1,
+                None => cats.push((key.clone(), guide.category.clone(), 1)),
+            }
+            let en_attr = if translated { "" } else { r#" lang="en""# };
+            let fact = |key: &str, n: usize| if n == 0 { String::new() } else { format!("<span>{}</span>", escape(&site.t(lang, key).replace("{n}", &n.to_string()))) };
+            cards.push_str(&format!(
+                r#"<li class="task" data-cat="{key}" data-slug="{slug}" data-region="{region}"><a href="/{lang}/guides/{slug}"><span class="task-top"><span class="av av-svc" aria-hidden="true">{icon}</span>{place}</span><strong{en_attr}>{title}</strong><span class="task-sum"{en_attr}>{summary}</span><span class="task-facts">{steps}{docs}</span><span class="task-go">{start} →</span></a></li>"#,
+                lang = lang.code(),
+                icon = service_icon(l),
+                place = place_label(g.id, site.t(lang, &format!("st_{}", g.id))),
+                region = g.id,
+                title = escape(&guide.title),
+                summary = escape(&guide.summary),
+                steps = fact("task_steps", guide.steps),
+                docs = fact("task_docs", guide.documents),
+                start = t("task_start"),
+            ));
+        }
+    }
+    if cards.is_empty() {
+        return String::new();
+    }
+    let total: usize = cats.iter().map(|c| c.2).sum();
+    let tabs: String = std::iter::once((String::new(), site.t(lang, "all").to_string(), total))
+        .chain(cats)
+        .map(|(key, label, n)| format!(r#"<button type="button" class="dx-chip" data-task-cat="{key}" aria-pressed="{}">{} <b>{n}</b></button>"#, key.is_empty(), escape(&label)))
+        .collect();
+    format!(
+        r#"<section class="tasks" aria-labelledby="tasks-title" data-suggest="{suggest}">
+<div class="recent" hidden><h2>{recent}</h2><ul class="recent-list" data-progress="{progress}"></ul></div>
+<div class="tasks-head"><h2 id="tasks-title">{popular}</h2><div class="task-cats" role="group" aria-label="{cats}" hidden>{tabs}</div></div>
+<ul class="task-grid">{cards}</ul>
+<h2 class="tasks-states">{states}</h2>
+</section>
+"#,
+        recent = t("task_recent"),
+        suggest = t("task_suggest"),
+        progress = t("task_progress"),
+        popular = t("task_popular"),
+        cats = t("task_cats"),
+        states = t("task_states"),
+    )
+}
+
+/// "Legal and complaints" -> "legal-and-complaints".
+fn slug_of(s: &str) -> String {
+    s.to_lowercase().split(|c: char| !c.is_alphanumeric()).filter(|w| !w.is_empty()).collect::<Vec<_>>().join("-")
+}
+
 /// A guides directory card. One of this site's guides shows its title and summary in the reader's language
 /// when translated, and opens in the same tab; an official portal opens in a new one.
 fn state_card<'a>(cfg: &'a Config, site: &'a Site, lang: Lang, l: &'a StateLink, state: &str, cat: &'a str, cat_name: &'a str) -> Card<'a> {
@@ -1245,6 +1365,7 @@ fn state_card<'a>(cfg: &'a Config, site: &'a Site, lang: Lang, l: &'a StateLink,
     let ours = l.guide.as_deref().and_then(|slug| site.guide_or_fallback(lang, slug));
     let (name, desc, url, english, host) = match ours {
         Some((g, translated)) => (g.title.as_str(), g.summary.as_str(), format!("/{}/guides/{}", lang.code(), g.slug), !translated, cfg.site_name.as_str()),
+        None if l.url.starts_with('/') => (l.name.as_str(), l.description.as_str(), format!("/{}{}", lang.code(), l.url), true, cfg.site_name.as_str()),
         None => (l.name.as_str(), l.description.as_str(), l.url.clone(), true, host_of(&l.url)),
     };
     Card {
@@ -1252,7 +1373,7 @@ fn state_card<'a>(cfg: &'a Config, site: &'a Site, lang: Lang, l: &'a StateLink,
         desc,
         avatar: format!(r#"<span class="av av-svc" aria-hidden="true">{}</span>"#, service_icon(l)),
         url,
-        external: ours.is_none(),
+        external: ours.is_none() && !l.url.starts_with('/'),
         english,
         badge: l.topic,
         badge_class: "b-topic",
@@ -1373,3 +1494,202 @@ fn india_map(site: &Site, lang: Lang, selected: Option<&str>) -> String {
 fn place_label(id: &str, name: &str) -> String {
     format!(r#"<span class="loc">{}<span>{}</span></span>"#, region_outline(id, None), escape(name))
 }
+
+/// Where a board's updates live on this site, under its state.
+fn board_path(b: &Board) -> String {
+    format!("/guides/{}/{}", b.state, b.id)
+}
+
+/// Interface text for a board's pages: the `{board}` in it becomes the board's name (TRB, MRB).
+fn bt(site: &Site, lang: Lang, b: &Board, key: &str) -> String {
+    site.t(lang, key).replace("{board}", b.name)
+}
+
+/// A board's updates as a list: date, type, the board's title and the exam or post, each opening its own page.
+fn board_rows<'a>(site: &Site, lang: Lang, b: &Board, items: impl IntoIterator<Item = &'a BoardUpdate>) -> String {
+    let base = board_path(b);
+    let rows: String = items
+        .into_iter()
+        .map(|u| {
+            let about = match (u.exam, &u.post) {
+                (Some(e), _) => format!(r#"<span class="meta">{}</span>"#, escape(site.t(lang, &format!("te_{e}")))),
+                (None, Some(p)) => format!(r#"<span class="meta" lang="en">{}</span>"#, escape(p)),
+                _ => String::new(),
+            };
+            format!(
+                r#"<li><a href="/{l}{base}/{id}"><time datetime="{date}">{date}</time><span class="trb-main"><span class="badge b-topic">{kind}</span><strong lang="en">{title}</strong>{about}</span></a></li>"#,
+                l = lang.code(),
+                id = u.id,
+                date = escape(u.when()),
+                kind = escape(site.t(lang, &format!("tk_{}", u.kind))),
+                title = escape(&u.title),
+            )
+        })
+        .collect();
+    format!(r#"<ul class="trb-list">{rows}</ul>"#)
+}
+
+/// The box on a board's guide: its five newest updates and a link to all of them.
+fn board_latest(site: &Site, lang: Lang, b: &Board) -> String {
+    let items = site.updates(b.id);
+    if items.is_empty() {
+        return String::new();
+    }
+    format!(
+        r#"<section class="trb-latest"><h2>{}</h2>{}<p><a class="seeall" href="/{}{}">{} →</a></p></section>
+"#,
+        escape(&bt(site, lang, b, "bu_latest")),
+        board_rows(site, lang, b, &items[..items.len().min(5)]),
+        lang.code(),
+        board_path(b),
+        escape(&bt(site, lang, b, "bu_all")),
+    )
+}
+
+/// A board's updates on this site: every one, newest first.
+pub fn board_updates_page(cfg: &Config, site: &Site, lang: Lang, b: &Board) -> String {
+    let t = |key: &str| escape(&bt(site, lang, b, key));
+    let l = lang.code();
+    let items = site.updates(b.id);
+    let list = if items.is_empty() { format!("<p>{}</p>", t("bu_none")) } else { board_rows(site, lang, b, items) };
+    let how = site.guide_or_fallback(lang, b.guide).map(|(g, _)| format!(r#"<p><a class="seeall" href="/{l}/guides/{}">{} →</a></p>"#, g.slug, escape(&g.title))).unwrap_or_default();
+    let body = format!(
+        r#"<article class="trb-page" data-region="{state}">
+<nav class="crumbs"><a href="/{l}/guides/{state}">← {tn}</a></nav>
+<p class="gkicker">{place}</p>
+<h1>{title}</h1>
+<p class="lede">{sub}</p>
+{list}
+<p class="meta">{note}</p>
+{how}</article>"#,
+        state = b.state,
+        tn = t(&format!("st_{}", b.state)),
+        place = place_label(b.state, site.t(lang, &format!("st_{}", b.state))),
+        title = t("bu_title"),
+        sub = t(b.sub_key),
+        note = t("bu_note"),
+    );
+    let base = board_path(b);
+    let path = format!("/{l}{base}");
+    let title = bt(site, lang, b, "bu_title");
+    let meta = Meta {
+        lang,
+        title: &title,
+        description: site.t(lang, b.sub_key),
+        path: &path,
+        switcher: all_languages(|x| format!("/{}{base}", x.code())),
+        alternates: all_languages(|x| format!("/{}{base}", x.code())),
+        script: None,
+        og_type: "website",
+        jsonld: vec![breadcrumbs(cfg, &[
+            (&cfg.site_name, format!("/{l}")),
+            (site.t(lang, "guides"), format!("/{l}/guides")),
+            (site.t(lang, &format!("st_{}", b.state)), format!("/{l}/guides/{}", b.state)),
+            (&title, path.clone()),
+        ])],
+        noindex: false,
+    };
+    layout(cfg, site, &meta, &body, "")
+}
+
+/// One board update on its own page: the facts, what to do next (in our words), and the board's notice and
+/// documents. The board's title is English, so the page points search engines at the English copy.
+pub fn board_update_page(cfg: &Config, site: &Site, lang: Lang, b: &Board, u: &BoardUpdate) -> String {
+    let t = |key: &str| escape(&bt(site, lang, b, key));
+    let l = lang.code();
+    let base = board_path(b);
+    let fact = |label: &str, value: String| format!("<div><dt>{}</dt><dd>{value}</dd></div>", t(label));
+    let date = |d: &str| format!(r#"<time datetime="{0}">{0}</time>"#, escape(d));
+    let mut facts = Vec::new();
+    if let Some(d) = &u.date {
+        facts.push(fact("bu_date", date(d)));
+    }
+    facts.push(fact("bu_kind", t(&format!("tk_{}", u.kind))));
+    if let Some(e) = u.exam {
+        facts.push(fact("bu_exam", t(&format!("te_{e}"))));
+    }
+    if let Some(p) = &u.post {
+        facts.push(fact("bu_post", format!(r#"<span lang="en">{}</span>"#, escape(p))));
+    }
+    if let Some(n) = &u.notification {
+        facts.push(fact("bu_notif", format!(r#"<span lang="en">{}</span>"#, escape(n))));
+    }
+    if let Some(target) = &u.target {
+        facts.push(fact("bu_target", format!(r#"<span lang="en">{}</span>"#, escape(target))));
+    }
+    if let Some(c) = &u.changed {
+        facts.push(fact("bu_changed", date(c)));
+    }
+    facts.push(fact("bu_seen", date(&u.first_seen)));
+    let docs: String = u
+        .docs
+        .iter()
+        .map(|(name, link)| format!(r#"<li><a href="{}" target="_blank" rel="noopener noreferrer"><span lang="en">{}</span> ↗</a></li>"#, escape(link), escape(name)))
+        .collect();
+    let docs = if docs.is_empty() { String::new() } else { format!(r#"<h2>{}</h2><ul class="trb-docs">{docs}</ul>"#, t("bu_docs")) };
+    let related: Vec<&BoardUpdate> = site.updates(b.id).iter().filter(|o| o.id != u.id && u.exam.is_some() && o.exam == u.exam).take(3).collect();
+    let related = if related.is_empty() { String::new() } else { format!("<h2>{}</h2>{}", t("bu_more"), board_rows(site, lang, b, related)) };
+    let body = format!(
+        r#"<article class="trb-page" data-region="{state}">
+<nav class="crumbs"><a href="/{l}{base}">← {all}</a></nav>
+<p class="gkicker">{place}<span class="badge b-topic">{kind}</span></p>
+<h1 lang="en">{title}</h1>
+<dl class="trb-facts">{facts}</dl>
+<h2>{next_title}</h2>
+<p>{next}</p>
+{login}<div class="official">
+<p><a class="button" href="{page}" target="_blank" rel="noopener noreferrer">{open} ↗</a></p>
+<p class="meta">{domain}</p>
+</div>
+{docs}
+<p class="meta">{note}</p>
+{related}
+</article>"#,
+        all = t("bu_all"),
+        state = b.state,
+        place = place_label(b.state, site.t(lang, &format!("st_{}", b.state))),
+        kind = t(&format!("tk_{}", u.kind)),
+        title = escape(&u.title),
+        facts = facts.concat(),
+        next_title = t("bu_next"),
+        next = t(&format!("tn_{}", u.kind)),
+        // A link to the board's candidate login says so, and what to have ready.
+        login = if u.login.is_empty() {
+            String::new()
+        } else {
+            let items: String = u.login.iter().map(|f| format!("<li>{}</li>", t(&format!("bu_need_{f}")))).collect();
+            format!(r#"<p>{}</p><ul class="trb-need">{items}</ul>"#, t("bu_login"))
+        },
+        page = escape(&u.page),
+        open = t(if u.login.is_empty() { "bu_open" } else { "bu_open_login" }),
+        domain = escape(host_of(&u.page)),
+        note = t("bu_note"),
+    );
+    let path = format!("/en{base}/{}", u.id);
+    let description = format!("{} · {} · {}", site.t(lang, &format!("tk_{}", u.kind)), u.when(), u.title);
+    let list_title = bt(site, lang, b, "bu_title");
+    let meta = Meta {
+        lang,
+        title: &u.title,
+        description: &description,
+        path: &path,
+        switcher: all_languages(|x| format!("/{}{base}/{}", x.code(), u.id)),
+        alternates: vec![(Lang::EN, path.clone())],
+        script: None,
+        og_type: "article",
+        jsonld: vec![breadcrumbs(cfg, &[
+            (&cfg.site_name, format!("/{l}")),
+            (site.t(lang, &format!("st_{}", b.state)), format!("/{l}/guides/{}", b.state)),
+            (&list_title, format!("/{l}{base}")),
+            (&u.title, path.clone()),
+        ])],
+        noindex: false,
+    };
+    layout(cfg, site, &meta, &body, "")
+}
+
+/// Every board, for the routes and the export.
+pub fn boards() -> &'static [Board] {
+    &BOARDS
+}
+

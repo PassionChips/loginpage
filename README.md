@@ -9,7 +9,7 @@ Every guide links to the official source and shows when it was last checked. The
 ```sh
 cargo run --bin run_main        # http://127.0.0.1:3000
 cargo test                      # server and page tests
-node --test tests/js/*.test.mjs # directory filter and sort rules
+node --test tests/js/*.test.mjs # directory filters, journey stages and search suggestions
 ```
 
 Settings come from environment variables:
@@ -56,6 +56,34 @@ On the India map, hovering (or keyboard-focusing) Tamil Nadu or Kerala makes tha
 
 The character is the supplied animation with its background removed (rembg `isnet-general-use` on every frame, then only the largest shape kept, edges tightened and de-tinted, and the left and right frame cuts faded out), at 405×720:
 `static/media/tamil-nadu-character.webm` (VP9 with alpha, 30 fps; Chrome, Edge, Firefox, Android), `tamil-nadu-character.webp` (animated WebP played once, 15 fps, 360×640; Safari and iOS, whose WebM playback drops alpha) and `tamil-nadu-character-poster.webp` (first frame). From a folder of transparent PNG frames: `ffmpeg -framerate 30 -i %03d.png -c:v libvpx-vp9 -pix_fmt yuva420p -b:v 0 -crf 30 -auto-alt-ref 0 -an tamil-nadu-character.webm` and `ffmpeg -framerate 30 -i %03d.png -vf fps=15,scale=360:640 -c:v libwebp_anim -quality 60 -loop 1 tamil-nadu-character.webp`. If the animation's length changes, update `DURATION` in the script.
+
+### TRB updates (automatic)
+
+Tamil Nadu › Jobs has a **TRB: what's new** card (`/<lang>/guides/tamil-nadu/trb`), and the TRB guide shows the latest five. Every item in the "What's New" list of trb.tn.gov.in gets its own page (`/<lang>/guides/tamil-nadu/trb/<id>`): TRB's date and title, the type of update (result, answer key, selection list...), the exam or recruitment, the notification number, a next step in our own words, and links to TRB's notice and PDFs. TRB's announcement text is never copied.
+
+- `tools/fetch_trb.py` (Python, standard library only) reads TRB's list and each notice page and writes `content/trb/updates.txt`. Run it by hand with `python3 -I tools/fetch_trb.py`. Old items stay as an archive (up to 60). If TRB's page cannot be read, it stops with an error and leaves the file alone.
+- `.github/workflows/trb-updates.yml` runs it every 12 hours and commits the file to `main` only when something changed; Cloudflare then publishes the site as for any commit. Disable the workflow in GitHub's Actions tab to stop it.
+- The type and exam come from words in TRB's titles (`KINDS` and `EXAMS` in the script); add a pattern there, plus `tk_`/`tn_`/`te_` interface strings, for a new kind of update. The server refuses to start if the file has an unknown type, a bad date or a non-https link.
+- **MRB** works the same way: `tools/fetch_mrb.py` reads the Notifications page of mrb.tn.gov.in into `content/mrb/updates.txt` (one page per recruitment at `/<lang>/guides/tamil-nadu/mrb/<id>`, with all its documents). MRB gives no dates, so a recruitment moves to the top when the script first sees it or sees a new document in it. The same workflow runs both scripts; if one board's site fails, the other's list is still committed and the run is marked failed.
+- **AP DSC** (Andhra Pradesh) works the same way: `tools/fetch_apdsc.py` reads the document lists of tet2dsc.apcfss.in (DSC, APTET, Special TET) from the site's script into `content/apdsc/updates.txt`, one page per programme at `/<lang>/guides/andhra-pradesh/apdsc/<id>`. The site resolves to IPv6 first, so the script tries IPv4 addresses first.
+- Each board belongs to a state (`state` in `BOARDS`): its pages live under that state's directory page and take its colour.
+- Boards are listed in `BOARDS` (`src/content.rs`); a guide shows a board's latest items with `feed: trb` or `feed: mrb` in its front matter.
+- **TNEA** has a how-to-apply guide (`tnea-engineering-admission`) but no automatic updates: tneaonline.org shows its announcements only after login.
+- Directory entries can point to this site's own pages listed in `INTERNAL_PAGES` (`src/content.rs`), as `topic | Name | /guides/... | description`.
+
+## Guided mode
+
+Every guide page has two reading modes: **Guided** (the default, one stage at a time) and **Full guide** (the article). The guided view is built in the browser (`static/js/guide/journey.mjs`) from the guide's own `##` sections, so there is nothing extra to write; visitors without script, search engines and printouts get the full article. The section id decides the stage (`static/js/guide/plan.mjs`):
+
+- `{#situation}`: optional "which applies to you?" question. Write it as a list of links: `- [I failed my test](#problems)` jumps to that section in guided mode (and works as a jump list in the full guide); a link to another site opens it.
+- `{#before}`, `{#eligibility}`, `{#fee}`: "Check you can apply".
+- `{#documents}`: a checklist; each top-level list item gets a tick box.
+- `{#steps}` and any other section with a numbered list: a timeline with a tick per step.
+- everything else (`{#after}`, `{#help}`, `{#problems}`...): cards to open on the last stage, after the official site.
+
+Ticks, the mode and the stage are kept in the visitor's browser only. `content/guides/glossary.txt` explains short forms (RTO, OTP...) on English guides: the first use of each becomes a button that shows its meaning.
+
+The guides page (`/<lang>/guides`) starts with the question "What do you need help getting done?", search suggestions, this site's guides as task cards with their step and document counts (counted from the guide), category tabs (from each guide's `category`) and the guides in progress in this browser.
 
 ## Add a guide
 

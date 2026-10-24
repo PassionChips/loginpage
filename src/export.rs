@@ -29,6 +29,12 @@ pub fn export(config: &Config, site: &Site, out: &Path) -> io::Result<usize> {
         let l = lang.code();
         page(&format!("/{l}"), render::index_page(config, site, lang))?;
         page(&format!("/{l}/guides"), render::guides_page(config, site, lang, None))?;
+        for b in render::boards() {
+            page(&format!("/{l}/guides/{}/{}", b.state, b.id), render::board_updates_page(config, site, lang, b))?;
+            for u in site.updates(b.id) {
+                page(&format!("/{l}/guides/{}/{}/{}", b.state, b.id, u.id), render::board_update_page(config, site, lang, b, u))?;
+            }
+        }
         for g in site.state_groups() {
             page(&format!("/{l}/guides/{}", g.id), render::guides_page(config, site, lang, Some(g.id)))?;
         }

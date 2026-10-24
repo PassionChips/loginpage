@@ -11,6 +11,14 @@ You need a **learner's licence (LL)** before you can get a permanent driving lic
 
 There are no screenshots on this page. The Parivahan website allows its content to be copied only after asking for permission.
 
+## Which part do you need? {#situation}
+
+- [This is my first learner's licence](#eligibility)
+- [I am under 18](#eligibility)
+- [I failed or missed my LL test](#problems)
+- [I have my LL and want my driving licence](#after)
+- [Something else, such as renewing or replacing a driving licence: Sarathi lists every licence service](https://sarathi.parivahan.gov.in/sarathiservice/stateSelection.do)
+
 ## Can I apply? {#eligibility}
 
 The Motor Vehicles Act, 1988 (section 4) sets the minimum age:
@@ -64,7 +72,7 @@ A learner's licence is only issued for a vehicle class you are old enough to dri
 - Your learner's licence is **valid for 6 months**, anywhere in India.
 - Apply for your **driving licence before the LL expires**. If it expires, you must start again from the beginning.
 
-## If something goes wrong
+## If something goes wrong {#problems}
 
 - **Failed the test:** pay the **retest fee** (under **Fee Payments**) and book a new slot.
 - **Missed the test date:** book a new slot under **Appointments**, if one is free.
@@ -72,7 +80,7 @@ A learner's licence is only issued for a vehicle class you are old enough to dri
 - **Session expired while applying:** close the application and start again.
 - **Forgot your application number:** use the **Find Application Number** link on Sarathi.
 
-## Good to know
+## Good to know {#good}
 
 - **Cancelling is final.** A cancelled application cannot be restored, and the fee is not refunded.
 - After you pay, you **cannot change your address** on the application; ask your RTO.

@@ -1,0 +1,30 @@
+# Plain-language explanations of short forms and official terms used in the English guides, one per line:
+#   TERM | explanation
+# A guide shows the first use of each term as a button that opens the explanation. Matching is exact and
+# case-sensitive on whole words. Only explain what the term means; rules and fees belong in the guides.
+
+OTP | One-time password: a short code sent to your mobile number or e-mail that works only once, for a few minutes.
+UIDAI | Unique Identification Authority of India: the government body that issues and updates Aadhaar.
+eKYC | Electronic KYC: proving who you are online with your Aadhaar number and an OTP, instead of showing papers.
+KYC | Know Your Customer: checking a person's identity, usually with an ID and address proof.
+RTO | Regional Transport Office: the state transport office for your area that issues licences and registers vehicles.
+RTOs | Regional Transport Offices: the state transport offices that issue licences and register vehicles.
+LL | Learner's licence: a temporary licence that lets you practise driving before the driving test.
+PSK | Passport Seva Kendra: a passport office where you go for your appointment with your documents.
+POPSK | Post Office Passport Seva Kendra: a passport office run in a post office.
+RPO | Regional Passport Office: the passport office in charge of your area.
+ECR | Emigration Check Required: a passport status for people who need clearance before going to some countries for work.
+PAN | Permanent Account Number: the 10-character number the Income Tax Department gives you.
+UPI | Unified Payments Interface: paying from your bank account with a phone app.
+BPL | Below Poverty Line: families the government lists as poor, who can get some services free or cheaper.
+RTI | Right to Information: the law that lets you ask a public authority for information.
+SSLC | Secondary School Leaving Certificate: the Class 10 certificate.
+HSC | Higher Secondary Certificate: the Class 12 certificate (+2).
+TFC | TNEA Facilitation Centre: a help centre where TNEA staff help with registration, certificates and counselling.
+SC | Scheduled Caste: a community category for reservation.
+ST | Scheduled Tribe: a community category for reservation.
+SCA | Scheduled Caste (Arunthathiyar): a community category for reservation in Tamil Nadu.
+MBC | Most Backward Classes: a community category for reservation in Tamil Nadu.
+DNC | Denotified Communities: a community category for reservation in Tamil Nadu, counted with MBC.
+BCM | Backward Class Muslim: a community category for reservation in Tamil Nadu.
+UMANG | UMANG: the central government's app that brings many government services into one place.

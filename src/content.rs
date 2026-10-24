@@ -93,6 +93,10 @@ pub const UI_KEYS: &[&str] = &[
     "gt_jobs", "gt_certificates", "gt_scholarships", "gt_admissions", "gt_welfare", "gt_land", "gt_citizen", "gt_id",
     "gx_states", "gx_topics", "gx_topic", "gx_count_one", "gx_count_many", "gx_see_all", "gx_back_all", "gx_state_sub",
     "gx_disclaimer", "gx_map_label", "gx_pick_state", "gx_find_state", "gx_no_page", "gx_tap_again",
+    "bu_title", "trb_sub", "bu_none", "bu_all", "bu_latest", "bu_open", "bu_docs", "bu_next", "bu_date", "bu_kind", "bu_exam", "bu_notif", "bu_seen", "bu_note", "bu_more", "tk_result", "tk_key", "tk_selection", "tk_hallticket", "tk_verification", "tk_certificate", "tk_press", "tk_notification", "tk_update", "tn_result", "tn_key", "tn_selection", "tn_hallticket", "tn_verification", "tn_certificate", "tn_press", "tn_notification", "tn_update", "te_tntet", "te_sgt", "te_pg", "te_bt", "te_ap", "te_brte", "te_special", "bu_target", "bu_login", "bu_open_login", "bu_need_roll", "bu_need_dob", "mrb_sub", "apdsc_sub", "bu_changed", "bu_post",
+    "task_title", "task_sub", "task_popular", "task_cats", "task_steps", "task_docs", "task_start", "task_recent", "task_progress", "task_suggest", "task_states",
+    "jm_mode", "jm_guided", "jm_full", "jm_stage", "jm_situation", "jm_check", "jm_prepare", "jm_process", "jm_finish", "jm_back", "jm_next", "jm_ready", "jm_done", "jm_tick", "jm_reset", "jm_finish_text", "jm_independent", "jm_more", "jm_term",
+    "theme", "theme_auto", "theme_light", "theme_dark", "theme_ocean", "jm_more_btn", "jm_less_btn",
 ];
 
 /// Groups in the free tools directory, in display order. Each needs a `cat_<id>` interface string
@@ -108,6 +112,72 @@ pub const GUIDE_STATES: [&str; 7] = ["india", "tamil-nadu", "andhra-pradesh", "t
 /// Topics within each state (filters on the guides directory, and sections on a state's page), in display
 /// order. Each needs a `gt_<id>` interface string and an icon in `render::icon`.
 pub const GUIDE_TOPICS: [&str; 8] = ["jobs", "certificates", "scholarships", "admissions", "welfare", "land", "citizen", "id"];
+
+/// Pages of this site (other than guides) that a guides directory entry may point to, as `topic | Name |
+/// /path | description`. The path is shown in the reader's language (`/en/guides/...`).
+pub const INTERNAL_PAGES: &[&str] = &["/guides/tamil-nadu/trb", "/guides/tamil-nadu/mrb", "/guides/andhra-pradesh/apdsc"];
+
+/// A Tamil Nadu recruitment board whose updates this site follows: `content/<id>/updates.txt`, written by
+/// `tools/fetch_<id>.py`, shown at `/<lang>/guides/<state>/<id>`. `guide` is this site's how-to-apply guide for
+/// it, and `sub_key` the interface string describing its list. Interface strings `bu_*` name the board with
+/// `{board}`.
+pub struct Board {
+    pub id: &'static str,
+    /// The guides directory section (a GUIDE_STATES id) the board's pages live under.
+    pub state: &'static str,
+    pub name: &'static str,
+    pub guide: &'static str,
+    pub sub_key: &'static str,
+}
+pub const BOARDS: [Board; 3] = [
+    Board { id: "trb", state: "tamil-nadu", name: "TRB", guide: "trb-assistant-professor", sub_key: "trb_sub" },
+    Board { id: "mrb", state: "tamil-nadu", name: "MRB", guide: "mrb-recruitment", sub_key: "mrb_sub" },
+    Board { id: "apdsc", state: "andhra-pradesh", name: "AP DSC", guide: "ap-dsc-teacher-recruitment", sub_key: "apdsc_sub" },
+];
+
+pub fn board(id: &str) -> Option<&'static Board> {
+    BOARDS.iter().find(|b| b.id == id)
+}
+
+/// What kind of update (see tools/fetch_*.py). Each needs `tk_<kind>` and `tn_<kind>` interface strings.
+pub const UPDATE_KINDS: [&str; 9] = ["result", "key", "selection", "hallticket", "verification", "certificate", "press", "notification", "update"];
+/// Which exam or recruitment an update is about. Each needs a `te_<exam>` interface string.
+pub const UPDATE_EXAMS: [&str; 7] = ["tntet", "sgt", "pg", "bt", "ap", "brte", "special"];
+
+/// One update of a board (TRB's "What's New" items, MRB's recruitments), copied by tools/fetch_<board>.py into
+/// content/<board>/updates.txt: facts and official links only.
+pub struct BoardUpdate {
+    pub board: &'static str,
+    pub id: String,
+    /// The date the board gives the update (YYYY-MM-DD), when it gives one.
+    pub date: Option<String>,
+    /// For boards that give no dates: when this site last saw the update change (a new document, say).
+    pub changed: Option<String>,
+    /// The board's own title, in English.
+    pub title: String,
+    /// The post it recruits for, when the board names it (MRB).
+    pub post: Option<String>,
+    pub kind: &'static str,
+    pub exam: Option<&'static str>,
+    pub notification: Option<String>,
+    /// The board's page for the update (or its PDF).
+    pub page: String,
+    /// When `page` is one of the board's lookup pages (results, certificates): that page's title.
+    pub target: Option<String>,
+    /// What that page's candidate login asks for: "roll" (roll or application number), "dob" (date of birth).
+    pub login: Vec<&'static str>,
+    /// The board's documents for it: (name, https link).
+    pub docs: Vec<(String, String)>,
+    /// When this site first listed it.
+    pub first_seen: String,
+}
+
+impl BoardUpdate {
+    /// The date to sort and show it by: the board's own date, else when it last changed here, else when it was first seen.
+    pub fn when(&self) -> &str {
+        self.date.as_deref().or(self.changed.as_deref()).unwrap_or(&self.first_seen)
+    }
+}
 
 /// One entry of the guides directory: an official portal, or one of this site's own guides.
 pub struct StateLink {
@@ -166,6 +236,11 @@ pub struct Guide {
     pub body_html: String,
     /// The `##` headings of the guide, for the toolbar's jump menu.
     pub sections: Vec<Section>,
+    /// A board's live list to show on the guide (`feed: trb` shows the latest TRB updates).
+    pub feed: Option<String>,
+    /// Numbered steps in the guide's sections, and items in its documents section, for the task cards.
+    pub steps: usize,
+    pub documents: usize,
 }
 
 pub struct Section {
@@ -181,6 +256,8 @@ pub struct Page {
 
 #[derive(Default)]
 pub struct Site {
+    /// Each board's updates, newest first.
+    updates: HashMap<&'static str, Vec<BoardUpdate>>,
     guides: HashMap<(Lang, String), Guide>,
     pages: HashMap<String, Page>,
     ui: HashMap<Lang, HashMap<String, String>>,
@@ -194,6 +271,8 @@ pub struct Site {
     stars_checked: Option<String>,
     /// Hero photo per directory page: "all" for the main page, otherwise a category id.
     backgrounds: HashMap<String, Background>,
+    /// Plain-language explanations of terms in the English guides: (term, explanation).
+    glossary: Vec<(String, String)>,
 }
 
 impl Site {
@@ -217,6 +296,13 @@ impl Site {
             for (slug, src) in read_markdown_dir(&root.join("guides").join(lang.code()))? {
                 let guide = parse_guide(&slug, &src).map_err(|e| format!("guides/{}/{slug}.md: {e}", lang.code()))?;
                 site.guides.insert((lang, slug), guide);
+            }
+        }
+        for b in &BOARDS {
+            let file = root.join(b.id).join("updates.txt");
+            if file.exists() {
+                let text = fs::read_to_string(&file).map_err(|e| format!("{}: {e}", file.display()))?;
+                site.updates.insert(b.id, parse_updates(b.id, &text).map_err(|e| format!("{}/updates.txt: {e}", b.id))?);
             }
         }
         let states = root.join("guides").join("directory.txt");
@@ -253,6 +339,17 @@ impl Site {
                 let (repo, count) = line.split_once('\t').ok_or(format!("links/github.tsv line {}: expected repo<TAB>stars", n + 1))?;
                 let count = count.trim().parse().map_err(|_| format!("links/github.tsv line {}: '{count}' is not a number", n + 1))?;
                 site.stars.insert(repo.to_string(), count);
+            }
+        }
+        let glossary = root.join("guides").join("glossary.txt");
+        if glossary.exists() {
+            let text = fs::read_to_string(&glossary).map_err(|e| format!("{}: {e}", glossary.display()))?;
+            for (n, line) in text.lines().enumerate() {
+                if line.trim().is_empty() || line.starts_with('#') {
+                    continue;
+                }
+                let (term, text) = line.split_once(" | ").ok_or(format!("guides/glossary.txt line {}: expected 'term | explanation'", n + 1))?;
+                site.glossary.push((term.trim().to_string(), text.trim().to_string()));
             }
         }
         let bg_file = root.join("links").join("backgrounds.tsv");
@@ -361,6 +458,19 @@ impl Site {
 
     pub fn link_groups(&self) -> &[LinkGroup] {
         &self.link_groups
+    }
+
+    /// A board's updates, newest first.
+    pub fn updates(&self, board: &str) -> &[BoardUpdate] {
+        self.updates.get(board).map(Vec::as_slice).unwrap_or(&[])
+    }
+
+    pub fn update(&self, board: &str, id: &str) -> Option<&BoardUpdate> {
+        self.updates(board).iter().find(|u| u.id == id)
+    }
+
+    pub fn glossary(&self) -> &[(String, String)] {
+        &self.glossary
     }
 
     pub fn state_groups(&self) -> &[StateGroup] {
@@ -522,8 +632,9 @@ fn parse_states(text: &str) -> Result<Vec<StateGroup>, String> {
                 if name.is_empty() || description.is_empty() {
                     return Err(at("name and description must not be empty".into()));
                 }
-                if !url.starts_with("https://") || url.contains(char::is_whitespace) {
-                    return Err(at(format!("'{url}' must be an https:// link")));
+                let internal = INTERNAL_PAGES.contains(&url);
+                if !internal && (!url.starts_with("https://") || url.contains(char::is_whitespace)) {
+                    return Err(at(format!("'{url}' must be an https:// link or one of this site's pages {INTERNAL_PAGES:?}")));
                 }
                 StateLink { topic, guide: None, name: name.into(), url: url.into(), description: description.into() }
             }
@@ -539,6 +650,59 @@ fn parse_states(text: &str) -> Result<Vec<StateGroup>, String> {
         return Err(format!("state '{}' has no entries", empty.id));
     }
     Ok(groups)
+}
+
+/// Parses content/<board>/updates.txt: `[id]` headers followed by `key: value` lines, and `doc: Name | https url`.
+/// Rejects unknown kinds and exams, bad dates, non-https links and duplicate ids, so a broken fetch fails the
+/// build instead of publishing a broken page. Keeps the file's order among updates with the same date.
+fn parse_updates(board: &'static str, text: &str) -> Result<Vec<BoardUpdate>, String> {
+    let mut items: Vec<BoardUpdate> = Vec::new();
+    for (n, line) in text.lines().enumerate() {
+        let at = |msg: String| format!("line {}: {msg}", n + 1);
+        let line = line.trim_end();
+        if line.trim().is_empty() || line.starts_with('#') {
+            continue;
+        }
+        if let Some(id) = line.strip_prefix('[').and_then(|l| l.strip_suffix(']')) {
+            if !valid_slug(id) || items.iter().any(|u| u.id == id) {
+                return Err(at(format!("bad or repeated id '{id}'")));
+            }
+            items.push(BoardUpdate { board, id: id.into(), date: None, changed: None, title: String::new(), post: None, kind: "update", exam: None, notification: None, page: String::new(), target: None, login: Vec::new(), docs: Vec::new(), first_seen: String::new() });
+            continue;
+        }
+        let item = items.last_mut().ok_or(at("line before any [id]".into()))?;
+        let (key, value) = line.split_once(": ").ok_or(at("expected 'key: value'".into()))?;
+        let https = |u: &str| u.starts_with("https://") && !u.contains(char::is_whitespace);
+        match key {
+            "date" | "changed" | "first_seen" if !valid_date(value) => return Err(at(format!("{key} must look like YYYY-MM-DD"))),
+            "date" => item.date = Some(value.into()),
+            "changed" => item.changed = Some(value.into()),
+            "post" => item.post = Some(value.into()),
+            "first_seen" => item.first_seen = value.into(),
+            "title" => item.title = value.into(),
+            "kind" => item.kind = UPDATE_KINDS.iter().find(|k| **k == value).ok_or(at(format!("unknown kind '{value}'")))?,
+            "exam" => item.exam = Some(UPDATE_EXAMS.iter().find(|k| **k == value).ok_or(at(format!("unknown exam '{value}'")))?),
+            "notification" => item.notification = Some(value.into()),
+            "page" if https(value) => item.page = value.into(),
+            "target" => item.target = Some(value.into()),
+            "login" => {
+                for field in value.split(',').filter(|f| !f.is_empty()) {
+                    item.login.push(["roll", "dob"].into_iter().find(|k| *k == field).ok_or(at(format!("unknown login field '{field}'")))?);
+                }
+            }
+            "doc" => match value.rsplit_once(" | ") {
+                Some((name, link)) if https(link) && !name.trim().is_empty() => item.docs.push((name.trim().into(), link.into())),
+                _ => return Err(at("expected 'doc: Name | https url'".into())),
+            },
+            _ => return Err(at(format!("unknown or invalid '{key}'"))),
+        }
+    }
+    if let Some(bad) = items.iter().find(|u| u.title.is_empty() || u.page.is_empty() || (u.date.is_none() && u.first_seen.is_empty())) {
+        return Err(format!("update '{}' needs a title, a page and a date or first_seen", bad.id));
+    }
+    // Newest first; the sort is stable, so updates with the same date keep the board's own order.
+    items.sort_by(|a, b| b.when().cmp(a.when()));
+    Ok(items)
 }
 
 pub fn valid_slug(slug: &str) -> bool {
@@ -558,11 +722,19 @@ fn parse_guide(slug: &str, src: &str) -> Result<Guide, String> {
         updated: take("updated")?,
         body_html: String::new(),
         sections: Vec::new(),
+        feed: meta.remove("feed").filter(|v| !v.is_empty()),
+        steps: 0,
+        documents: 0,
     };
+    if guide.feed.as_deref().is_some_and(|f| board(f).is_none()) {
+        return Err(format!("feed must be one of {:?}", BOARDS.iter().map(|b| b.id).collect::<Vec<_>>()));
+    }
     let mut guide = guide;
     let (numbered, sections) = number_headings(body);
     guide.body_html = render_markdown(&numbered);
     guide.sections = sections;
+    guide.steps = count_items(&numbered, |id| id != "documents" && id != "situation", true);
+    guide.documents = count_items(&numbered, |id| id == "documents", false);
     if !guide.official_url.starts_with("https://") {
         return Err("official_url must start with https://".into());
     }
@@ -640,6 +812,21 @@ fn number_headings(md: &str) -> (String, Vec<Section>) {
 
 /// Markdown to HTML. Raw HTML in the source is shown as text, and links may only be
 /// http(s), mailto or relative, so content files cannot inject markup or scripts.
+/// Top-level list items (`1.` when `numbered`, else `-`) in the `##` sections whose id passes `keep`.
+fn count_items(md: &str, keep: impl Fn(&str) -> bool, numbered: bool) -> usize {
+    let mut on = false;
+    let mut n = 0;
+    for line in md.lines() {
+        if let Some(h) = line.strip_prefix("## ") {
+            on = h.rsplit_once("{#").is_some_and(|(_, id)| keep(id.trim_end_matches('}').trim()));
+        } else if on {
+            let item = if numbered { line.split_once(". ").is_some_and(|(d, _)| !d.is_empty() && d.chars().all(|c| c.is_ascii_digit())) } else { line.starts_with("- ") };
+            n += usize::from(item);
+        }
+    }
+    n
+}
+
 fn render_markdown(md: &str) -> String {
     let events = Parser::new_ext(md, Options::ENABLE_TABLES | Options::ENABLE_STRIKETHROUGH | Options::ENABLE_HEADING_ATTRIBUTES).map(|event| match event {
         Event::Html(t) | Event::InlineHtml(t) => Event::Text(t),
@@ -790,6 +977,20 @@ mod tests {
         assert!(parse_states("[kerala]\njobs | A | https://a.example | x\n[india]\nland | B | https://a.example | y").is_err(), "duplicate url");
         assert!(parse_states("[kerala]\nid | guide=../x").is_err(), "bad guide slug");
         assert!(parse_states("[kerala]\n").is_err(), "empty state");
+    }
+
+    #[test]
+    fn board_updates_parse_and_bad_ones_are_rejected() {
+        let ok = "# c\n[mn-1]\ndate: 2026-10-12\ntitle: Results\nkind: result\nexam: tntet\npage: https://trb.example/x\ndoc: Press | https://trb.example/a.pdf\n\n[mn-2]\ndate: 2026-10-15\ntitle: Key\nkind: key\npage: https://trb.example/y\n";
+        let items = parse_updates("trb", ok).unwrap();
+        assert_eq!((items[0].id.as_str(), items[1].exam, items[1].docs.len()), ("mn-2", Some("tntet"), 1), "newest first");
+        assert!(parse_updates("trb", "[mn-1]\ndate: 12-10-2026\ntitle: t\npage: https://x.example").is_err(), "bad date");
+        assert!(parse_updates("trb", "[mn-1]\ndate: 2026-10-12\ntitle: t\nkind: party\npage: https://x.example").is_err(), "unknown kind");
+        assert!(parse_updates("trb", "[mn-1]\ndate: 2026-10-12\ntitle: t\npage: http://x.example").is_err(), "not https");
+        assert!(parse_updates("trb", "[mn-1]\ndate: 2026-10-12\ntitle: t\n").is_err(), "no page");
+        let undated = parse_updates("mrb", "[n-1]\nfirst_seen: 2026-10-24\ntitle: A\npage: https://x.example\n[n-2]\nfirst_seen: 2026-10-24\ntitle: B\npage: https://x.example\n[n-3]\nchanged: 2026-10-25\nfirst_seen: 2026-10-24\ntitle: C\npage: https://x.example\n").unwrap();
+        assert_eq!(undated.iter().map(|u| u.id.as_str()).collect::<Vec<_>>(), ["n-3", "n-1", "n-2"], "changed first, then the board's order");
+        assert!(parse_updates("trb", "[mn-1]\ndate: 2026-10-12\ntitle: t\npage: https://x.example\n[mn-1]\n").is_err(), "repeated id");
     }
 
     #[test]
